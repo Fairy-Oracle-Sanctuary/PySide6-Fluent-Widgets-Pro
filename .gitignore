@@ -1,0 +1,6 @@
+PySide6-Fluent-UI/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.DS_Store
