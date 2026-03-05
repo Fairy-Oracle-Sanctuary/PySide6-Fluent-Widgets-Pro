@@ -7,12 +7,14 @@ from PySide6.QtCore import (
     QLocale,
     QParallelAnimationGroup,
     QPropertyAnimation,
+    QRectF,
     QSequentialAnimationGroup,
     Qt,
 )
-from PySide6.QtGui import QColor, QPainter
-from PySide6.QtWidgets import QProgressBar
+from PySide6.QtGui import QColor, QIcon, QPainter
+from PySide6.QtWidgets import QProgressBar, QSizePolicy
 
+from ...common.icon import FluentIconBase, Icon, drawIcon
 from ...common.style_sheet import isDarkTheme, themeColor
 
 
@@ -313,3 +315,100 @@ class IndeterminateProgressBar(QProgressBar):
         w = int(0.6 * self.width())
         r = self.height() / 2
         painter.drawRoundedRect(x, 0, w, self.height(), r, r)
+
+
+class FilledProgressBar(ProgressBar):
+    """Vertical filled progress bar with optional icon at the bottom
+
+    Constructors
+    ------------
+    * FilledProgressBar(`parent`: QWidget = None)
+    * FilledProgressBar(`icon`: FluentIconBase | QIcon | str, `parent`: QWidget = None)
+    """
+
+    def __init__(self, parent=None, useAni=True):
+        super().__init__(parent=parent, useAni=useAni)
+        self._icon = None
+        self.setFixedWidth(36)
+        self.setFixedHeight(210)
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        self.setCustomBarColor(QColor(33, 148, 243), QColor(33, 148, 243))
+        self.setCustomBackgroundColor(QColor(0, 0, 0, 21), QColor(255, 255, 255, 30))
+
+    def setIcon(self, icon):
+        """Set the icon to display at the bottom of progress bar
+
+        Parameters
+        ----------
+        icon: FluentIconBase | QIcon | str
+            the icon to be displayed
+        """
+        self._icon = icon
+        self.update()
+
+    def icon(self):
+        """Get the icon"""
+        return self._icon
+
+    def _drawIcon(self, icon, painter, rect, state=QIcon.Off):
+        """draw icon in white color"""
+        if isinstance(icon, FluentIconBase):
+            icon.render(painter, rect, fill=QColor(255, 255, 255).name())
+        elif isinstance(icon, Icon):
+            icon.fluentIcon.render(painter, rect, fill=QColor(255, 255, 255).name())
+        else:
+            drawIcon(icon, painter, rect, state)
+
+    def paintEvent(self, e):
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing)
+
+        textHeight = 20
+        gap = 6
+        barTop = textHeight + gap
+        barRect = QRectF(0, barTop, self.width(), max(0, self.height() - barTop))
+
+        # draw percentage text above progress bar (outside)
+        text = self.valText()
+        if text:
+            painter.setPen(QColor(255, 255, 255) if isDarkTheme() else QColor(0, 0, 0))
+            painter.drawText(
+                0,
+                2,
+                self.width(),
+                textHeight,
+                Qt.AlignHCenter | Qt.AlignVCenter,
+                text,
+            )
+
+        # draw background
+        bc = self.darkBackgroundColor if isDarkTheme() else self.lightBackgroundColor
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(bc)
+        r = self.width() / 2
+        painter.drawRoundedRect(barRect, r, r)
+
+        if self.minimum() >= self.maximum():
+            return
+
+        # draw bar (from bottom to top)
+        painter.setBrush(self.barColor())
+        barHeight = int(self.val / (self.maximum() - self.minimum()) * barRect.height())
+        painter.drawRoundedRect(
+            QRectF(
+                barRect.x(),
+                barRect.bottom() - barHeight,
+                barRect.width(),
+                barHeight,
+            ),
+            r,
+            r,
+        )
+
+        # draw icon at the bottom
+        if self._icon:
+            iconSize = 16
+            x = (self.width() - iconSize) // 2
+            y = int(barRect.bottom() - iconSize - 8)  # bottom padding
+            rect = QRectF(x, y, iconSize, iconSize)
+            self._drawIcon(self._icon, painter, rect)
