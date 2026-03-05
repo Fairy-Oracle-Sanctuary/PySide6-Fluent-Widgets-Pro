@@ -1,7 +1,9 @@
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
+
 from qfluentwidgets_pro import (
     Clip,
+    FilledProgressBar,
     FilledPushButton,
     FluentIcon,
     FluentTranslator,
@@ -32,7 +34,9 @@ class MainWindow(FluentWidget):
         self.view = QVBoxLayout()
         self.setLayout(self.view)
 
-        self.pushbtn = RangeSlider()
+        self.pushbtn = FilledProgressBar()
+        self.pushbtn.setIcon(FluentIcon.ACCEPT)
+        self.pushbtn.setValue(50)
         self.view.addWidget(self.pushbtn)
 
         self.roundbtn = RoundPushButton("RoundPushButton")

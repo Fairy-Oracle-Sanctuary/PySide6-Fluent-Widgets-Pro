@@ -1,81 +1,105 @@
 # coding:utf-8
-from PySide6.QtCore import Qt, QEasingCurve
-from PySide6.QtWidgets import QWidget, QStackedWidget, QVBoxLayout, QLabel, QHBoxLayout, QFrame, QSizePolicy
-from qfluentwidgets import (Pivot, qrouter, SegmentedWidget, TabBar, CheckBox, ComboBox,
-                            TabCloseButtonDisplayMode, BodyLabel, SpinBox, BreadcrumbBar,
-                            SegmentedToggleToolWidget, FluentIcon)
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QStackedWidget,
+    QVBoxLayout,
+    QWidget,
+)
+from qfluentwidgets import (
+    BodyLabel,
+    BreadcrumbBar,
+    CheckBox,
+    ComboBox,
+    FluentIcon,
+    Pivot,
+    SegmentedToggleToolWidget,
+    SegmentedWidget,
+    SpinBox,
+    TabBar,
+    TabCloseButtonDisplayMode,
+    qrouter,
+)
 
-from .gallery_interface import GalleryInterface
-from ..common.translator import Translator
 from ..common.style_sheet import StyleSheet
+from ..common.translator import Translator
+from .gallery_interface import GalleryInterface
 
 
 class NavigationViewInterface(GalleryInterface):
-    """ Navigation view interface """
+    """Navigation view interface"""
 
     def __init__(self, parent=None):
         t = Translator()
         super().__init__(
             title=t.navigation,
             subtitle="qfluentwidgets.components.navigation",
-            parent=parent
+            parent=parent,
         )
-        self.setObjectName('navigationViewInterface')
+        self.setObjectName("navigationViewInterface")
 
         # breadcrumb bar
         breadcrumb = BreadcrumbBar(self)
         items = [
-            self.tr("Home"), self.tr("Documents"), self.tr("Study"),
-            self.tr("Janpanese Sensei"), self.tr("Action Film"), self.tr("G Cup"),
-            self.tr("Mikami Yua"), self.tr("Folder1"), self.tr("Folder2"),
+            self.tr("Home"),
+            self.tr("Documents"),
+            self.tr("Study"),
+            self.tr("Janpanese Sensei"),
+            self.tr("Action Film"),
+            self.tr("G Cup"),
+            self.tr("Mikami Yua"),
+            self.tr("Folder1"),
+            self.tr("Folder2"),
         ]
         for i in items:
             breadcrumb.addItem(i, i)
 
         self.addExampleCard(
-            title=self.tr('Breadcrumb bar'),
+            title=self.tr("Breadcrumb bar"),
             widget=breadcrumb,
-            sourcePath='https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/PySide6/examples/navigation/breadcrumb_bar/demo.py',
-            stretch=1
+            sourcePath="https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/PySide6/examples/navigation/breadcrumb_bar/demo.py",
+            stretch=1,
         )
 
         self.addExampleCard(
-            title=self.tr('A basic pivot'),
+            title=self.tr("A basic pivot"),
             widget=PivotInterface(self),
-            sourcePath='https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/PySide6/examples/navigation/pivot/demo.py'
+            sourcePath="https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/PySide6/examples/navigation/pivot/demo.py",
         )
 
         self.addExampleCard(
-            title=self.tr('A segmented control'),
+            title=self.tr("A segmented control"),
             widget=SegmentedInterface(self),
-            sourcePath='https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/PySide6/examples/navigation/segmented_widget/demo.py'
+            sourcePath="https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/PySide6/examples/navigation/segmented_widget/demo.py",
         )
 
         self.addExampleCard(
-            title=self.tr('Another segmented control'),
+            title=self.tr("Another segmented control"),
             widget=self.createToggleToolWidget(),
-            sourcePath='https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/master/examples/navigation/segmented_tool_widget/demo.py'
+            sourcePath="https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/master/examples/navigation/segmented_tool_widget/demo.py",
         )
 
         card = self.addExampleCard(
-            title=self.tr('A tab bar'),
+            title=self.tr("A tab bar"),
             widget=TabInterface(self),
-            sourcePath='https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/PySide6/examples/navigation/tab_view/demo.py',
-            stretch=1
+            sourcePath="https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/PySide6/examples/navigation/tab_view/demo.py",
+            stretch=1,
         )
         card.topLayout.setContentsMargins(12, 0, 0, 0)
 
     def createToggleToolWidget(self):
         w = SegmentedToggleToolWidget(self)
-        w.addItem('k1', FluentIcon.TRANSPARENT)
-        w.addItem('k2', FluentIcon.CHECKBOX)
-        w.addItem('k3', FluentIcon.CONSTRACT)
-        w.setCurrentItem('k1')
+        w.addItem("k1", FluentIcon.TRANSPARENT)
+        w.addItem("k2", FluentIcon.CHECKBOX)
+        w.addItem("k3", FluentIcon.CONSTRACT)
+        w.setCurrentItem("k1")
         return w
 
 
 class PivotInterface(QWidget):
-    """ Pivot interface """
+    """Pivot interface"""
 
     Nav = Pivot
 
@@ -87,14 +111,14 @@ class PivotInterface(QWidget):
         self.stackedWidget = QStackedWidget(self)
         self.vBoxLayout = QVBoxLayout(self)
 
-        self.songInterface = QLabel('Song Interface', self)
-        self.albumInterface = QLabel('Album Interface', self)
-        self.artistInterface = QLabel('Artist Interface', self)
+        self.songInterface = QLabel("Song Interface", self)
+        self.albumInterface = QLabel("Album Interface", self)
+        self.artistInterface = QLabel("Artist Interface", self)
 
         # add items to pivot
-        self.addSubInterface(self.songInterface, 'songInterface', self.tr('Song'))
-        self.addSubInterface(self.albumInterface, 'albumInterface', self.tr('Album'))
-        self.addSubInterface(self.artistInterface, 'artistInterface', self.tr('Artist'))
+        self.addSubInterface(self.songInterface, "songInterface", self.tr("Song"))
+        self.addSubInterface(self.albumInterface, "albumInterface", self.tr("Album"))
+        self.addSubInterface(self.artistInterface, "artistInterface", self.tr("Artist"))
 
         self.vBoxLayout.addWidget(self.pivot, 0, Qt.AlignLeft)
         self.vBoxLayout.addWidget(self.stackedWidget)
@@ -114,7 +138,7 @@ class PivotInterface(QWidget):
         self.pivot.addItem(
             routeKey=objectName,
             text=text,
-            onClick=lambda: self.stackedWidget.setCurrentWidget(widget)
+            onClick=lambda: self.stackedWidget.setCurrentWidget(widget),
         )
 
     def onCurrentIndexChanged(self, index):
@@ -124,7 +148,6 @@ class PivotInterface(QWidget):
 
 
 class SegmentedInterface(PivotInterface):
-
     Nav = SegmentedWidget
 
     def __init__(self, parent=None):
@@ -134,7 +157,7 @@ class SegmentedInterface(PivotInterface):
 
 
 class TabInterface(QWidget):
-    """ Tab interface """
+    """Tab interface"""
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -145,21 +168,23 @@ class TabInterface(QWidget):
         self.tabView = QWidget(self)
         self.controlPanel = QFrame(self)
 
-        self.movableCheckBox = CheckBox(self.tr('IsTabMovable'), self)
-        self.scrollableCheckBox = CheckBox(self.tr('IsTabScrollable'), self)
-        self.shadowEnabledCheckBox = CheckBox(self.tr('IsTabShadowEnabled'), self)
-        self.tabMaxWidthLabel = BodyLabel(self.tr('TabMaximumWidth'), self)
+        self.movableCheckBox = CheckBox(self.tr("IsTabMovable"), self)
+        self.scrollableCheckBox = CheckBox(self.tr("IsTabScrollable"), self)
+        self.shadowEnabledCheckBox = CheckBox(self.tr("IsTabShadowEnabled"), self)
+        self.tabMaxWidthLabel = BodyLabel(self.tr("TabMaximumWidth"), self)
         self.tabMaxWidthSpinBox = SpinBox(self)
-        self.closeDisplayModeLabel = BodyLabel(self.tr('TabCloseButtonDisplayMode'), self)
+        self.closeDisplayModeLabel = BodyLabel(
+            self.tr("TabCloseButtonDisplayMode"), self
+        )
         self.closeDisplayModeComboBox = ComboBox(self)
 
         self.hBoxLayout = QHBoxLayout(self)
         self.vBoxLayout = QVBoxLayout(self.tabView)
         self.panelLayout = QVBoxLayout(self.controlPanel)
 
-        self.songInterface = QLabel('Song Interface', self)
-        self.albumInterface = QLabel('Album Interface', self)
-        self.artistInterface = QLabel('Artist Interface', self)
+        self.songInterface = QLabel("Song Interface", self)
+        self.albumInterface = QLabel("Album Interface", self)
+        self.artistInterface = QLabel("Artist Interface", self)
 
         # add items to pivot
         self.__initWidget()
@@ -172,33 +197,57 @@ class TabInterface(QWidget):
         self.tabMaxWidthSpinBox.setRange(60, 400)
         self.tabMaxWidthSpinBox.setValue(self.tabBar.tabMaximumWidth())
 
-        self.closeDisplayModeComboBox.addItem(self.tr('Always'), userData=TabCloseButtonDisplayMode.ALWAYS)
-        self.closeDisplayModeComboBox.addItem(self.tr('OnHover'), userData=TabCloseButtonDisplayMode.ON_HOVER)
-        self.closeDisplayModeComboBox.addItem(self.tr('Never'), userData=TabCloseButtonDisplayMode.NEVER)
-        self.closeDisplayModeComboBox.currentIndexChanged.connect(self.onDisplayModeChanged)
+        self.closeDisplayModeComboBox.addItem(
+            self.tr("Always"), userData=TabCloseButtonDisplayMode.ALWAYS
+        )
+        self.closeDisplayModeComboBox.addItem(
+            self.tr("OnHover"), userData=TabCloseButtonDisplayMode.ON_HOVER
+        )
+        self.closeDisplayModeComboBox.addItem(
+            self.tr("Never"), userData=TabCloseButtonDisplayMode.NEVER
+        )
+        self.closeDisplayModeComboBox.currentIndexChanged.connect(
+            self.onDisplayModeChanged
+        )
 
-        self.addSubInterface(self.songInterface,
-                             'tabSongInterface', self.tr('Song'), ':/gallery/images/MusicNote.png')
-        self.addSubInterface(self.albumInterface,
-                             'tabAlbumInterface', self.tr('Album'), ':/gallery/images/Dvd.png')
-        self.addSubInterface(self.artistInterface,
-                             'tabArtistInterface', self.tr('Artist'), ':/gallery/images/Singer.png')
+        self.addSubInterface(
+            self.songInterface,
+            "tabSongInterface",
+            self.tr("Song"),
+            ":/gallery/images/MusicNote.png",
+        )
+        self.addSubInterface(
+            self.albumInterface,
+            "tabAlbumInterface",
+            self.tr("Album"),
+            ":/gallery/images/Dvd.png",
+        )
+        self.addSubInterface(
+            self.artistInterface,
+            "tabArtistInterface",
+            self.tr("Artist"),
+            ":/gallery/images/Singer.png",
+        )
 
-        self.controlPanel.setObjectName('controlPanel')
+        self.controlPanel.setObjectName("controlPanel")
         StyleSheet.NAVIGATION_VIEW_INTERFACE.apply(self)
 
         self.connectSignalToSlot()
 
-        qrouter.setDefaultRouteKey(
-            self.stackedWidget, self.songInterface.objectName())
+        qrouter.setDefaultRouteKey(self.stackedWidget, self.songInterface.objectName())
 
     def connectSignalToSlot(self):
         self.movableCheckBox.stateChanged.connect(
-            lambda: self.tabBar.setMovable(self.movableCheckBox.isChecked()))
+            lambda: self.tabBar.setMovable(self.movableCheckBox.isChecked())
+        )
         self.scrollableCheckBox.stateChanged.connect(
-            lambda: self.tabBar.setScrollable(self.scrollableCheckBox.isChecked()))
+            lambda: self.tabBar.setScrollable(self.scrollableCheckBox.isChecked())
+        )
         self.shadowEnabledCheckBox.stateChanged.connect(
-            lambda: self.tabBar.setTabShadowEnabled(self.shadowEnabledCheckBox.isChecked()))
+            lambda: self.tabBar.setTabShadowEnabled(
+                self.shadowEnabledCheckBox.isChecked()
+            )
+        )
 
         self.tabMaxWidthSpinBox.valueChanged.connect(self.tabBar.setTabMaximumWidth)
 
@@ -244,7 +293,7 @@ class TabInterface(QWidget):
             routeKey=objectName,
             text=text,
             icon=icon,
-            onClick=lambda: self.stackedWidget.setCurrentWidget(widget)
+            onClick=lambda: self.stackedWidget.setCurrentWidget(widget),
         )
 
     def onDisplayModeChanged(self, index):
@@ -260,8 +309,10 @@ class TabInterface(QWidget):
         qrouter.push(self.stackedWidget, widget.objectName())
 
     def addTab(self):
-        text = f'硝子酱一级棒卡哇伊×{self.tabCount}'
-        self.addSubInterface(QLabel('🥰 ' + text), text, text, ':/gallery/images/Smiling_with_heart.png')
+        text = f"硝子酱一级棒卡哇伊×{self.tabCount}"
+        self.addSubInterface(
+            QLabel("🥰 " + text), text, text, ":/gallery/images/Smiling_with_heart.png"
+        )
         self.tabCount += 1
 
     def removeTab(self, index):
