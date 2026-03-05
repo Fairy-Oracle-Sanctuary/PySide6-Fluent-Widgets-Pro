@@ -329,7 +329,7 @@ class FilledProgressBar(ProgressBar):
     def __init__(self, parent=None, useAni=True):
         super().__init__(parent=parent, useAni=useAni)
         self._icon = None
-        self.setFixedWidth(36)
+        self.setFixedWidth(34)
         self.setFixedHeight(210)
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         self.setCustomBarColor(QColor(33, 148, 243), QColor(33, 148, 243))
