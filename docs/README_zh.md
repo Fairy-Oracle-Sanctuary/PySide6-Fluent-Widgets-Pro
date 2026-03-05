@@ -49,6 +49,7 @@
 - **[ToolTipSlider]** 带数值提示的 Slider（基于原有 `ToolTip` 基础设施实现）
 - **[RangeSlider]** 双滑块范围选择 Slider（支持双 tooltip 同时显示）
 - **[SubtitleCheckBox]** 支持副标题/布局优化的 CheckBox
+- **[SubtitleRadioButton]** 支持副标题/布局优化的 RadioButton
 
 ## 使用方式
 

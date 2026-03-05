@@ -45,6 +45,7 @@ The following components have been restored or extended in this repo (the list w
 - **[ToolTipSlider]** Slider with value tooltip (implemented using the existing `ToolTip` infrastructure)
 - **[RangeSlider]** Two-handle slider for selecting a numeric range (with dual tooltips)
 - **[SubtitleCheckBox]** Checkbox supporting subtitle text / layout improvements
+- **[SubtitleRadioButton]** RadioButton supporting subtitle text / layout improvements
 
 ## 🚀 Installation
 
