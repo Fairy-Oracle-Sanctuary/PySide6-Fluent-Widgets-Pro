@@ -495,25 +495,49 @@ class SubtitleRadioButton(RadioButton):
     def subText(self):
         return self._subText
 
-    def _drawText(self, painter: QPainter):
+    def sizeHint(self):
+        fm = self.fontMetrics()
+        textWidth = fm.boundingRect(self.text()).width() if self.text() else 0
+        subTextWidth = fm.boundingRect(self._subText).width() if self._subText else 0
+        width = 29 + max(textWidth, subTextWidth) + 10
+        height = fm.height() * 2 + 8
+        return QSize(width, height)
+
+    def paintEvent(self, e):
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing | QPainter.TextAntialiasing)
+        self._drawIndicator(painter)
+
         if not self.isEnabled():
             painter.setOpacity(0.36)
 
-        font = self.font()
-        color = self.textColor()
         width = self.width()
         height = self.height()
-        painter.setFont(font)
-        painter.setPen(color)
-        painter.drawText(30, -4, width, height / 2, Qt.AlignVCenter, self.text())
 
+        painter.setFont(self.font())
+        painter.setPen(self.textColor())
+        painter.drawText(
+            QRect(29, 0, width, height / 2),
+            Qt.AlignVCenter,
+            self.text(),
+        )
+
+        if not self._subText:
+            return
+
+        font = self.font()
         font.setPixelSize(12)
-        color = QColor(color)
+        color = QColor(self.textColor())
         color.setAlpha(128)
         painter.setFont(font)
         painter.setPen(color)
         painter.drawText(
-            30, height / 2 - 6, width, height / 2, Qt.AlignVCenter, self.subText()
+            29,
+            height / 2 - 5,
+            width,
+            height / 2,
+            Qt.AlignVCenter,
+            self.subText(),
         )
 
 
