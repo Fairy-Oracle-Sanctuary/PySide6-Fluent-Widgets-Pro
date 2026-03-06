@@ -41,11 +41,12 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 
 The following components have been restored or extended in this repo (the list will be updated continuously):
 
-- **All Button Widgets**
-- **[ToolTipSlider]** Slider with value tooltip (implemented using the existing `ToolTip` infrastructure)
-- **[RangeSlider]** Two-handle slider for selecting a numeric range (with dual tooltips)
-- **[SubtitleCheckBox]** Checkbox supporting subtitle text / layout improvements
-- **[SubtitleRadioButton]** RadioButton supporting subtitle text / layout improvements
+`HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
+`TextPushButton` `TextToolButton` `LuminaPushButton`
+`OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
+`RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
+`SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
+`Pager` `FilledProgressBar`
 
 ## 🚀 Installation
 
