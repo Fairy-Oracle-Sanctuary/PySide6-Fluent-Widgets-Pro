@@ -45,11 +45,12 @@
 
 已还原或扩展的组件（列表将持续更新）：
 
-- **所有付费按钮组件**
-- **[ToolTipSlider]** 带数值提示的 Slider（基于原有 `ToolTip` 基础设施实现）
-- **[RangeSlider]** 双滑块范围选择 Slider（支持双 tooltip 同时显示）
-- **[SubtitleCheckBox]** 支持副标题/布局优化的 CheckBox
-- **[SubtitleRadioButton]** 支持副标题/布局优化的 RadioButton
+`HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
+`TextPushButton` `TextToolButton` `LuminaPushButton`
+`OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
+`RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
+`SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
+`Pager` `FilledProgressBar`
 
 ## 使用方式
 
