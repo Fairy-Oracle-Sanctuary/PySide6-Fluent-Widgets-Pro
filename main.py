@@ -24,7 +24,9 @@ from qfluentwidgets_pro import (
     TextPushButton,
     ToolTipSlider,  # noqa
     toggleTheme,
-    RadialGauge
+    RadialGauge,
+    DropMultiFilesWidget,
+    DropSingleFileWidget
 )
 
 
@@ -210,6 +212,11 @@ class MainWindow(FluentWidget):
         self.ring2 = RadialGauge()
         self.ring2.setValue(50)
         ringLayout.addWidget(self.ring2)
+
+        self.selectFile1 = DropSingleFileWidget()
+        self.selectFile2 = DropMultiFilesWidget()
+        self.view.addWidget(self.selectFile1)
+        self.view.addWidget(self.selectFile2)
 
         # 切换主题
         self.theme_button = PushButton("切换主题")
