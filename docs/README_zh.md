@@ -122,6 +122,10 @@ app.exec()
 - 与官方 QFluentWidgets Pro **无任何隶属关系**
 - 请遵守原项目的开源协议与商业条款
 
+## 🙏 致谢
+
+- `Pager` 组件实现参考了 [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) (作者 HiyorinI)
+
 
 ## 计划（Roadmap）
 
