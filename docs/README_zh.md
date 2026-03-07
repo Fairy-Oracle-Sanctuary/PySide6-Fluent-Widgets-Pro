@@ -124,7 +124,7 @@ app.exec()
 
 ## 🙏 致谢
 
-- `Pager` 组件实现参考了 [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) (作者 HiyorinI)
+- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` 组件实现参考了 [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) (作者 HiyorinI)
 
 
 ## 计划（Roadmap）

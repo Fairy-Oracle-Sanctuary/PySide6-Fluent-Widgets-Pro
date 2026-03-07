@@ -117,7 +117,7 @@ app.exec()
 
 ## � Acknowledgments
 
-- `Pager` component implementation references [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) by HiyorinI
+- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` component implementation references [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) by HiyorinI
 
 ## �🗺️ Roadmap
 
