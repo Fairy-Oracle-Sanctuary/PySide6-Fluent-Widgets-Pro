@@ -2326,10 +2326,11 @@ class LuminaPushButton(PushButton):
         # Glow effect - always visible with fixed blur radius
         self._glowEffect = QGraphicsDropShadowEffect(self)
         self._glowEffect.setOffset(0, 0)
-        self._glowEffect.setBlurRadius(25)  # Fixed blur radius to avoid shaking
+        self._glowEffect.setBlurRadius(25)
         self._glowColor = QColor(*themeColor().getRgb()[:3], 80)
         self._glowEffect.setColor(self._glowColor)
         self.setGraphicsEffect(self._glowEffect)
+        self._customGlowColor = False
 
         # Animation for color alpha (not blur radius to avoid layout issues)
         self._glowAlphaAni = QPropertyAnimation(self, b"glowAlpha", self)
@@ -2349,6 +2350,7 @@ class LuminaPushButton(PushButton):
         alpha = self._glowColor.alpha()
         self._glowColor = QColor(color.red(), color.green(), color.blue(), alpha)
         self._glowEffect.setColor(self._glowColor)
+        self._customGlowColor = True
 
     def glowColor(self) -> QColor:
         """Get current glow color"""
@@ -2364,6 +2366,8 @@ class LuminaPushButton(PushButton):
     glowAlpha = Property(int, getGlowAlpha, setGlowAlpha)
 
     def _updateGlowColor(self):
+        if self._customGlowColor:
+            return
         color = themeColor()
         alpha = self._glowColor.alpha()
         self._glowColor = QColor(*color.getRgb()[:3], alpha)

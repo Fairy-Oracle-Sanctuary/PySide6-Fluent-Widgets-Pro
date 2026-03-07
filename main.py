@@ -1,5 +1,5 @@
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
 from qfluentwidgets_pro import (
     Clip,
@@ -10,12 +10,14 @@ from qfluentwidgets_pro import (
     FluentWidget,
     HyperlinkToolButton,
     LuminaPushButton,
+    MultiSegmentProgressRing,
     OutlinedPushButton,
     OutlinedToolButton,
     PushButton,
     RangeSlider,  # noqa
     RoundPushButton,
     RoundToolButton,
+    ScrollArea,
     SubtitleCheckBox,
     SubtitleRadioButton,
     Tag,
@@ -31,8 +33,19 @@ class MainWindow(FluentWidget):
         self.setWindowTitle("MainWindow")
         self.resize(800, 800)
 
-        self.view = QVBoxLayout()
-        self.setLayout(self.view)
+        self.scrollArea = ScrollArea(self)
+        self.scrollArea.enableTransparentBackground()
+        self.scrollArea.setWidgetResizable(True)
+
+        self.contentWidget = QWidget(self.scrollArea)
+        self.contentWidget.setStyleSheet("background: transparent;")
+        self.view = QVBoxLayout(self.contentWidget)
+        self.contentWidget.setLayout(self.view)
+        self.scrollArea.setWidget(self.contentWidget)
+
+        self.mainLayout = QVBoxLayout(self)
+        self.mainLayout.addWidget(self.scrollArea)
+        self.setLayout(self.mainLayout)
 
         self.pushbtn = FilledProgressBar()
         self.pushbtn.setIcon(FluentIcon.ACCEPT)
@@ -40,6 +53,7 @@ class MainWindow(FluentWidget):
         self.view.addWidget(self.pushbtn)
 
         self.roundbtn = RoundPushButton("RoundPushButton")
+        self.roundbtn.clicked.connect(lambda: self.pushbtn.setValue(self.pushbtn.value() + 10))
         self.view.addWidget(self.roundbtn)
 
         # RoundToolButton test
@@ -173,6 +187,31 @@ class MainWindow(FluentWidget):
 
         subcheck = SubtitleCheckBox("SubtitleCheckBox", "Subtitle")
         self.view.addWidget(subcheck)
+
+        ringLayout = QHBoxLayout()
+        self.view.addLayout(ringLayout)
+
+        self.ring1 = MultiSegmentProgressRing()
+        self.ring1.setText("75%")
+        self.ring1.setFixedSize(100, 100)
+        self.ring1.setStrokeWidth(8)
+        self.ring1.setGapDegree(4)
+        self.ring1.setSegments(
+            [
+                (0.4, QColor("#22c55e")),
+                (0.3, QColor("#3b82f6")),
+                (0.2, QColor("#f59e0b")),
+                (0.1, QColor("#ef4444")),
+            ]
+        )
+        ringLayout.addWidget(self.ring1)
+
+        self.ring2 = MultiSegmentProgressRing()
+        self.ring2.setFixedSize(100, 100)
+        self.ring2.setStrokeWidth(10)
+        self.ring2.setGapDegree(6)
+        self.ring2.setSegments([(0.4, QColor("#a855f7"))])
+        ringLayout.addWidget(self.ring2)
 
         # 切换主题
         self.theme_button = PushButton("切换主题")
