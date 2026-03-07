@@ -47,7 +47,7 @@ The following components have been restored or extended in this repo (the list w
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
-`RadialGauge`
+`RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
 
 ## 🚀 Installation
 
