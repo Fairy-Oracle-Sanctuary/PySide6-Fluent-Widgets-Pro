@@ -51,7 +51,7 @@
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
-`RadialGauge`
+`RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
 
 ## 使用方式
 
