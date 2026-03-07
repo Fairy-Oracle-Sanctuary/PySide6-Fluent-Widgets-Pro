@@ -46,7 +46,8 @@ The following components have been restored or extended in this repo (the list w
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
-`Pager` `FilledProgressBar`
+`Pager` `FilledProgressBar` `MultiSegmentProgressRing`
+`RadialGauge`
 
 ## 🚀 Installation
 

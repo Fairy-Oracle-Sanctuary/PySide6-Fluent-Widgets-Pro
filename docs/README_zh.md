@@ -50,7 +50,8 @@
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
-`Pager` `FilledProgressBar`
+`Pager` `FilledProgressBar` `MultiSegmentProgressRing`
+`RadialGauge`
 
 ## 使用方式
 

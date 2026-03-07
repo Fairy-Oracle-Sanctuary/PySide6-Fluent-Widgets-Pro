@@ -72,6 +72,44 @@ class ProgressRing(ProgressBar):
     strokeWidth = Property(int, getStrokeWidth, setStrokeWidth)
 
 
+class RadialGauge(ProgressRing):
+    """Radial gauge with 270° arc (bottom gap) - dashboard style"""
+
+    def __init__(self, parent=None, useAni=True):
+        super().__init__(parent, useAni=useAni)
+        self._startAngle = 225
+        self._spanAngle = 270
+        self.setTextVisible(True)
+
+    def paintEvent(self, e):
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing)
+
+        cw = self._strokeWidth
+        w = min(self.height(), self.width()) - cw
+        rc = QRectF(cw / 2, self.height() / 2 - w / 2, w, w)
+
+        # draw background arc (270°)
+        bc = self.darkBackgroundColor if isDarkTheme() else self.lightBackgroundColor
+        pen = QPen(bc, cw, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
+        painter.setPen(pen)
+        painter.drawArc(rc, int(self._startAngle * 16), int(-self._spanAngle * 16))
+
+        if self.maximum() <= self.minimum():
+            return
+
+        # draw progress arc
+        pen.setColor(self.barColor())
+        painter.setPen(pen)
+        progress = self.val / (self.maximum() - self.minimum())
+        degree = int(progress * self._spanAngle)
+        painter.drawArc(rc, int(self._startAngle * 16), int(-degree * 16))
+
+        # draw text
+        if self.isTextVisible():
+            self._drawText(painter, self.valText())
+
+
 class MultiSegmentProgressRing(ProgressRing):
     def __init__(self, parent=None, useAni=True):
         super().__init__(parent=parent, useAni=useAni)
@@ -125,7 +163,6 @@ class MultiSegmentProgressRing(ProgressRing):
         if total <= 0:
             return
 
-        # 单段时显示完整一圈，不应用 gap（状态环语义）
         isSingleSegment = len(self._segments) == 1
 
         gapDeg = 0.0 if isSingleSegment else self._gapDegree

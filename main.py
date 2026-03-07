@@ -24,6 +24,7 @@ from qfluentwidgets_pro import (
     TextPushButton,
     ToolTipSlider,  # noqa
     toggleTheme,
+    RadialGauge
 )
 
 
@@ -206,11 +207,8 @@ class MainWindow(FluentWidget):
         )
         ringLayout.addWidget(self.ring1)
 
-        self.ring2 = MultiSegmentProgressRing()
-        self.ring2.setFixedSize(100, 100)
-        self.ring2.setStrokeWidth(10)
-        self.ring2.setGapDegree(6)
-        self.ring2.setSegments([(0.4, QColor("#a855f7"))])
+        self.ring2 = RadialGauge()
+        self.ring2.setValue(50)
         ringLayout.addWidget(self.ring2)
 
         # 切换主题

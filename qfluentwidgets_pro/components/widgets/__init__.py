@@ -116,7 +116,7 @@ from .pips_pager import (
     VerticalPipsPager,
 )
 from .progress_bar import FilledProgressBar, IndeterminateProgressBar, ProgressBar
-from .progress_ring import IndeterminateProgressRing, MultiSegmentProgressRing, ProgressRing
+from .progress_ring import IndeterminateProgressRing, MultiSegmentProgressRing, ProgressRing, RadialGauge
 from .scroll_area import ScrollArea, SingleDirectionScrollArea, SmoothScrollArea
 from .scroll_bar import (
     ScrollBar,
