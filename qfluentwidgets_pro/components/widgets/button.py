@@ -495,25 +495,49 @@ class SubtitleRadioButton(RadioButton):
     def subText(self):
         return self._subText
 
-    def _drawText(self, painter: QPainter):
+    def sizeHint(self):
+        fm = self.fontMetrics()
+        textWidth = fm.boundingRect(self.text()).width() if self.text() else 0
+        subTextWidth = fm.boundingRect(self._subText).width() if self._subText else 0
+        width = 29 + max(textWidth, subTextWidth) + 10
+        height = fm.height() * 2 + 8
+        return QSize(width, height)
+
+    def paintEvent(self, e):
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing | QPainter.TextAntialiasing)
+        self._drawIndicator(painter)
+
         if not self.isEnabled():
             painter.setOpacity(0.36)
 
-        font = self.font()
-        color = self.textColor()
         width = self.width()
         height = self.height()
-        painter.setFont(font)
-        painter.setPen(color)
-        painter.drawText(30, -4, width, height / 2, Qt.AlignVCenter, self.text())
 
+        painter.setFont(self.font())
+        painter.setPen(self.textColor())
+        painter.drawText(
+            QRect(29, 0, width, height / 2),
+            Qt.AlignVCenter,
+            self.text(),
+        )
+
+        if not self._subText:
+            return
+
+        font = self.font()
         font.setPixelSize(12)
-        color = QColor(color)
+        color = QColor(self.textColor())
         color.setAlpha(128)
         painter.setFont(font)
         painter.setPen(color)
         painter.drawText(
-            30, height / 2 - 6, width, height / 2, Qt.AlignVCenter, self.subText()
+            29,
+            height / 2 - 5,
+            width,
+            height / 2,
+            Qt.AlignVCenter,
+            self.subText(),
         )
 
 
@@ -2302,10 +2326,11 @@ class LuminaPushButton(PushButton):
         # Glow effect - always visible with fixed blur radius
         self._glowEffect = QGraphicsDropShadowEffect(self)
         self._glowEffect.setOffset(0, 0)
-        self._glowEffect.setBlurRadius(25)  # Fixed blur radius to avoid shaking
+        self._glowEffect.setBlurRadius(25)
         self._glowColor = QColor(*themeColor().getRgb()[:3], 80)
         self._glowEffect.setColor(self._glowColor)
         self.setGraphicsEffect(self._glowEffect)
+        self._customGlowColor = False
 
         # Animation for color alpha (not blur radius to avoid layout issues)
         self._glowAlphaAni = QPropertyAnimation(self, b"glowAlpha", self)
@@ -2325,6 +2350,7 @@ class LuminaPushButton(PushButton):
         alpha = self._glowColor.alpha()
         self._glowColor = QColor(color.red(), color.green(), color.blue(), alpha)
         self._glowEffect.setColor(self._glowColor)
+        self._customGlowColor = True
 
     def glowColor(self) -> QColor:
         """Get current glow color"""
@@ -2340,6 +2366,8 @@ class LuminaPushButton(PushButton):
     glowAlpha = Property(int, getGlowAlpha, setGlowAlpha)
 
     def _updateGlowColor(self):
+        if self._customGlowColor:
+            return
         color = themeColor()
         alpha = self._glowColor.alpha()
         self._glowColor = QColor(*color.getRgb()[:3], alpha)

@@ -1,4 +1,5 @@
 # coding:utf-8
+from typing import List, Tuple
 from PySide6.QtCore import (
     Property,
     QParallelAnimationGroup,
@@ -69,6 +70,129 @@ class ProgressRing(ProgressBar):
             self._drawText(painter, self.valText())
 
     strokeWidth = Property(int, getStrokeWidth, setStrokeWidth)
+
+
+class RadialGauge(ProgressRing):
+    """Radial gauge with 270° arc (bottom gap) - dashboard style"""
+
+    def __init__(self, parent=None, useAni=True):
+        super().__init__(parent, useAni=useAni)
+        self._startAngle = 225
+        self._spanAngle = 270
+        self.setTextVisible(True)
+
+    def paintEvent(self, e):
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing)
+
+        cw = self._strokeWidth
+        w = min(self.height(), self.width()) - cw
+        rc = QRectF(cw / 2, self.height() / 2 - w / 2, w, w)
+
+        # draw background arc (270°)
+        bc = self.darkBackgroundColor if isDarkTheme() else self.lightBackgroundColor
+        pen = QPen(bc, cw, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
+        painter.setPen(pen)
+        painter.drawArc(rc, int(self._startAngle * 16), int(-self._spanAngle * 16))
+
+        if self.maximum() <= self.minimum():
+            return
+
+        # draw progress arc
+        pen.setColor(self.barColor())
+        painter.setPen(pen)
+        progress = self.val / (self.maximum() - self.minimum())
+        degree = int(progress * self._spanAngle)
+        painter.drawArc(rc, int(self._startAngle * 16), int(-degree * 16))
+
+        # draw text
+        if self.isTextVisible():
+            self._drawText(painter, self.valText())
+
+
+class MultiSegmentProgressRing(ProgressRing):
+    def __init__(self, parent=None, useAni=True):
+        super().__init__(parent=parent, useAni=useAni)
+        self._segments: List[Tuple[float, QColor]] = []
+        self._gapDegree = 3.0
+        self._text = ""
+
+    def segments(self) -> List[Tuple[float, QColor]]:
+        return list(self._segments)
+
+    def setSegments(self, segments: List[Tuple[float, QColor]]):
+        segs: List[Tuple[float, QColor]] = []
+        for p, c in (segments or []):
+            segs.append((float(p), QColor(c)))
+
+        self._segments = segs
+        self.update()
+
+    def getGapDegree(self) -> float:
+        return self._gapDegree
+
+    def setGapDegree(self, deg: float):
+        self._gapDegree = max(0.0, float(deg))
+        self.update()
+
+    def text(self) -> str:
+        return self._text
+
+    def setText(self, text: str):
+        self._text = text or ""
+        self.update()
+
+    def paintEvent(self, e):
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing)
+
+        cw = self._strokeWidth
+        w = min(self.height(), self.width()) - cw
+        rc = QRectF(cw / 2, self.height() / 2 - w / 2, w, w)
+
+        radius = w / 2
+
+        if not self._segments:
+            return
+
+        total = 0.0
+        for p, _ in self._segments:
+            if p > 0:
+                total += p
+
+        if total <= 0:
+            return
+
+        isSingleSegment = len(self._segments) == 1
+
+        gapDeg = 0.0 if isSingleSegment else self._gapDegree
+        capDeg = 0.0
+        if radius > 0 and not isSingleSegment:
+            capDeg = (cw / 2) / radius * 180 / 3.141592653589793
+
+        gapDeg = max(0.0, gapDeg) + 2 * capDeg
+        startDeg = 90.0
+
+        for p, color in self._segments:
+            slotDeg = max(0.0, p) / total * 360.0
+            sweepDeg = max(0.0, slotDeg - gapDeg)
+            if sweepDeg > 0:
+                pen = QPen(color, cw, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
+                painter.setPen(pen)
+                painter.drawArc(
+                    rc,
+                    int(round(startDeg * 16)),
+                    -int(round(sweepDeg * 16)),
+                )
+
+            startDeg -= slotDeg
+
+        # draw text
+        if self._text:
+            self._drawText(painter, self._text)
+
+    gapDegree = Property(float, getGapDegree, setGapDegree)
+    textProperty = Property(str, text, setText)
 
 
 class IndeterminateProgressRing(QProgressBar):
