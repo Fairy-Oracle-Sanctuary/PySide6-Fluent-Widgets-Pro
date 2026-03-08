@@ -1,22 +1,23 @@
 # coding:utf-8
-from typing import Union
 import sys
+from typing import Union
 
-from PySide6.QtCore import Qt, QSize, QRectF, QEvent
-from PySide6.QtGui import QPixmap, QPainter, QColor, QIcon
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QGraphicsDropShadowEffect
+from PySide6.QtCore import QEvent, QSize, Qt
+from PySide6.QtGui import QColor, QIcon, QPainter
+from PySide6.QtWidgets import QGraphicsDropShadowEffect, QWidget
 
-from ..common.icon import FluentIconBase, drawIcon, toQIcon
-from ..common.style_sheet import isDarkTheme, FluentStyleSheet
+from ..common.icon import FluentIconBase, toQIcon
+from ..common.style_sheet import FluentStyleSheet, isDarkTheme
 from ..components.widgets import IconWidget
-from qframelesswindow import TitleBar
-
+from ..qframelesswindow import TitleBar
 
 
 class SplashScreen(QWidget):
-    """ Splash screen """
+    """Splash screen"""
 
-    def __init__(self, icon: Union[str, QIcon, FluentIconBase], parent=None, enableShadow=True):
+    def __init__(
+        self, icon: Union[str, QIcon, FluentIconBase], parent=None, enableShadow=True
+    ):
         super().__init__(parent=parent)
         self._icon = icon
         self._iconSize = QSize(96, 96)
@@ -57,7 +58,7 @@ class SplashScreen(QWidget):
         return self._iconSize
 
     def setTitleBar(self, titleBar: QWidget):
-        """ set title bar """
+        """set title bar"""
         self.titleBar.deleteLater()
         self.titleBar = titleBar
         titleBar.setParent(self)
@@ -75,11 +76,11 @@ class SplashScreen(QWidget):
 
     def resizeEvent(self, e):
         iw, ih = self.iconSize().width(), self.iconSize().height()
-        self.iconWidget.move(self.width()//2 - iw//2, self.height()//2 - ih//2)
+        self.iconWidget.move(self.width() // 2 - iw // 2, self.height() // 2 - ih // 2)
         self.titleBar.resize(self.width(), self.titleBar.height())
 
     def finish(self):
-        """ close splash screen """
+        """close splash screen"""
         self.close()
 
     def paintEvent(self, e):

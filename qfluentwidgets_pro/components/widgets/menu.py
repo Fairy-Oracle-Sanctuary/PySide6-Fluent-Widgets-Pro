@@ -47,7 +47,6 @@ from PySide6.QtWidgets import (
     QTextEdit,
     QWidget,
 )
-from qframelesswindow import WindowEffect
 
 from ...common.config import isDarkTheme
 from ...common.font import getFont
@@ -55,6 +54,7 @@ from ...common.icon import Action, FluentIconBase, FluentIconEngine, Icon
 from ...common.icon import FluentIcon as FIF
 from ...common.screen import getCurrentScreenGeometry
 from ...common.style_sheet import FluentStyleSheet, themeColor
+from ...qframelesswindow import WindowEffect
 from .scroll_bar import SmoothScrollDelegate
 from .tool_tip import ItemViewToolTipDelegate, ItemViewToolTipType
 

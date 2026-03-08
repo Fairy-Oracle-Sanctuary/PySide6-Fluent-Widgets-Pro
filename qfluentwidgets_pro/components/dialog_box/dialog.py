@@ -1,19 +1,18 @@
 # coding:utf-8
-from PySide6.QtCore import Qt, Signal, QObject, QEvent
+from PySide6.QtCore import QEvent, Qt, Signal
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QLabel, QFrame, QVBoxLayout, QHBoxLayout, QPushButton
-from qframelesswindow import FramelessDialog
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout
 
 from ...common.auto_wrap import TextWrap
 from ...common.style_sheet import FluentStyleSheet
+from ...qframelesswindow import FramelessDialog
 from ..widgets.button import PrimaryPushButton
 from ..widgets.label import BodyLabel
-
 from .mask_dialog_base import MaskDialogBase
 
 
 class Ui_MessageBox:
-    """ Ui of message box """
+    """Ui of message box"""
 
     yesSignal = Signal()
     cancelSignal = Signal()
@@ -27,8 +26,8 @@ class Ui_MessageBox:
         self.contentLabel = BodyLabel(content, parent)
 
         self.buttonGroup = QFrame(parent)
-        self.yesButton = PrimaryPushButton(self.tr('OK'), self.buttonGroup)
-        self.cancelButton = QPushButton(self.tr('Cancel'), self.buttonGroup)
+        self.yesButton = PrimaryPushButton(self.tr("OK"), self.buttonGroup)
+        self.cancelButton = QPushButton(self.tr("Cancel"), self.buttonGroup)
 
         self.vBoxLayout = QVBoxLayout(parent)
         self.textLayout = QVBoxLayout()
@@ -94,8 +93,8 @@ class Ui_MessageBox:
     def __setQss(self):
         self.titleLabel.setObjectName("titleLabel")
         self.contentLabel.setObjectName("contentLabel")
-        self.buttonGroup.setObjectName('buttonGroup')
-        self.cancelButton.setObjectName('cancelButton')
+        self.buttonGroup.setObjectName("buttonGroup")
+        self.cancelButton.setObjectName("cancelButton")
 
         FluentStyleSheet.DIALOG.apply(self)
         FluentStyleSheet.DIALOG.apply(self.contentLabel)
@@ -104,13 +103,15 @@ class Ui_MessageBox:
         self.cancelButton.adjustSize()
 
     def setContentCopyable(self, isCopyable: bool):
-        """ set whether the content is copyable """
+        """set whether the content is copyable"""
         if isCopyable:
             self.contentLabel.setTextInteractionFlags(
-                Qt.TextInteractionFlag.TextSelectableByMouse)
+                Qt.TextInteractionFlag.TextSelectableByMouse
+            )
         else:
             self.contentLabel.setTextInteractionFlags(
-                Qt.TextInteractionFlag.NoTextInteraction)
+                Qt.TextInteractionFlag.NoTextInteraction
+            )
 
     def hideYesButton(self):
         self.yesButton.hide()
@@ -122,7 +123,7 @@ class Ui_MessageBox:
 
 
 class Dialog(FramelessDialog, Ui_MessageBox):
-    """ Dialog box """
+    """Dialog box"""
 
     yesSignal = Signal()
     cancelSignal = Signal()
@@ -138,7 +139,7 @@ class Dialog(FramelessDialog, Ui_MessageBox):
         self.titleBar.hide()
 
         self.vBoxLayout.insertWidget(0, self.windowTitleLabel, 0, Qt.AlignTop)
-        self.windowTitleLabel.setObjectName('windowTitleLabel')
+        self.windowTitleLabel.setObjectName("windowTitleLabel")
         FluentStyleSheet.DIALOG.apply(self)
         self.setFixedSize(self.size())
 
@@ -147,7 +148,7 @@ class Dialog(FramelessDialog, Ui_MessageBox):
 
 
 class MessageBox(MaskDialogBase, Ui_MessageBox):
-    """ Message box """
+    """Message box"""
 
     yesSignal = Signal()
     cancelSignal = Signal()
@@ -164,7 +165,7 @@ class MessageBox(MaskDialogBase, Ui_MessageBox):
         self.buttonGroup.setMinimumWidth(280)
         self.widget.setFixedSize(
             max(self.contentLabel.width(), self.titleLabel.width()) + 48,
-            self.contentLabel.y() + self.contentLabel.height() + 105
+            self.contentLabel.y() + self.contentLabel.height() + 105,
         )
 
     def eventFilter(self, obj, e: QEvent):
