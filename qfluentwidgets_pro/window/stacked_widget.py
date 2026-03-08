@@ -1,13 +1,12 @@
 # coding:utf-8
-from PySide6.QtCore import Qt, Signal, QEasingCurve
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QAbstractScrollArea
+from PySide6.QtCore import QEasingCurve, Qt, Signal
+from PySide6.QtWidgets import QAbstractScrollArea, QFrame, QHBoxLayout
 
-from ..components.widgets.stacked_widget import PopUpAniStackedWidget, EntranceTransitionStackedWidget
-
+from ..components.widgets.stacked_widget import PopUpAniStackedWidget
 
 
 class StackedWidget(QFrame):
-    """ Stacked widget """
+    """Stacked widget"""
 
     currentChanged = Signal(int)
 
@@ -30,11 +29,11 @@ class StackedWidget(QFrame):
         self.view.setAnimationEnabled(isEnabled)
 
     def addWidget(self, widget):
-        """ add widget to view """
+        """add widget to view"""
         self.view.addWidget(widget)
 
     def removeWidget(self, widget):
-        """ remove widget from view """
+        """remove widget from view"""
         self.view.removeWidget(widget)
 
     def widget(self, index: int):
@@ -48,7 +47,8 @@ class StackedWidget(QFrame):
             self.view.setCurrentWidget(widget, duration=300)
         else:
             self.view.setCurrentWidget(
-                widget, True, False, 300, QEasingCurve.Type.InQuad)
+                widget, True, False, 300, QEasingCurve.Type.InQuad
+            )
 
     def setCurrentIndex(self, index, popOut=True):
         self.setCurrentWidget(self.view.widget(index), popOut)
