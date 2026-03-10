@@ -1,67 +1,76 @@
-from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
 from qfluentwidgets_pro import (
-    Clip,
-    FilledProgressBar,
     FilledPushButton,
     FluentIcon,
     FluentTranslator,
-    FluentWidget,
-    HyperlinkToolButton,
-    LuminaPushButton,
-    MultiSegmentProgressRing,
     OutlinedPushButton,
-    OutlinedToolButton,
     PushButton,
     RangeSlider,  # noqa
     RoundPushButton,
     RoundToolButton,
-    ScrollArea,
-    SubtitleCheckBox,
-    SubtitleRadioButton,
     Tag,
-    TextPushButton,
     ToolTipSlider,  # noqa
+    TopFluentWindow,
+    TopNavigationItemPosition,
     toggleTheme,
-    RadialGauge,
-    DropMultiFilesWidget,
-    DropSingleFileWidget
 )
 
 
-class MainWindow(FluentWidget):
+class MainWindow(TopFluentWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("MainWindow")
-        self.resize(800, 800)
+        self.setWindowTitle("TopFluentWindow Demo")
+        self.resize(900, 600)
 
-        self.scrollArea = ScrollArea(self)
-        self.scrollArea.enableTransparentBackground()
-        self.scrollArea.setWidgetResizable(True)
+        # create sub interfaces
+        self.homeInterface = self._createHomePage()
+        self.homeInterface.setObjectName("homeInterface")
+        self.addSubInterface(
+            self.homeInterface,
+            FluentIcon.HOME,
+            "Home",
+            TopNavigationItemPosition.LEFT,
+            expanded=True,  # show both icon and text for Home
+        )
 
-        self.contentWidget = QWidget(self.scrollArea)
-        self.contentWidget.setStyleSheet("background: transparent;")
-        self.view = QVBoxLayout(self.contentWidget)
-        self.contentWidget.setLayout(self.view)
-        self.scrollArea.setWidget(self.contentWidget)
+        self.buttonsInterface = self._createButtonsPage()
+        self.buttonsInterface.setObjectName("buttonsInterface")
+        self.addSubInterface(
+            self.buttonsInterface,
+            FluentIcon.ACCEPT,
+            "Buttons",
+            TopNavigationItemPosition.LEFT,
+        )
 
-        self.mainLayout = QVBoxLayout(self)
-        self.mainLayout.addWidget(self.scrollArea)
-        self.setLayout(self.mainLayout)
+        self.settingsInterface = QWidget(self)
+        self.settingsInterface.setObjectName("settingsInterface")
+        layout = QVBoxLayout(self.settingsInterface)
+        layout.addWidget(PushButton("Settings Page"))
+        self.addSubInterface(
+            self.settingsInterface,
+            FluentIcon.SETTING,
+            "Settings",
+            TopNavigationItemPosition.RIGHT,
+        )
 
-        self.pushbtn = FilledProgressBar()
-        self.pushbtn.setIcon(FluentIcon.ACCEPT)
-        self.pushbtn.setValue(50)
-        self.view.addWidget(self.pushbtn)
+    def _createHomePage(self):
+        page = QWidget(self)
+        layout = QVBoxLayout(page)
+        layout.addWidget(PushButton("Welcome to TopFluentWindow!"))
+        return page
 
+    def _createButtonsPage(self):
+        page = QWidget(self)
+        layout = QVBoxLayout(page)
+
+        # RoundPushButton test
         self.roundbtn = RoundPushButton("RoundPushButton")
-        self.roundbtn.clicked.connect(lambda: self.pushbtn.setValue(self.pushbtn.value() + 10))
-        self.view.addWidget(self.roundbtn)
+        layout.addWidget(self.roundbtn)
 
         # RoundToolButton test
         hLayout = QHBoxLayout()
-        self.view.addLayout(hLayout)
+        layout.addLayout(hLayout)
 
         self.roundToolBtn = RoundToolButton(FluentIcon.ADD)
         self.roundToolBtn.setFixedSize(40, 40)
@@ -73,7 +82,7 @@ class MainWindow(FluentWidget):
 
         # OutlinedPushButton test
         hLayout2 = QHBoxLayout()
-        self.view.addLayout(hLayout2)
+        layout.addLayout(hLayout2)
 
         self.outlinedBtn = OutlinedPushButton("Outlined")
         hLayout2.addWidget(self.outlinedBtn)
@@ -81,21 +90,9 @@ class MainWindow(FluentWidget):
         self.outlinedBtn2 = OutlinedPushButton(FluentIcon.ADD, "With Icon")
         hLayout2.addWidget(self.outlinedBtn2)
 
-        # OutlinedToolButton test
-        hLayout3 = QHBoxLayout()
-        self.view.addLayout(hLayout3)
-
-        self.outlinedToolBtn = OutlinedToolButton(FluentIcon.SETTING)
-        self.outlinedToolBtn.setFixedSize(40, 40)
-        hLayout3.addWidget(self.outlinedToolBtn)
-
-        self.outlinedToolBtn2 = OutlinedToolButton(FluentIcon.SEARCH)
-        self.outlinedToolBtn2.setFixedSize(32, 32)
-        hLayout3.addWidget(self.outlinedToolBtn2)
-
         # FilledPushButton test - 5 color schemes
         hLayout4 = QHBoxLayout()
-        self.view.addLayout(hLayout4)
+        layout.addLayout(hLayout4)
 
         self.filledInfo = FilledPushButton("Information")
         self.filledInfo.setColorScheme(FilledPushButton.INFORMATION)
@@ -109,56 +106,9 @@ class MainWindow(FluentWidget):
         self.filledAttention.setColorScheme(FilledPushButton.ATTENTION)
         hLayout4.addWidget(self.filledAttention)
 
-        self.filledWarning = FilledPushButton("Warning")
-        self.filledWarning.setColorScheme(FilledPushButton.WARNING)
-        hLayout4.addWidget(self.filledWarning)
-
-        self.filledError = FilledPushButton("Error")
-        self.filledError.setColorScheme(FilledPushButton.ERROR)
-        hLayout4.addWidget(self.filledError)
-
-        # TextPushButton test - 5 color schemes
-        hLayout5 = QHBoxLayout()
-        self.view.addLayout(hLayout5)
-
-        self.textInfo = HyperlinkToolButton(FluentIcon.LINK, "https://github.com")
-        hLayout5.addWidget(self.textInfo)
-
-        self.textSuccess = TextPushButton(FluentIcon.GITHUB, "Success")
-        self.textSuccess.setColorScheme(TextPushButton.SUCCESS)
-        hLayout5.addWidget(self.textSuccess)
-
-        self.textAttention = TextPushButton("Attention")
-        self.textAttention.setColorScheme(TextPushButton.ATTENTION)
-        hLayout5.addWidget(self.textAttention)
-
-        self.textWarning = TextPushButton("Warning")
-        self.textWarning.setColorScheme(TextPushButton.WARNING)
-        hLayout5.addWidget(self.textWarning)
-
-        self.textError = TextPushButton("Error")
-        self.textError.setColorScheme(TextPushButton.ERROR)
-        hLayout5.addWidget(self.textError)
-
-        # LuminaPushButton test
-        hLayout6 = QHBoxLayout()
-        self.view.addLayout(hLayout6)
-
-        self.luminaBtn1 = LuminaPushButton("Lumina Button")
-        self.luminaBtn1.setGlowColor(QColor(255, 100, 50))
-        hLayout6.addWidget(self.luminaBtn1)
-
-        self.luminaBtn2 = LuminaPushButton(FluentIcon.GITHUB, "With Icon")
-        self.luminaBtn2.setDisabled(True)
-        hLayout6.addWidget(self.luminaBtn2)
-
-        clip = Clip("text")
-        clip.setIcon(FluentIcon.ACCEPT)
-        self.view.addWidget(clip)
-
         # Tag examples
         hLayout7 = QHBoxLayout()
-        self.view.addLayout(hLayout7)
+        layout.addLayout(hLayout7)
 
         self.tagInfo = Tag("Information")
         self.tagInfo.setIcon(FluentIcon.INFO)
@@ -175,53 +125,13 @@ class MainWindow(FluentWidget):
         self.tagWarning.setType(Tag.WARNING)
         hLayout7.addWidget(self.tagWarning)
 
-        self.tagError = Tag("Error")
-        self.tagError.setIcon(FluentIcon.CLOSE)
-        self.tagError.setType(Tag.ERROR)
-        hLayout7.addWidget(self.tagError)
-
-        self.tagProgress = Tag("Progress")
-        self.tagProgress.setIcon(FluentIcon.SYNC)
-        self.tagProgress.setType(Tag.PROGRESS)
-        hLayout7.addWidget(self.tagProgress)
-
-        subraido1 = SubtitleRadioButton("SubtitleRadioButton", "subtitle")
-        self.view.addWidget(subraido1)
-
-        subcheck = SubtitleCheckBox("SubtitleCheckBox", "Subtitle")
-        self.view.addWidget(subcheck)
-
-        ringLayout = QHBoxLayout()
-        self.view.addLayout(ringLayout)
-
-        self.ring1 = MultiSegmentProgressRing()
-        self.ring1.setText("75%")
-        self.ring1.setFixedSize(100, 100)
-        self.ring1.setStrokeWidth(8)
-        self.ring1.setGapDegree(4)
-        self.ring1.setSegments(
-            [
-                (0.4, QColor("#22c55e")),
-                (0.3, QColor("#3b82f6")),
-                (0.2, QColor("#f59e0b")),
-                (0.1, QColor("#ef4444")),
-            ]
-        )
-        ringLayout.addWidget(self.ring1)
-
-        self.ring2 = RadialGauge()
-        self.ring2.setValue(50)
-        ringLayout.addWidget(self.ring2)
-
-        self.selectFile1 = DropSingleFileWidget()
-        self.selectFile2 = DropMultiFilesWidget()
-        self.view.addWidget(self.selectFile1)
-        self.view.addWidget(self.selectFile2)
-
         # 切换主题
         self.theme_button = PushButton("切换主题")
-        self.view.addWidget(self.theme_button)
+        layout.addWidget(self.theme_button)
         self.theme_button.clicked.connect(toggleTheme)
+
+        layout.addStretch()
+        return page
 
 
 if __name__ == "__main__":
