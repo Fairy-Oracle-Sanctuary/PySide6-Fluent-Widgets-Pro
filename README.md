@@ -116,11 +116,11 @@ app.exec()
 - This repository is **not affiliated with** the official QFluentWidgets Pro team.
 - Please respect the original project's license and commercial terms.
 
-## � Acknowledgments
+## 🧮 Acknowledgments
 
 - `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` component implementation references [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) by HiyorinI
 
-## �🗺️ Roadmap
+## 🗺️ Roadmap
 
 - Improve widget API consistency and documentation
 - Restore more Pro widgets/components (prioritized by community needs)
