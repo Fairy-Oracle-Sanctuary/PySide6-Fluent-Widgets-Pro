@@ -5,7 +5,6 @@ from typing import Union
 from PySide6.QtCore import QRect, QRectF, QSize, Qt
 from PySide6.QtGui import QColor, QIcon, QPainter
 from PySide6.QtWidgets import QApplication, QHBoxLayout, QLabel, QVBoxLayout, QWidget
-from ..qframelesswindow import TitleBar, TitleBarBase, TitleBarButton
 
 from ..common.animation import BackgroundAnimationWidget
 from ..common.config import qconfig
@@ -21,6 +20,7 @@ from ..components.navigation import (
 )
 from ..components.widgets.frameless_window import FramelessWindow
 from ..components.widgets.label import CaptionLabel
+from ..qframelesswindow import TitleBar, TitleBarBase, TitleBarButton
 from .stacked_widget import StackedWidget
 
 
@@ -531,3 +531,113 @@ class FluentBackgroundTheme:
 
     DEFAULT = (QColor(243, 243, 243), QColor(32, 32, 32))  # light, dark
     DEFAULT_BLUE = (QColor(240, 244, 249), QColor(25, 33, 42))
+
+
+class TopFluentWindow(FluentWindowBase):
+    """Fluent window with horizontal top navigation bar"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self.setTitleBar(FluentTitleBar(self))
+
+        from ..components.navigation import TopNavigationInterface
+
+        self.navigationInterface = TopNavigationInterface(self, showReturnButton=True)
+
+        # initialize layout - navigation at top, content below
+        self.hBoxLayout.removeItem(self.hBoxLayout.itemAt(0))
+        self.hBoxLayout.setContentsMargins(0, 0, 0, 0)
+
+        self.vBoxLayout = QVBoxLayout()
+        self.vBoxLayout.setSpacing(0)
+        self.vBoxLayout.setContentsMargins(0, self.titleBar.height() - 12, 0, 0)
+
+        # add navigation interface at top
+        self.vBoxLayout.addWidget(self.navigationInterface)
+        self.vBoxLayout.addWidget(self.stackedWidget, 1)
+
+        self.hBoxLayout.addLayout(self.vBoxLayout)
+
+        self.navigationInterface.displayModeChanged.connect(self.titleBar.raise_)
+        self.titleBar.raise_()
+
+    def addSubInterface(
+        self,
+        interface: QWidget,
+        icon: Union[FluentIconBase, QIcon, str],
+        text: str,
+        position=None,
+        parent=None,
+        isTransparent=False,
+        expanded: bool = False,
+    ):
+        """add sub interface, the object name of `interface` should be set already
+        before calling this method
+
+        Parameters
+        ----------
+        interface: QWidget
+            the subinterface to be added
+
+        icon: FluentIconBase | QIcon | str
+            the icon of navigation item
+
+        text: str
+            the text of navigation item
+
+        position: TopNavigationItemPosition
+            the position of navigation item (LEFT, CENTER, RIGHT)
+
+        parent: QWidget | str
+            not used in TopFluentWindow, kept for API compatibility
+
+        isTransparent: bool
+            whether to use transparent background
+
+        expanded: bool
+            whether to show text for this specific navigation item
+        """
+        from ..components.navigation import TopNavigationItemPosition
+
+        if not interface.objectName():
+            raise ValueError("The object name of `interface` can't be empty string.")
+
+        if position is None:
+            position = TopNavigationItemPosition.LEFT
+
+        interface.setProperty("isStackedTransparent", isTransparent)
+        self.stackedWidget.addWidget(interface)
+
+        # add navigation item
+        routeKey = interface.objectName()
+        item = self.navigationInterface.addItem(
+            routeKey=routeKey,
+            icon=icon,
+            text=text,
+            onClick=lambda: self.switchTo(interface),
+            position=position,
+            tooltip=text,
+            expanded=expanded,
+        )
+
+        # initialize selected item
+        if self.stackedWidget.count() == 1:
+            self.stackedWidget.currentChanged.connect(self._onCurrentInterfaceChanged)
+            self.navigationInterface.setCurrentItem(routeKey)
+            qrouter.setDefaultRouteKey(self.stackedWidget, routeKey)
+
+        self._updateStackedBackground()
+
+        return item
+
+    def removeInterface(self, interface, isDelete=False):
+        self.navigationInterface.removeWidget(interface.objectName())
+        self.stackedWidget.removeWidget(interface)
+        interface.hide()
+
+        if isDelete:
+            interface.deleteLater()
+
+    def resizeEvent(self, e):
+        self.titleBar.move(0, 0)
+        self.titleBar.resize(self.width(), self.titleBar.height())
