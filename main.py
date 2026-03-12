@@ -3,6 +3,8 @@ from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 from gallery.view.chart.home_interface import ChartMainWindow  # noqa
 from qfluentwidgets_pro import (
     ChartWidget,
+    DropMultiFilesWidget,
+    DropSingleFileWidget,
     FilledPushButton,
     FluentIcon,
     FluentTranslator,
@@ -11,6 +13,7 @@ from qfluentwidgets_pro import (
     PushButton,
     RoundPushButton,
     RoundToolButton,
+    Splitter,
     Tag,
     TopFluentWindow,
     TopNavigationItemPosition,
@@ -136,6 +139,24 @@ class MainWindow(TopFluentWindow):
             TopNavigationItemPosition.RIGHT,
         )
 
+        self.dropInterface = self._createDropPage()
+        self.dropInterface.setObjectName("dropInterface")
+        self.addSubInterface(
+            self.dropInterface,
+            FluentIcon.FOLDER,
+            "Drop Files",
+            TopNavigationItemPosition.LEFT,
+        )
+
+        self.splitterInterface = self._createSplitterPage()
+        self.splitterInterface.setObjectName("splitterInterface")
+        self.addSubInterface(
+            self.splitterInterface,
+            FluentIcon.TILES,
+            "Splitter",
+            TopNavigationItemPosition.LEFT,
+        )
+
     def _createHomePage(self):
         page = QWidget(self)
         layout = QVBoxLayout(page)
@@ -215,6 +236,90 @@ class MainWindow(TopFluentWindow):
         self.chart_button = PushButton("打开图表窗口")
         layout.addWidget(self.chart_button)
         self.chart_button.clicked.connect(self._openChartWindow)
+
+        layout.addStretch()
+        return page
+
+    def _createDropPage(self):
+        """Create drop files demo page"""
+        page = QWidget(self)
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+        layout.setSpacing(20)
+
+        # DropSingleFileWidget
+        from qfluentwidgets_pro import BodyLabel
+
+        layout.addWidget(BodyLabel("Drop Single File:"))
+        self.singleDrop = DropSingleFileWidget()
+        self.singleDrop.setFixedHeight(120)
+        self.singleDrop.selectionChange.connect(
+            lambda path: print(f"Single file: {path}")
+        )
+        layout.addWidget(self.singleDrop)
+
+        # DropMultiFilesWidget
+        layout.addWidget(BodyLabel("Drop Multiple Files:"))
+        self.multiDrop = DropMultiFilesWidget()
+        self.multiDrop.setFixedHeight(120)
+        self.multiDrop.selectionChange.connect(
+            lambda paths: print(f"Multiple files: {paths}")
+        )
+        layout.addWidget(self.multiDrop)
+
+        layout.addStretch()
+        return page
+
+    def _createSplitterPage(self):
+        """Create splitter demo page"""
+        from PySide6.QtCore import Qt
+        from PySide6.QtGui import QColor, QPainter
+        from PySide6.QtWidgets import QWidget
+
+        from qfluentwidgets_pro import BodyLabel, isDarkTheme, themeColor
+
+        class BackgroundCard(QWidget):
+            def __init__(self, text, parent=None):
+                super().__init__(parent)
+                self.text = text
+                self.setMinimumSize(100, 80)
+
+            def paintEvent(self, event):
+                painter = QPainter(self)
+                painter.setRenderHint(QPainter.Antialiasing)
+                painter.setPen(Qt.NoPen)
+                painter.setBrush(themeColor())
+                painter.drawRoundedRect(self.rect(), 6, 6)
+
+                painter.setPen(
+                    QColor(255, 255, 255) if isDarkTheme() else QColor(0, 0, 0)
+                )
+                font = self.font()
+                font.setPixelSize(16)
+                painter.setFont(font)
+                painter.drawText(self.rect(), self.text, Qt.AlignCenter)
+
+        page = QWidget(self)
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+        layout.setSpacing(20)
+
+        # Horizontal splitter
+        layout.addWidget(BodyLabel("Horizontal Splitter:"))
+        hSplitter = Splitter(Qt.Horizontal)
+        hSplitter.addWidget(BackgroundCard("Left", self))
+        hSplitter.addWidget(BackgroundCard("Center", self))
+        hSplitter.addWidget(BackgroundCard("Right", self))
+        hSplitter.setFixedHeight(120)
+        layout.addWidget(hSplitter)
+
+        # Vertical splitter
+        layout.addWidget(BodyLabel("Vertical Splitter:"))
+        vSplitter = Splitter(Qt.Vertical)
+        vSplitter.addWidget(BackgroundCard("Top", self))
+        vSplitter.addWidget(BackgroundCard("Bottom", self))
+        vSplitter.setFixedHeight(250)
+        layout.addWidget(vSplitter)
 
         layout.addStretch()
         return page

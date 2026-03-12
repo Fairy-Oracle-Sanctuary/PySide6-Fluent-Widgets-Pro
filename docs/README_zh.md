@@ -52,7 +52,7 @@
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
 `RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
-`TopFluentWindow` `CardWidget`
+`TopFluentWindow` `CardWidget` `Splitter`
 
 ## 使用方式
 
@@ -125,7 +125,7 @@ app.exec()
 
 ## 🙏 致谢
 
-- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` 组件实现参考了 [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) (作者 HiyorinI)
+- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` `Splitter` 组件实现参考了 [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) (作者 HiyorinI)
 
 
 ## 计划（Roadmap）
