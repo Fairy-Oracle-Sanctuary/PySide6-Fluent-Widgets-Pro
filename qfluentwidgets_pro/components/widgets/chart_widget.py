@@ -273,11 +273,8 @@ class ChartWidget(SimpleCardWidget):
         if not self._initialized:
             return
 
-        theme, bg_color = self._getTheme()
-        theme_str = f"'{theme}'" if theme else "null"
-
-        js_code = f"applyTheme({theme_str}, '{bg_color}');"
-        self._browser.page().runJavaScript(js_code)
+        # Re-render chart with new theme to update all colors
+        self._doUpdateChart()
 
         # Update card background
         self.update()
