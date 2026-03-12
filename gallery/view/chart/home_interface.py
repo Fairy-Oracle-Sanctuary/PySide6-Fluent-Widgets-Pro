@@ -10,7 +10,7 @@ from qfluentwidgets_pro import (
     toggleTheme,
 )
 from qfluentwidgets_pro.components.widgets.menu import FIF
-
+from .realtime_interface import RealtimeChartInterface
 from ...common.resource import *
 from ...common.translator import Translator
 from .charts_interface import ChartCard
@@ -108,6 +108,7 @@ class ChartMainWindow(FluentWindow):
             calendar_chart,
             self,
         )
+        self.realtimeChart = RealtimeChartInterface(self)
 
         # add items to navigation interface
         self.initNavigation()
@@ -128,6 +129,7 @@ class ChartMainWindow(FluentWindow):
         self.addSubInterface(self.funnelChart, FIF.PIE_SINGLE, self.tr("漏斗图"))
         self.addSubInterface(self.gaugeChart, FIF.SPEED_MEDIUM, self.tr("仪表盘"))
         self.addSubInterface(self.calendarChart, FIF.CALENDAR, self.tr("日历图"))
+        self.addSubInterface(self.realtimeChart, FIF.UPDATE, self.tr("实时数据"))
 
         self.navigationInterface.addItem(
             routeKey="theme",

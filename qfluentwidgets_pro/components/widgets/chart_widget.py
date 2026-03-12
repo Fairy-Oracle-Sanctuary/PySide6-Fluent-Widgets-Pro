@@ -40,6 +40,7 @@ class ChartWidget(SimpleCardWidget):
         self._initialized = False
         self._pending_option = False
         self._chart_shown = False
+        self._animation_enabled = True  # Animation control for real-time updates
 
         # Create layout
         self._layout = QVBoxLayout(self)
@@ -94,6 +95,16 @@ class ChartWidget(SimpleCardWidget):
         self._js_option = js_option
         self._option = {}
         self._updateChart()
+
+    def setAnimationEnabled(self, enabled: bool):
+        """Enable or disable chart animation
+
+        Parameters
+        ----------
+        enabled : bool
+            Whether to enable animation. Disable for real-time data updates.
+        """
+        self._animation_enabled = enabled
 
     def clear(self):
         """Clear the chart"""
@@ -259,7 +270,7 @@ class ChartWidget(SimpleCardWidget):
             if (!option.backgroundColor) {{
                 option.backgroundColor = '{bg_color}';
             }}
-            option.animation = true;
+            option.animation = {"true" if self._animation_enabled else "false"};
             option.animationDuration = 1000;
             option.animationEasing = 'cubicOut';
             chart.setOption(option, {{ notMerge: true }});
