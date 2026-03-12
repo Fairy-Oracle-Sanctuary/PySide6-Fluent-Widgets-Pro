@@ -1,0 +1,26 @@
+{
+    "Material": {
+        "AcrylicBlurRadius": 15
+    },
+    "Update": {
+        "CheckUpdateAtStartUp": true
+    },
+    "Folders": {
+        "Download": "D:/CODE/PySide6/PySide6-Fluent-Widgets-Extend/app/download",
+        "LocalMusic": []
+    },
+    "MainWindow": {
+        "DpiScale": "Auto",
+        "Language": "Auto",
+        "MicaEnabled": true
+    },
+    "QFluentWidgets": {
+        "FontFamilies": [
+            "Segoe UI",
+            "Microsoft YaHei",
+            "PingFang SC"
+        ],
+        "ThemeColor": "#ff009faa",
+        "ThemeMode": "Light"
+    }
+}
