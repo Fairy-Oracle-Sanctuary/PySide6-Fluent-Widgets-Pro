@@ -93,6 +93,7 @@ from .line_edit import (
     SearchLineEdit,
     TextBrowser,
     TextEdit,
+    PinBox
 )
 from .list_view import ListItemDelegate, ListView, ListWidget
 from .menu import (

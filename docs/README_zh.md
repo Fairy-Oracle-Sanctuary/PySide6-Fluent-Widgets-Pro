@@ -41,7 +41,7 @@
 - **[兼容性]** Python 3.9+ / Windows、macOS、Linux
 
 
-## 已还原组件（部分）
+## 已还原组件（26）
 
 已还原或扩展的组件（列表将持续更新）：
 
@@ -52,7 +52,7 @@
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
 `RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
-`TopFluentWindow` `CardWidget` `Splitter`
+`TopFluentWindow` `CardWidget` `Splitter` `PinBox`
 
 ## 使用方式
 
@@ -125,7 +125,7 @@ app.exec()
 
 ## 🙏 致谢
 
-- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` `Splitter` 组件实现参考了 [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) (作者 HiyorinI)
+- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` `Splitter` `PinBox` 组件实现参考了 [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) (作者 HiyorinI)
 
 
 ## 计划（Roadmap）

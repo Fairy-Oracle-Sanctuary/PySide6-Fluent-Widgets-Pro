@@ -13,7 +13,14 @@ from PySide6.QtCore import (
     QTimer,
     Signal,
 )
-from PySide6.QtGui import QAction, QColor, QIcon, QPainter, QPainterPath
+from PySide6.QtGui import (
+    QAction,
+    QColor,
+    QIcon,
+    QPainter,
+    QPainterPath,
+    QValidator,
+)
 from PySide6.QtWidgets import (
     QCompleter,
     QHBoxLayout,
@@ -590,3 +597,119 @@ class PasswordLineEdit(LineEdit):
             return super().inputMethodQuery(query)
 
     passwordVisible = Property(bool, isPasswordVisible, setPasswordVisible)
+
+
+class PinBoxLineEdit(LineEdit):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.__isTop: bool = False
+        self.__isEnd: bool = False
+        self.__originalSize = None
+        self.setAlignment(Qt.AlignCenter)
+        self.setMaxLength(1)
+        self.textChanged.connect(self._onTextChanged)
+
+    def setFixedSize(self, w, h):
+        super().setFixedSize(w, h)
+        if self.__originalSize is None:
+            self.__originalSize = (w, h)
+
+    def keyReleaseEvent(self, e):
+        super().keyReleaseEvent(e)
+        if e.key() == Qt.Key.Key_Backspace and not self.__isTop:
+            self.focusPreviousChild()
+
+    def _onTextChanged(self):
+        if len(self.text()) >= 1 and not self.__isEnd:
+            self.focusNextChild()
+
+    def focusInEvent(self, e):
+        super().focusInEvent(e)
+        if self.__originalSize:
+            super().setFixedSize(self.__originalSize[0] - 2, self.__originalSize[1] - 2)
+
+    def focusOutEvent(self, e):
+        super().focusOutEvent(e)
+        # Restore original size
+        if self.__originalSize:
+            super().setFixedSize(*self.__originalSize)
+
+
+class PinBox(QWidget):
+    textChanged = Signal(list)
+
+    def __init__(self, parent: QWidget = None):
+        super().__init__(parent)
+        self.hBoxLayout: QHBoxLayout = QHBoxLayout(self)
+        self.__totas: int = 4
+        self.__pinBoxWidth: int = 40
+        self.__pinBoxHeight: int = 32
+        self.__echoMode: QLineEdit.echoMode = None
+        self.__validator: QValidator = None
+        self.__pinBoxLineEdits: List[PinBoxLineEdit] = []  # type: List[PinBoxLineEdit]
+
+        self.hBoxLayout.setSpacing(10)
+        self.__initPinBox()
+        self.hBoxLayout.setAlignment(Qt.AlignCenter)
+
+    def __initPinBox(self):
+        for _ in range(self.__totas):
+            pinBox = PinBoxLineEdit(self)
+            pinBox.setFixedSize(self.__pinBoxWidth, self.__pinBoxHeight)
+
+            if self.__echoMode:
+                pinBox.setEchoMode(self.__echoMode)
+            if self.__validator:
+                pinBox.setValidator(self.__validator)
+
+            self.hBoxLayout.addWidget(pinBox)
+            self.__pinBoxLineEdits.append(pinBox)
+
+            pinBox.textChanged.connect(self.__onTextChange)
+
+        self.__pinBoxLineEdits[0].__isTop = True
+        self.__pinBoxLineEdits[-1].__isEnd = True
+
+    def __onTextChange(self):
+        result = []
+        for w in self.__pinBoxLineEdits:
+            result.append(w.text())
+        self.textChanged.emit(result)
+
+    def setEchoMode(self, mode: QLineEdit.EchoMode):
+        if mode == self.__echoMode:
+            return
+        self.__echoMode = mode
+        for edit in self.__pinBoxLineEdits:
+            edit.setEchoMode(mode)
+
+    def setPinBoxFixedWidth(self, w: int):
+        if w == self.__pinBoxWidth:
+            return
+        self.__pinBoxWidth = w
+        for box in self.__pinBoxLineEdits:
+            box.setFixedWidth(w)
+
+    def setPinBoxFixedHeight(self, h: int):
+        if h == self.__pinBoxHeight:
+            return
+        self.__pinBoxHeight = h
+        for box in self.__pinBoxLineEdits:
+            box.setFixedHeight(h)
+
+    def setPinBoxValidator(self, validator: QValidator):
+        self.__validator = validator
+        for box in self.__pinBoxLineEdits:
+            box.setValidator(validator)
+
+    def setPinBoxCount(self, num: int):
+        if num == self.__totas:
+            return
+        self.__totas = num
+        for edit in self.__pinBoxLineEdits:
+            edit.deleteLater()
+        self.__pinBoxLineEdits.clear()
+        self.__initPinBox()
+
+    def count(self):
+        return self.__totas
