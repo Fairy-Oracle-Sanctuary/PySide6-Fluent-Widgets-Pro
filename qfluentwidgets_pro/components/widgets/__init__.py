@@ -86,15 +86,15 @@ from .label import (
     TitleLabel,
 )
 from .line_edit import (
+    LabelLineEdit,
     LineEdit,
     LineEditButton,
     PasswordLineEdit,
+    PinBox,
     PlainTextEdit,
     SearchLineEdit,
     TextBrowser,
     TextEdit,
-    PinBox,
-    LabelLineEdit
 )
 from .list_view import ListItemDelegate, ListView, ListWidget
 from .menu import (
@@ -119,7 +119,14 @@ from .pips_pager import (
     PipsScrollButtonDisplayMode,
     VerticalPipsPager,
 )
-from .progress_bar import FilledProgressBar, IndeterminateProgressBar, ProgressBar
+from .progress_bar import (
+    FilledProgressBar,
+    IndeterminateProgressBar,
+    ProgressBar,
+    StepProgressBar,
+    StepProgressBarButton,
+    StepProgressBar
+)
 from .progress_ring import (
     IndeterminateProgressRing,
     MultiSegmentProgressRing,
