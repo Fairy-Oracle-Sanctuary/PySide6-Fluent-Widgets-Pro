@@ -47,11 +47,12 @@ from .card_widget import (
     HeaderCardWidget,
     SimpleCardWidget,
 )
+from .chart_widget import ChartWidget
 from .check_box import CheckBox, SubtitleCheckBox
 from .combo_box import ComboBox, EditableComboBox
 from .command_bar import CommandBar, CommandBarView, CommandButton
 from .cycle_list_widget import CycleListWidget
-from .drop_widget import DropSingleFileWidget, DropMultiFilesWidget
+from .drop_widget import DropMultiFilesWidget, DropSingleFileWidget
 from .flip_view import FlipImageDelegate, FlipView, HorizontalFlipView, VerticalFlipView
 from .flyout import (
     Flyout,
@@ -117,7 +118,12 @@ from .pips_pager import (
     VerticalPipsPager,
 )
 from .progress_bar import FilledProgressBar, IndeterminateProgressBar, ProgressBar
-from .progress_ring import IndeterminateProgressRing, MultiSegmentProgressRing, ProgressRing, RadialGauge
+from .progress_ring import (
+    IndeterminateProgressRing,
+    MultiSegmentProgressRing,
+    ProgressRing,
+    RadialGauge,
+)
 from .scroll_area import ScrollArea, SingleDirectionScrollArea, SmoothScrollArea
 from .scroll_bar import (
     ScrollBar,

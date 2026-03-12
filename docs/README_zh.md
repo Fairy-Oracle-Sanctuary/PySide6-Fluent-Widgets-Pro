@@ -52,7 +52,7 @@
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
 `RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
-`TopFluentWindow`
+`TopFluentWindow` `CardWidget`
 
 ## 使用方式
 

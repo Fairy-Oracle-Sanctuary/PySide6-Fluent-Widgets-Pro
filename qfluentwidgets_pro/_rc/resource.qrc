@@ -535,5 +535,6 @@
     <file>qss/light/time_picker.qss</file>
     <file>qss/light/tool_tip.qss</file>
     <file>qss/light/tree_view.qss</file>
+    <file>js/echarts.min.js</file>
   </qresource>
 </RCC>
