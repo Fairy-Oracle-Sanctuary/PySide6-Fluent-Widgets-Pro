@@ -53,7 +53,7 @@
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
 `RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
 `TopFluentWindow` `CardWidget` `Splitter` `PinBox`
-`LabelLineEdit`
+`LabelLineEdit` `StepProgressBar`
 
 ## 使用方式
 

@@ -7,17 +7,18 @@ from qfluentwidgets_pro import (
     FilledPushButton,
     FluentIcon,
     FluentTranslator,
+    LabelLineEdit,
     OutlinedPushButton,
+    PinBox,
     PushButton,
     RoundPushButton,
     RoundToolButton,
     Splitter,
+    StepProgressBar,
     Tag,
     TopFluentWindow,
     TopNavigationItemPosition,
     toggleTheme,
-    PinBox,
-    LabelLineEdit
 )
 
 
@@ -160,6 +161,19 @@ class MainWindow(TopFluentWindow):
         self.labelLine.setPlaceholderText("text")
         layout.addWidget(self.labelLine)
 
+        stepbutton = StepProgressBar(4)
+        stepbutton.setIcons(
+            [
+                FluentIcon.HOME,
+                FluentIcon.SEARCH,
+                FluentIcon.SETTING,
+                FluentIcon.CHECKBOX,
+            ]
+        )
+        stepbutton.setStepNames(["开始", "上传中", "处理", "完成"])
+        stepbutton.setNonInteractive(True)
+        stepbutton.nextStep()
+        layout.addWidget(stepbutton)
 
         # 切换主题
         self.theme_button = PushButton("切换主题")
