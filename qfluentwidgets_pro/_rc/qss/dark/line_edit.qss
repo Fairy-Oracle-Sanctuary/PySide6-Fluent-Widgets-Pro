@@ -50,3 +50,21 @@ LineEdit:disabled, TextEdit:disabled, PlainTextEdit:disabled, TextBrowser:disabl
 #lineEditButton:pressed {
     background-color: rgba(255, 255, 255, 6);
 }
+
+PinBoxLineEdit {
+    background-color: rgba(255, 255, 255, 0.0605);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5442);
+    border-radius: 5px;
+    padding: 0px;
+    color: white;
+}
+
+PinBoxLineEdit:hover {
+    background: rgba(255, 255, 255, 0.0837);
+}
+
+PinBoxLineEdit:focus {
+    background: rgb(31, 31, 31);
+    border: 2px solid --ThemeColorPrimary;
+}

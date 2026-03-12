@@ -2,13 +2,11 @@ from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
 from gallery.view.chart.home_interface import ChartMainWindow  # noqa
 from qfluentwidgets_pro import (
-    ChartWidget,
     DropMultiFilesWidget,
     DropSingleFileWidget,
     FilledPushButton,
     FluentIcon,
     FluentTranslator,
-    FluentWindow,
     OutlinedPushButton,
     PushButton,
     RoundPushButton,
@@ -18,88 +16,8 @@ from qfluentwidgets_pro import (
     TopFluentWindow,
     TopNavigationItemPosition,
     toggleTheme,
+    PinBox
 )
-
-
-class ChartWindow(FluentWindow):
-    """Chart window with proper WebEngine support"""
-
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Chart Demo")
-        self.resize(900, 700)
-
-        # Create chart interface
-        self.chartInterface = QWidget(self)
-        self.chartInterface.setObjectName("chartInterface")
-        layout = QVBoxLayout(self.chartInterface)
-        layout.setContentsMargins(30, 30, 30, 30)
-
-        # Create chart widget
-        self.chart = ChartWidget(self.chartInterface)
-        self.chart.setOptionJS("""option = {
-  angleAxis: {
-    max: 2,
-    startAngle: 30,
-    splitLine: {
-      show: false
-    }
-  },
-  radiusAxis: {
-    type: 'category',
-    data: ['v', 'w', 'x', 'y', 'z'],
-    z: 10
-  },
-  polar: {},
-  series: [
-    {
-      type: 'bar',
-      data: [4, 3, 2, 1, 0],
-      coordinateSystem: 'polar',
-      name: 'Without Round Cap',
-      itemStyle: {
-        borderColor: 'red',
-        opacity: 0.8,
-        borderWidth: 1
-      }
-    },
-    {
-      type: 'bar',
-      data: [4, 3, 2, 1, 0],
-      coordinateSystem: 'polar',
-      name: 'With Round Cap',
-      roundCap: true,
-      itemStyle: {
-        borderColor: 'green',
-        opacity: 0.8,
-        borderWidth: 1
-      }
-    }
-  ],
-  legend: {
-    show: true,
-    data: ['Without Round Cap', 'With Round Cap']
-  }
-};""")
-        layout.addWidget(self.chart)
-
-        self.addSubInterface(self.chartInterface, FluentIcon.CHAT, "Chart")
-
-        # Add theme toggle button to navigation
-        from qfluentwidgets_pro import NavigationItemPosition
-
-        self.navigationInterface.addItem(
-            routeKey="theme",
-            icon=FluentIcon.CONSTRACT,
-            text="切换主题",
-            onClick=self._toggleTheme,
-            position=NavigationItemPosition.BOTTOM,
-            selectable=False,
-        )
-
-    def _toggleTheme(self):
-        """Toggle theme and refresh chart"""
-        toggleTheme()
 
 
 class MainWindow(TopFluentWindow):
@@ -227,6 +145,14 @@ class MainWindow(TopFluentWindow):
         self.tagWarning.setIcon(FluentIcon.EDIT)
         self.tagWarning.setType(Tag.WARNING)
         hLayout7.addWidget(self.tagWarning)
+
+        # PinBox example
+        from qfluentwidgets_pro import BodyLabel
+
+        layout.addWidget(BodyLabel("PinBox (验证码输入):"))
+        self.pinBox = PinBox()
+        self.pinBox.textChanged.connect(lambda pins: print(f"PIN: {''.join(pins)}"))
+        layout.addWidget(self.pinBox)
 
         # 切换主题
         self.theme_button = PushButton("切换主题")
