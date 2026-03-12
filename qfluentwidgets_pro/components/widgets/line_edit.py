@@ -37,6 +37,7 @@ from ...common.font import setFont
 from ...common.icon import FluentIcon as FIF
 from ...common.icon import FluentIconBase, drawIcon, isDarkTheme
 from ...common.style_sheet import FluentStyleSheet, themeColor, updateDynamicStyle
+from .button import PushButton
 from .menu import (
     IndicatorMenuItemDelegate,
     LineEditMenu,
@@ -713,3 +714,46 @@ class PinBox(QWidget):
 
     def count(self):
         return self.__totas
+
+
+class LabelLineEdit(LineEdit):
+    def __init__(self, prefix: str, suffix: str, parent=None):
+        super().__init__(parent)
+        self.setMinimumHeight(34)
+        self._prefixLabel: PushButton = PushButton(prefix, self)
+        self._suffixLabel: PushButton = PushButton(suffix, self)
+
+        self.hBoxLayout.insertWidget(0, self._prefixLabel, 1, Qt.AlignLeft)
+        self.hBoxLayout.addWidget(self._suffixLabel, 0, Qt.AlignRight)
+
+        self._prefixLabel.adjustSize()
+        self._suffixLabel.adjustSize()
+        self._adjustTextMargins()
+
+    def _adjustTextMargins(self):
+        left = len(self.leftButtons) * 30 + self._prefixLabel.width()
+        right = (
+            len(self.rightButtons) * 30
+            + 28 * self.isClearButtonEnabled()
+            + self._suffixLabel.width()
+        )
+        m = self.textMargins()
+        self.setTextMargins(left, m.top(), right, m.bottom())
+
+    def setPrefix(self, prefix: str) -> None:
+        if prefix:
+            self._prefixLabel.setText(prefix)
+            self._prefixLabel.adjustSize()
+            self._adjustTextMargins()
+
+    def setSuffix(self, suffix: str) -> None:
+        if suffix:
+            self._suffixLabel.setText(suffix)
+            self._suffixLabel.adjustSize()
+            self._adjustTextMargins()
+
+    def prefix(self) -> str:
+        return self._prefixLabel.text()
+
+    def suffix(self) -> str:
+        return self._suffixLabel.text()
