@@ -16,7 +16,8 @@ from qfluentwidgets_pro import (
     TopFluentWindow,
     TopNavigationItemPosition,
     toggleTheme,
-    PinBox
+    PinBox,
+    LabelLineEdit
 )
 
 
@@ -153,6 +154,12 @@ class MainWindow(TopFluentWindow):
         self.pinBox = PinBox()
         self.pinBox.textChanged.connect(lambda pins: print(f"PIN: {''.join(pins)}"))
         layout.addWidget(self.pinBox)
+
+        layout.addWidget(BodyLabel("LabelLineEdit"))
+        self.labelLine = LabelLineEdit("a", "b")
+        self.labelLine.setPlaceholderText("text")
+        layout.addWidget(self.labelLine)
+
 
         # 切换主题
         self.theme_button = PushButton("切换主题")
