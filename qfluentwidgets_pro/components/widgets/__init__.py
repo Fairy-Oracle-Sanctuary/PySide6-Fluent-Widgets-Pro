@@ -151,6 +151,7 @@ from .spin_box import (
     SpinBox,
     TimeEdit,
 )
+from .splitter import Splitter, SplitterHandle
 from .stacked_widget import (
     DrillInTransitionStackedWidget,
     EntranceTransitionStackedWidget,

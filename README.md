@@ -48,7 +48,7 @@ The following components have been restored or extended in this repo (the list w
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
 `RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
-`TopFluentWindow` `CardWidget`
+`TopFluentWindow` `CardWidget` `Splitter`
 
 ## 🚀 Installation
 
@@ -118,7 +118,7 @@ app.exec()
 
 ## 🧮 Acknowledgments
 
-- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` component implementation references [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) by HiyorinI
+- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` `Splitter` component implementation references [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) by HiyorinI
 
 ## 🗺️ Roadmap
 
