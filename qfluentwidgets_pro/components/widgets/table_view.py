@@ -37,6 +37,9 @@ class TableItemDelegate(QStyledItemDelegate):
         self.selectedRows = set()
         self.lightCheckedColor = QColor()
         self.darkCheckedColor = QColor()
+        self.showIndicator = True
+        self.borderRadius = 5
+        self.useStackedWidgetStyle = False
 
         if isinstance(parent, QTableView):
             self.tooltipDelegate = ItemViewToolTipDelegate(
@@ -59,6 +62,18 @@ class TableItemDelegate(QStyledItemDelegate):
             self.selectedRows.add(index.row())
             if index.row() == self.pressedRow:
                 self.pressedRow = -1
+
+    def setShowIndicator(self, show: bool):
+        """Set whether to show selection indicator"""
+        self.showIndicator = show
+
+    def setBorderRadius(self, radius: int):
+        """Set border radius for row background"""
+        self.borderRadius = radius
+
+    def setUseStackedWidgetStyle(self, use: bool):
+        """Set whether to use StackedWidget style for alternating rows"""
+        self.useStackedWidgetStyle = use
 
     def sizeHint(self, option, index):
         # increase original sizeHint to accommodate space needed for border
@@ -103,7 +118,7 @@ class TableItemDelegate(QStyledItemDelegate):
         self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex
     ):
         """draw row background"""
-        r = 5
+        r = self.borderRadius
         if index.column() == 0:
             rect = option.rect.adjusted(4, 0, r + 1, 0)
             painter.drawRoundedRect(rect, r, r)
@@ -156,12 +171,13 @@ class TableItemDelegate(QStyledItemDelegate):
         isHover = self.hoverRow == index.row()
         isPressed = self.pressedRow == index.row()
         isAlternate = index.row() % 2 == 0 and self.parent().alternatingRowColors()
+        isSelected = index.row() in self.selectedRows
         isDark = isDarkTheme()
 
         c = 255 if isDark else 0
         alpha = 0
 
-        if index.row() not in self.selectedRows:
+        if not isSelected:
             if isPressed:
                 alpha = 9 if isDark else 6
             elif isHover:
@@ -178,14 +194,42 @@ class TableItemDelegate(QStyledItemDelegate):
 
         if index.data(Qt.ItemDataRole.BackgroundRole):
             painter.setBrush(index.data(Qt.ItemDataRole.BackgroundRole))
+        elif self.useStackedWidgetStyle:
+            shouldUseStyle = isAlternate or (isSelected and not isAlternate)
+            if shouldUseStyle and not isHover and not isPressed:
+                if isDark:
+                    bgColor = QColor(255, 255, 255, 8)
+                else:
+                    bgColor = QColor(255, 255, 255, 127)
+                painter.setBrush(bgColor)
+            else:
+                painter.setBrush(QColor(c, c, c, alpha))
         else:
             painter.setBrush(QColor(c, c, c, alpha))
 
         self._drawBackground(painter, option, index)
 
+        if (
+            self.useStackedWidgetStyle
+            and not isHover
+            and not isPressed
+            and not index.data(Qt.ItemDataRole.BackgroundRole)
+        ):
+            shouldDrawBorder = isAlternate or (isSelected and not isAlternate)
+            if shouldDrawBorder:
+                if isDark:
+                    borderColor = QColor(0, 0, 0, 46)
+                else:
+                    borderColor = QColor(0, 0, 0, 17)
+                painter.setPen(borderColor)
+                painter.setBrush(Qt.NoBrush)
+                self._drawBackground(painter, option, index)
+                painter.setPen(Qt.NoPen)
+
         # draw indicator
         if (
-            index.row() in self.selectedRows
+            self.showIndicator
+            and isSelected
             and index.column() == 0
             and self.parent().horizontalScrollBar().value() == 0
         ):
@@ -404,3 +448,38 @@ class TableView(TableBase, QTableView):
     selectRightClickedRow = Property(
         bool, isSelectRightClickedRow, setSelectRightClickedRow
     )
+
+
+class RoundTableBase:
+    """Round table base class - no header, no border, taller rows"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Hide header
+        self.horizontalHeader().hide()
+        self.verticalHeader().hide()
+
+        # No border
+        self.setBorderVisible(False)
+
+        # Taller rows (default 38 -> 48)
+        self.verticalHeader().setDefaultSectionSize(48)
+
+        # No selection indicator, larger border radius, StackedWidget style
+        self.delegate.setShowIndicator(False)
+        self.delegate.setBorderRadius(8)
+        self.delegate.setUseStackedWidgetStyle(True)
+
+
+class RoundTableWidget(RoundTableBase, TableWidget):
+    """Round table widget"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+
+class RoundTableView(RoundTableBase, TableView):
+    """Round table view"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)

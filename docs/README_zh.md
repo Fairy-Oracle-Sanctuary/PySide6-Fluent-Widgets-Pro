@@ -41,7 +41,7 @@
 - **[兼容性]** Python 3.9+ / Windows、macOS、Linux
 
 
-## 已还原组件（28）
+## 已还原组件（30）
 
 已还原或扩展的组件（列表将持续更新）：
 
@@ -53,7 +53,8 @@
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
 `RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
 `TopFluentWindow` `CardWidget` `Splitter` `PinBox`
-`LabelLineEdit` `StepProgressBar`
+`LabelLineEdit` `StepProgressBar` `RoundTableWidget`
+`RoundTableView`
 
 ## 使用方式
 

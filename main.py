@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QHBoxLayout, QTableWidgetItem, QVBoxLayout, QWidget
 
 from gallery.view.chart.home_interface import ChartMainWindow  # noqa
 from qfluentwidgets_pro import (
@@ -12,7 +12,9 @@ from qfluentwidgets_pro import (
     PinBox,
     PushButton,
     RoundPushButton,
+    RoundTableWidget,
     RoundToolButton,
+    ScrollArea,
     Splitter,
     StepProgressBar,
     Tag,
@@ -84,8 +86,13 @@ class MainWindow(TopFluentWindow):
         return page
 
     def _createButtonsPage(self):
-        page = QWidget(self)
+        scroll = ScrollArea(self)
+        scroll.setWidgetResizable(True)
+
+        page = QWidget(scroll)
         layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+        layout.setSpacing(10)
 
         # RoundPushButton test
         self.roundbtn = RoundPushButton("RoundPushButton")
@@ -175,6 +182,17 @@ class MainWindow(TopFluentWindow):
         stepbutton.nextStep()
         layout.addWidget(stepbutton)
 
+        # RoundTableWidget
+        table = RoundTableWidget()
+        table.setColumnCount(3)
+        table.setRowCount(5)
+        table.setHorizontalHeaderLabels(["列1", "列2", "列3"])
+        for row in range(5):
+            for col in range(3):
+                table.setItem(row, col, QTableWidgetItem(f"数据 {row + 1}-{col + 1}"))
+        table.setFixedHeight(300)
+        layout.addWidget(table)
+
         # 切换主题
         self.theme_button = PushButton("切换主题")
         layout.addWidget(self.theme_button)
@@ -185,7 +203,11 @@ class MainWindow(TopFluentWindow):
         self.chart_button.clicked.connect(self._openChartWindow)
 
         layout.addStretch()
-        return page
+        scroll.setWidget(page)
+
+        scroll.enableTransparentBackground()
+
+        return scroll
 
     def _createDropPage(self):
         """Create drop files demo page"""
