@@ -171,6 +171,8 @@ from .state_tool_tip import StateToolTip
 from .switch_button import IndicatorPosition, SwitchButton
 from .tab_view import TabBar, TabCloseButtonDisplayMode, TabItem, TabWidget
 from .table_view import (
+    LineTableView,
+    LineTableWidget,
     RoundTableView,
     RoundTableWidget,
     TableItemDelegate,

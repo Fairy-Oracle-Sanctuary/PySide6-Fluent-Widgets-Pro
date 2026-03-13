@@ -41,7 +41,7 @@
 - **[兼容性]** Python 3.9+ / Windows、macOS、Linux
 
 
-## 已还原组件（30）
+## 已还原组件（32）
 
 已还原或扩展的组件（列表将持续更新）：
 
@@ -54,7 +54,7 @@
 `RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
 `TopFluentWindow` `ChartWidget` `Splitter` `PinBox`
 `LabelLineEdit` `StepProgressBar` `RoundTableWidget`
-`RoundTableView`
+`RoundTableView` `LineTableWidget` `LineTableView`
 
 ## 使用方式
 
