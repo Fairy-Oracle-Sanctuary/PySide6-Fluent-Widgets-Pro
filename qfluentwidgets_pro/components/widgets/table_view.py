@@ -20,6 +20,7 @@ from ...common.style_sheet import (
     FluentStyleSheet,
     isDarkTheme,
     setCustomStyleSheet,
+    themeColor,
     updateDynamicStyle,
 )
 from .check_box import CheckBoxIcon
@@ -40,6 +41,9 @@ class TableItemDelegate(QStyledItemDelegate):
         self.showIndicator = True
         self.borderRadius = 5
         self.useStackedWidgetStyle = False
+        self.useTransparentRows = False
+        self.useThemeColorSelection = False
+        self.showRowDivider = False
 
         if isinstance(parent, QTableView):
             self.tooltipDelegate = ItemViewToolTipDelegate(
@@ -74,6 +78,18 @@ class TableItemDelegate(QStyledItemDelegate):
     def setUseStackedWidgetStyle(self, use: bool):
         """Set whether to use StackedWidget style for alternating rows"""
         self.useStackedWidgetStyle = use
+
+    def setUseTransparentRows(self, use: bool):
+        """Set whether all rows are transparent (no alternating style)"""
+        self.useTransparentRows = use
+
+    def setUseThemeColorSelection(self, use: bool):
+        """Set whether selected rows use theme color background"""
+        self.useThemeColorSelection = use
+
+    def setShowRowDivider(self, show: bool):
+        """Set whether to show 1px divider line between rows"""
+        self.showRowDivider = show
 
     def sizeHint(self, option, index):
         # increase original sizeHint to accommodate space needed for border
@@ -119,7 +135,11 @@ class TableItemDelegate(QStyledItemDelegate):
     ):
         """draw row background"""
         r = self.borderRadius
-        if index.column() == 0:
+        if r == 0:
+            # No border radius - draw full width without padding
+            rect = option.rect.adjusted(-1, 0, 1, 0)
+            painter.drawRect(rect)
+        elif index.column() == 0:
             rect = option.rect.adjusted(4, 0, r + 1, 0)
             painter.drawRoundedRect(rect, r, r)
         elif index.column() == index.model().columnCount(index.parent()) - 1:
@@ -194,6 +214,27 @@ class TableItemDelegate(QStyledItemDelegate):
 
         if index.data(Qt.ItemDataRole.BackgroundRole):
             painter.setBrush(index.data(Qt.ItemDataRole.BackgroundRole))
+        elif self.useThemeColorSelection and isSelected:
+            # Selected rows use theme color background
+
+            color = themeColor()
+            if isHover:
+                bgColor = QColor(color.red(), color.green(), color.blue(), 40)
+            elif isPressed:
+                bgColor = QColor(color.red(), color.green(), color.blue(), 60)
+            else:
+                bgColor = QColor(color.red(), color.green(), color.blue(), 30)
+            painter.setBrush(bgColor)
+        elif self.useTransparentRows:
+            # All rows transparent, selected rows show StackedWidget style
+            if isSelected and not isHover and not isPressed:
+                if isDark:
+                    bgColor = QColor(255, 255, 255, 8)
+                else:
+                    bgColor = QColor(255, 255, 255, 127)
+                painter.setBrush(bgColor)
+            else:
+                painter.setBrush(QColor(c, c, c, alpha))
         elif self.useStackedWidgetStyle:
             shouldUseStyle = isAlternate or (isSelected and not isAlternate)
             if shouldUseStyle and not isHover and not isPressed:
@@ -209,13 +250,17 @@ class TableItemDelegate(QStyledItemDelegate):
 
         self._drawBackground(painter, option, index)
 
+        # Draw 1px border for StackedWidget style rows (only when not hover/pressed)
         if (
-            self.useStackedWidgetStyle
+            (self.useStackedWidgetStyle or self.useTransparentRows)
             and not isHover
             and not isPressed
             and not index.data(Qt.ItemDataRole.BackgroundRole)
         ):
-            shouldDrawBorder = isAlternate or (isSelected and not isAlternate)
+            if self.useTransparentRows:
+                shouldDrawBorder = isSelected
+            else:
+                shouldDrawBorder = isAlternate or (isSelected and not isAlternate)
             if shouldDrawBorder:
                 if isDark:
                     borderColor = QColor(0, 0, 0, 46)
@@ -237,6 +282,22 @@ class TableItemDelegate(QStyledItemDelegate):
 
         if index.data(Qt.CheckStateRole) is not None:
             self._drawCheckBox(painter, option, index)
+
+        # draw row divider line
+        if self.showRowDivider and index.column() == 0:
+            # Temporarily disable clipping to draw across full width
+            painter.setClipping(False)
+            y = option.rect.y() + option.rect.height() + self.margin
+            painter.setPen(Qt.NoPen)
+            if isDark:
+                painter.setBrush(QColor(255, 255, 255, 47))
+            else:
+                painter.setBrush(QColor(0, 0, 0, 17))
+            header = self.parent().horizontalHeader()
+            totalWidth = header.length()
+            rect = QRectF(0, y - 1, totalWidth, 1)
+            painter.drawRect(rect)
+            painter.setClipping(True)
 
         painter.restore()
         super().paint(painter, option, index)
@@ -480,6 +541,52 @@ class RoundTableWidget(RoundTableBase, TableWidget):
 
 class RoundTableView(RoundTableBase, TableView):
     """Round table view"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+
+class LineTableBase:
+    """Line table base class - has header, no border, no alternating rows"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Hide vertical header only
+        self.verticalHeader().hide()
+
+        # No border
+        self.setBorderVisible(False)
+
+        # Set isLineTable property for QSS styling
+        self.setProperty("isLineTable", True)
+
+        # Taller header (default 38 -> 48)
+        self.horizontalHeader().setFixedHeight(52)
+        self.horizontalHeader().setStretchLastSection(False)
+
+        # Taller rows (default 38 -> 48)
+        self.verticalHeader().setDefaultSectionSize(48)
+
+        # No alternating row colors
+        self.setAlternatingRowColors(False)
+
+        # No selection indicator, no border radius, theme color selection, show divider
+        self.delegate.setShowIndicator(False)
+        self.delegate.setBorderRadius(0)
+        self.delegate.setUseThemeColorSelection(True)
+        self.delegate.setShowRowDivider(True)
+        self.delegate.margin = 0
+
+
+class LineTableWidget(LineTableBase, TableWidget):
+    """Line table widget"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+
+class LineTableView(LineTableBase, TableView):
+    """Line table view"""
 
     def __init__(self, parent=None):
         super().__init__(parent)

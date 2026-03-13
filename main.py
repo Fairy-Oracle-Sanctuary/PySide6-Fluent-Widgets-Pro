@@ -8,6 +8,7 @@ from qfluentwidgets_pro import (
     FluentIcon,
     FluentTranslator,
     LabelLineEdit,
+    LineTableWidget,
     OutlinedPushButton,
     PinBox,
     PushButton,
@@ -192,6 +193,19 @@ class MainWindow(TopFluentWindow):
                 table.setItem(row, col, QTableWidgetItem(f"数据 {row + 1}-{col + 1}"))
         table.setFixedHeight(300)
         layout.addWidget(table)
+
+        # LineTableWidget
+        lineTable = LineTableWidget()
+        lineTable.setColumnCount(5)
+        lineTable.setRowCount(5)
+        lineTable.setHorizontalHeaderLabels(["列A", "列B", "列C", "列D", "列E"])
+        for row in range(5):
+            for col in range(3):
+                lineTable.setItem(
+                    row, col, QTableWidgetItem(f"数据 {row + 1}-{col + 1}")
+                )
+        lineTable.setFixedHeight(300)
+        layout.addWidget(lineTable)
 
         # 切换主题
         self.theme_button = PushButton("切换主题")
