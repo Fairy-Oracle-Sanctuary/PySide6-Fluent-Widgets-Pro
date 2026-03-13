@@ -41,7 +41,7 @@
 - **[兼容性]** Python 3.9+ / Windows、macOS、Linux
 
 
-## 已还原组件（32）
+## 已还原组件（34）
 
 已还原或扩展的组件（列表将持续更新）：
 
@@ -55,6 +55,7 @@
 `TopFluentWindow` `ChartWidget` `Splitter` `PinBox`
 `LabelLineEdit` `StepProgressBar` `RoundTableWidget`
 `RoundTableView` `LineTableWidget` `LineTableView`
+`DropSingleFolderWidget` `DropMultiFoldersWidget`
 
 ## 使用方式
 
