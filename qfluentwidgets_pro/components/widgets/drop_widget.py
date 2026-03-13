@@ -155,3 +155,57 @@ class DropSingleFileWidget(DropMultiFilesWidget):
                     filePath.append(url)
             self.draggedChange.emit(filePath)
         event.acceptProposedAction()
+
+
+class DropSingleFolderWidget(DropMultiFilesWidget):
+    """Single folder selector (drag or click to select one folder)"""
+
+    def __init__(self, defaultDir=".\\", isDashLine=True, parent=None):
+        super().__init__(defaultDir, isDashLine, parent)
+        self.setLabelText("拖动文件夹到此")
+        self.button.setText("选择文件夹")
+
+    def dropEvent(self, event):
+        urls = [url.toLocalFile() for url in event.mimeData().urls()]
+        folderPath = []
+        if urls:
+            for url in urls:
+                if QFileInfo(url).isDir():
+                    folderPath.append(url)
+                    break  # 只取第一个文件夹
+            self.draggedChange.emit(folderPath)
+        event.acceptProposedAction()
+
+
+class DropMultiFoldersWidget(DropMultiFilesWidget):
+    """Multiple folders selector (drag or click to select multiple folders)"""
+
+    def __init__(self, defaultDir=".\\", isDashLine=True, parent=None):
+        super().__init__(defaultDir, isDashLine, parent)
+        self.setLabelText("拖动多个文件夹到此")
+        self.button.setText("选择文件夹")
+
+    def _showDialog(self) -> None:
+        """Open dialog to select multiple folders"""
+        dialog = QFileDialog(self, "选择文件夹", self._defaultDir)
+        dialog.setFileMode(QFileDialog.Directory)
+        dialog.setOption(QFileDialog.ShowDirsOnly, True)
+        dialog.setOption(QFileDialog.DontUseNativeDialog, True)
+        
+        listView = dialog.findChild(QWidget, "listView")
+        if listView:
+            listView.setSelectionMode(3)  # ExtendedSelection
+        
+        if dialog.exec():
+            folders = dialog.selectedFiles()
+            self.selectionChange.emit(folders)
+
+    def dropEvent(self, event):
+        urls = [url.toLocalFile() for url in event.mimeData().urls()]
+        folderPaths = []
+        if urls:
+            for url in urls:
+                if QFileInfo(url).isDir():
+                    folderPaths.append(url)
+            self.draggedChange.emit(folderPaths)
+        event.acceptProposedAction()
