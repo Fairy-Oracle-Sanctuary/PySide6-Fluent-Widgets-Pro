@@ -125,7 +125,6 @@ from .progress_bar import (
     ProgressBar,
     StepProgressBar,
     StepProgressBarButton,
-    StepProgressBar
 )
 from .progress_ring import (
     IndeterminateProgressRing,
@@ -171,7 +170,13 @@ from .stacked_widget import (
 from .state_tool_tip import StateToolTip
 from .switch_button import IndicatorPosition, SwitchButton
 from .tab_view import TabBar, TabCloseButtonDisplayMode, TabItem, TabWidget
-from .table_view import TableItemDelegate, TableView, TableWidget
+from .table_view import (
+    RoundTableView,
+    RoundTableWidget,
+    TableItemDelegate,
+    TableView,
+    TableWidget,
+)
 from .teaching_tip import (
     PopupTeachingTip,
     TeachingTip,
