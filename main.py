@@ -10,6 +10,7 @@ from qfluentwidgets_pro import (
     LabelLineEdit,
     LineTableWidget,
     MultiSelectComboBox,
+    MultiSelectComboBoxClip,
     OutlinedPushButton,
     PinBox,
     PushButton,
@@ -19,6 +20,7 @@ from qfluentwidgets_pro import (
     ScrollArea,
     Splitter,
     StepProgressBar,
+    SubtitleCheckBox,
     Tag,
     TopFluentWindow,
     TopNavigationItemPosition,
@@ -178,6 +180,20 @@ class MainWindow(TopFluentWindow):
         )
         layout.addWidget(self.multiCombo)
 
+        # MultiSelectComboBox with chips mode
+        layout.addWidget(BodyLabel("MultiSelectComboBox Chips Mode:"))
+        self.multiComboChips = MultiSelectComboBox()
+        self.multiComboChips.setFixedWidth(200)
+        self.multiComboChips.setChipsMode()
+        self.multiComboChips.setPlaceholderText("请选择...")
+        self.multiComboChips.addItems(
+            ["Python", "JavaScript", "C++", "Java", "Go", "Rust"]
+        )
+        self.multiComboChips.selectionChanged.connect(
+            lambda indices: print(f"Chips mode selected: {indices}")
+        )
+        layout.addWidget(self.multiComboChips)
+
         layout.addWidget(BodyLabel("LabelLineEdit"))
         self.labelLine = LabelLineEdit("a", "b")
         self.labelLine.setPlaceholderText("text")
@@ -263,6 +279,21 @@ class MainWindow(TopFluentWindow):
             lambda paths: print(f"Multiple files: {paths}")
         )
         layout.addWidget(self.multiDrop)
+
+        layout.addWidget(SubtitleCheckBox("Title", "subtitle"))
+
+        # MultiSelectComboBoxClip test
+        clipLayout = QHBoxLayout()
+        clip1 = MultiSelectComboBoxClip("Python")
+        clip1.closed.connect(lambda text: print(f"Closed: {text}"))
+        clip2 = MultiSelectComboBoxClip("JavaScript")
+        clip2.closed.connect(lambda text: print(f"Closed: {text}"))
+        clip3 = MultiSelectComboBoxClip("C++")
+        clip3.closed.connect(lambda text: print(f"Closed: {text}"))
+        clipLayout.addWidget(clip1)
+        clipLayout.addWidget(clip2)
+        clipLayout.addWidget(clip3)
+        layout.addLayout(clipLayout)
 
         layout.addStretch()
         return page

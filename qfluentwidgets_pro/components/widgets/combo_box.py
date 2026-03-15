@@ -2,9 +2,18 @@
 import sys
 from typing import Iterable, List, Set, Union
 
-from PySide6.QtCore import QEvent, QPoint, QRect, QRectF, Qt, Signal, QSize
-from PySide6.QtGui import QAction, QCursor, QIcon, QPainter, QColor, QPen
-from PySide6.QtWidgets import QApplication, QPushButton, QStyledItemDelegate, QStyle
+from PySide6.QtCore import QEvent, QPoint, QRect, QRectF, QSize, Qt, Signal
+from PySide6.QtGui import QAction, QColor, QCursor, QIcon, QPainter, QPen
+from PySide6.QtWidgets import (
+    QApplication,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QScrollArea,
+    QStyle,
+    QStyledItemDelegate,
+    QWidget,
+)
 
 from ...common.animation import TranslateYAnimation
 from ...common.color import fallbackThemeColor, validColor
@@ -14,7 +23,7 @@ from ...common.icon import FluentIconBase, isDarkTheme
 from ...common.style_sheet import FluentStyleSheet, ThemeColor
 from .line_edit import LineEdit, LineEditButton
 from .menu import IndicatorMenuItemDelegate, MenuAnimationType, RoundMenu
-
+from .scroll_area import SingleDirectionScrollArea
 
 class ComboItem:
     """Combo box item"""
@@ -582,14 +591,16 @@ class ComboBoxMenu(RoundMenu):
 
 class CheckBoxMenuItemDelegate(QStyledItemDelegate):
     """Check box menu item delegate for multi-select combo box
-    
+
     Uses the same drawing logic as CheckBox widget
     """
 
     def __init__(self, parent=None):
         super().__init__(parent)
 
-    def _borderColor(self, isDark: bool, isChecked: bool, isHover: bool, isPressed: bool):
+    def _borderColor(
+        self, isDark: bool, isChecked: bool, isHover: bool, isPressed: bool
+    ):
         """Get border color based on state - matches CheckBox"""
         if isDark:
             if isChecked:
@@ -610,7 +621,9 @@ class CheckBoxMenuItemDelegate(QStyledItemDelegate):
             else:
                 return QColor(0, 0, 0, 122)
 
-    def _backgroundColor(self, isDark: bool, isChecked: bool, isHover: bool, isPressed: bool):
+    def _backgroundColor(
+        self, isDark: bool, isChecked: bool, isHover: bool, isPressed: bool
+    ):
         """Get background color based on state - matches CheckBox"""
         if isDark:
             if isChecked:
@@ -633,14 +646,14 @@ class CheckBoxMenuItemDelegate(QStyledItemDelegate):
 
     def paint(self, painter, option, index):
         painter.setRenderHints(QPainter.Antialiasing)
-        
+
         isDark = isDarkTheme()
         isChecked = index.data(Qt.CheckStateRole) == Qt.Checked
         isHover = option.state & QStyle.State_MouseOver
         isPressed = option.state & QStyle.State_Sunken
-        
+
         # draw background for checked or hover state with rounded corners and padding
-        bgRect = option.rect.adjusted(4, 1, -4, -1)
+        bgRect = option.rect.adjusted(6, 2, -6, -2)
         if isChecked:
             # selected item background
             bgColor = QColor(255, 255, 255, 9) if isDark else QColor(0, 0, 0, 9)
@@ -649,28 +662,34 @@ class CheckBoxMenuItemDelegate(QStyledItemDelegate):
             painter.drawRoundedRect(bgRect, 5, 5)
         if isHover:
             painter.setPen(Qt.NoPen)
-            painter.setBrush(QColor(255, 255, 255, 10) if isDark else QColor(0, 0, 0, 10))
+            painter.setBrush(
+                QColor(255, 255, 255, 10) if isDark else QColor(0, 0, 0, 10)
+            )
             painter.drawRoundedRect(bgRect, 5, 5)
-        
+
         # draw check box indicator with more left padding
         rect = QRect(14, option.rect.top() + (option.rect.height() - 18) // 2, 18, 18)
-        
+
         # draw border and background
         borderColor = self._borderColor(isDark, isChecked, bool(isHover), isPressed)
         bgColor = self._backgroundColor(isDark, isChecked, bool(isHover), isPressed)
-        
+
         if isChecked:
-            bgColor = validColor(bgColor, ThemeColor.DARK_1.color() if isDark else ThemeColor.LIGHT_1.color())
-        
+            bgColor = validColor(
+                bgColor,
+                ThemeColor.DARK_1.color() if isDark else ThemeColor.LIGHT_1.color(),
+            )
+
         painter.setPen(QPen(borderColor, 1.5))
         painter.setBrush(bgColor)
         painter.drawRoundedRect(rect, 4.5, 4.5)
-        
+
         # draw check mark using the same style as CheckBox
         if isChecked:
             from .check_box import CheckBoxIcon
+
             CheckBoxIcon.ACCEPT.render(painter, rect)
-        
+
         # draw text with more left padding
         text = index.data(Qt.DisplayRole)
         if text:
@@ -680,7 +699,7 @@ class CheckBoxMenuItemDelegate(QStyledItemDelegate):
             painter.drawText(textRect, Qt.AlignVCenter | Qt.AlignLeft, text)
 
     def sizeHint(self, option, index):
-        return QSize(100, 33)
+        return QSize(100, 36)
 
     def editorEvent(self, event, model, option, index):
         if event.type() == QEvent.MouseButtonRelease:
@@ -697,11 +716,11 @@ class MultiSelectComboBoxMenu(RoundMenu):
 
     def __init__(self, parent=None):
         super().__init__(title="", parent=parent)
-        self.view.setViewportMargins(0, 2, 0, 6)
+        self.view.setViewportMargins(0, 5, 0, 5)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.view.setItemDelegate(CheckBoxMenuItemDelegate())
         self.view.setObjectName("multiSelectComboListWidget")
-        self.setItemHeight(33)
+        self.setItemHeight(36)
 
     def _onItemClicked(self, item):
         """Override to prevent menu from closing on item click"""
@@ -735,9 +754,19 @@ class MultiSelectComboBox(QPushButton):
         self._placeholderText = ""
         self._maxVisibleItems = -1
         self.dropMenu = None
+        self._chipsMode = False
 
         FluentStyleSheet.COMBO_BOX.apply(self)
         self.installEventFilter(self)
+
+    def setChipsMode(self, enabled: bool = True):
+        """Set whether to use chips display mode"""
+        self._chipsMode = enabled
+        self._updateDisplay()
+
+    def isChipsMode(self) -> bool:
+        """Return whether chips mode is enabled"""
+        return self._chipsMode
 
     def eventFilter(self, obj, e: QEvent):
         if obj is self:
@@ -751,7 +780,9 @@ class MultiSelectComboBox(QPushButton):
                 self.isHover = False
         return super().eventFilter(obj, e)
 
-    def addItem(self, text: str, icon: Union[str, QIcon, FluentIconBase] = None, userData=None):
+    def addItem(
+        self, text: str, icon: Union[str, QIcon, FluentIconBase] = None, userData=None
+    ):
         """Add an item"""
         item = ComboItem(text, icon, userData)
         self.items.append(item)
@@ -774,7 +805,7 @@ class MultiSelectComboBox(QPushButton):
             elif i > index:
                 newSelected.add(i - 1)
         self._selectedIndices = newSelected
-        self._updateDisplayText()
+        self._updateDisplay()
 
     def clear(self):
         """Clear all items"""
@@ -793,16 +824,22 @@ class MultiSelectComboBox(QPushButton):
 
     def selectedItems(self) -> List[ComboItem]:
         """Return list of selected items"""
-        return [self.items[i] for i in self._selectedIndices if 0 <= i < len(self.items)]
+        return [
+            self.items[i] for i in self._selectedIndices if 0 <= i < len(self.items)
+        ]
 
     def selectedTexts(self) -> List[str]:
         """Return list of selected texts"""
-        return [self.items[i].text for i in self._selectedIndices if 0 <= i < len(self.items)]
+        return [
+            self.items[i].text
+            for i in self._selectedIndices
+            if 0 <= i < len(self.items)
+        ]
 
     def setSelectedIndices(self, indices: Set[int]):
         """Set selected indices"""
         self._selectedIndices = {i for i in indices if 0 <= i < len(self.items)}
-        self._updateDisplayText()
+        self._updateDisplay()
         self.selectionChanged.emit(self._selectedIndices)
         self.selectedTextChanged.emit(self.selectedTexts())
 
@@ -812,17 +849,91 @@ class MultiSelectComboBox(QPushButton):
         if not self._selectedIndices:
             self.setText(text)
 
+    def _updateDisplay(self):
+        """Update display based on mode and selection"""
+        if self._chipsMode:
+            self._updateDisplayChips()
+        else:
+            self._updateDisplayText()
+
     def _updateDisplayText(self):
-        """Update display text based on selection"""
+        """Update display text based on selection (TEXT mode)"""
         if not self._selectedIndices:
             self.setText(self._placeholderText or "")
             return
-        
+
         selected = self.selectedTexts()
-        if len(selected) <= 2:
-            self.setText(", ".join(selected))
-        else:
-            self.setText(f"已选择 {len(selected)} 项")
+        self.setText(", ".join(selected))
+
+    def _updateDisplayChips(self):
+        """Update display with chips (CHIPS mode)"""
+        # Clear text in chips mode
+        self.setText("")
+
+        # Create chips container if not exists
+        if not hasattr(self, "_chipsScrollArea"):
+            self._setupChipsContainer()
+
+        # Clear existing chips
+        self._clearChips()
+
+        # Create chips for selected items
+        if not self._selectedIndices:
+            if self._placeholderText:
+                self.setText(self._placeholderText)
+            self._chipsScrollArea.setVisible(False)
+            return
+
+        for idx in sorted(self._selectedIndices):
+            if 0 <= idx < len(self.items):
+                chip = MultiSelectComboBoxClip(self.items[idx].text)
+                chip.closed.connect(lambda text, i=idx: self._onChipClosed(i))
+                self._chipsLayout.insertWidget(0, chip)
+
+        self._chipsScrollArea.setVisible(True)
+
+    def _setupChipsContainer(self):
+        """Setup the scroll area and container for chips"""
+        # Create scroll area with horizontal smooth scrolling
+        self._chipsScrollArea = SingleDirectionScrollArea(self, Qt.Horizontal)
+        self._chipsScrollArea.setWidgetResizable(True)
+        self._chipsScrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self._chipsScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self._chipsScrollArea.setFrameShape(QScrollArea.NoFrame)
+        self._chipsScrollArea.setStyleSheet("background: transparent;")
+        self._chipsScrollArea.setFocusPolicy(Qt.NoFocus)
+
+        # Create container widget
+        self._chipsContainer = QWidget()
+        self._chipsContainer.setStyleSheet("background: transparent;")
+
+        # Create horizontal layout for chips
+        self._chipsLayout = QHBoxLayout(self._chipsContainer)
+        self._chipsLayout.setContentsMargins(10, 0, 40, 0)
+        self._chipsLayout.setSpacing(4)
+        self._chipsLayout.addStretch()
+
+        self._chipsScrollArea.setWidget(self._chipsContainer)
+        self._chipsScrollArea.setGeometry(self.rect())
+
+    def _clearChips(self):
+        """Clear all chips from container"""
+        if not hasattr(self, "_chipsLayout"):
+            return
+
+        # Remove all items except the stretch
+        while self._chipsLayout.count() > 1:
+            item = self._chipsLayout.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+
+    def _onChipClosed(self, index: int):
+        """Handle chip close button click"""
+        if index in self._selectedIndices:
+            self._selectedIndices.discard(index)
+            self._updateDisplay()
+            self.selectionChanged.emit(self._selectedIndices)
+            self.selectedTextChanged.emit(self.selectedTexts())
 
     def setMaxVisibleItems(self, num: int):
         self._maxVisibleItems = num
@@ -838,7 +949,7 @@ class MultiSelectComboBox(QPushButton):
             return
 
         menu = self._createComboMenu()
-        
+
         # create actions with checkable state
         for i, item in enumerate(self.items):
             action = QAction(item.icon, item.text)
@@ -846,7 +957,7 @@ class MultiSelectComboBox(QPushButton):
             action.setCheckable(True)
             action.setChecked(i in self._selectedIndices)
             menu.addAction(action)
-            
+
             listItem = menu.view.item(i)
             if listItem:
                 checkState = Qt.Checked if i in self._selectedIndices else Qt.Unchecked
@@ -865,7 +976,11 @@ class MultiSelectComboBox(QPushButton):
         self.dropMenu = menu
 
         # determine animation type
-        x = -menu.width() // 2 + menu.layout().contentsMargins().left() + self.width() // 2
+        x = (
+            -menu.width() // 2
+            + menu.layout().contentsMargins().left()
+            + self.width() // 2
+        )
         pd = self.mapToGlobal(QPoint(x, self.height()))
         hd = menu.view.heightForAnimation(pd, MenuAnimationType.DROP_DOWN)
 
@@ -907,13 +1022,13 @@ class MultiSelectComboBox(QPushButton):
         index = self._findItemByText(item.text())
         if index < 0 or not self.items[index].isEnabled:
             return
-        
+
         if index in self._selectedIndices:
             self._selectedIndices.discard(index)
         else:
             self._selectedIndices.add(index)
-        
-        self._updateDisplayText()
+
+        self._updateDisplay()
         self.selectionChanged.emit(self._selectedIndices)
         self.selectedTextChanged.emit(self.selectedTexts())
 
@@ -927,6 +1042,11 @@ class MultiSelectComboBox(QPushButton):
     def mouseReleaseEvent(self, e):
         super().mouseReleaseEvent(e)
         self._toggleComboMenu()
+
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        if hasattr(self, "_chipsScrollArea"):
+            self._chipsScrollArea.setGeometry(0, 0, self.width() - 36, self.height())
 
     def paintEvent(self, e):
         QPushButton.paintEvent(self, e)
@@ -944,3 +1064,106 @@ class MultiSelectComboBox(QPushButton):
             FIF.ARROW_DOWN.render(painter, rect)
         else:
             FIF.ARROW_DOWN.render(painter, rect, fill="#646464")
+
+
+class MultiSelectComboBoxClipCloseButton(QPushButton):
+    """Close button for MultiSelectComboBoxClip"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setFixedSize(24, 24)
+        self.setCursor(Qt.PointingHandCursor)
+        self.setObjectName("clipCloseButton")
+
+    def paintEvent(self, e):
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing)
+
+        # Draw background on hover/press
+        isHover = self.underMouse()
+        isPressed = self.isDown()
+
+        if isPressed:
+            painter.setBrush(
+                QColor(255, 255, 255, 11) if isDarkTheme() else QColor(0, 0, 0, 11)
+            )
+        elif isHover:
+            painter.setBrush(
+                QColor(255, 255, 255, 20) if isDarkTheme() else QColor(0, 0, 0, 20)
+            )
+        else:
+            painter.setBrush(Qt.NoBrush)
+
+        painter.setPen(Qt.NoPen)
+        painter.drawRoundedRect(self.rect(), 5, 5)
+
+        if isPressed:
+            painter.setOpacity(0.6)
+        painter.setPen(
+            QPen(
+                QColor(255, 255, 255, 200) if isDarkTheme() else QColor(0, 0, 0, 180),
+                1.5,
+            )
+        )
+        r = QRect(8, 8, 8, 8)
+        painter.drawLine(r.topLeft(), r.bottomRight())
+        painter.drawLine(r.topRight(), r.bottomLeft())
+
+
+class MultiSelectComboBoxClip(QWidget):
+    """Clip/tag component for MultiSelectComboBox chips mode"""
+
+    closed = Signal(str)
+
+    def __init__(self, text: str, parent=None):
+        super().__init__(parent)
+        self._text = text
+        self._setUpUi()
+
+    def _setUpUi(self):
+
+        self.setObjectName("multiSelectComboBoxClip")
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setFixedHeight(24)
+        self._isPressed = False
+
+        # Layout - no right margin so close button fits edge
+        self.hLayout = QHBoxLayout(self)
+        self.hLayout.setContentsMargins(8, 0, 0, 0)
+        self.hLayout.setSpacing(4)
+
+        # Text label
+        self.textLabel = QLabel(self._text, self)
+        self.textLabel.setObjectName("clipTextLabel")
+        self.hLayout.addWidget(self.textLabel)
+
+        # Close button
+        self.closeButton = MultiSelectComboBoxClipCloseButton(self)
+        self.closeButton.clicked.connect(self._onClose)
+        self.hLayout.addWidget(self.closeButton)
+
+        # Apply style
+        FluentStyleSheet.COMBO_BOX.apply(self)
+
+        self.adjustSize()
+
+    def mousePressEvent(self, e):
+        self._isPressed = True
+        self.setProperty("isPressed", True)
+        self.setStyle(self.style())
+        super().mousePressEvent(e)
+
+    def mouseReleaseEvent(self, e):
+        self._isPressed = False
+        self.setProperty("isPressed", False)
+        self.setStyle(self.style())
+        super().mouseReleaseEvent(e)
+
+    def _onClose(self):
+        self.closed.emit(self._text)
+
+    def text(self) -> str:
+        return self._text
+
+    def sizeHint(self):
+        return QSize(self.hLayout.totalMinimumSize().width() + 16, 24)
