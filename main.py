@@ -9,6 +9,7 @@ from qfluentwidgets_pro import (
     FluentTranslator,
     LabelLineEdit,
     LineTableWidget,
+    MultiSelectComboBox,
     OutlinedPushButton,
     PinBox,
     PushButton,
@@ -163,6 +164,19 @@ class MainWindow(TopFluentWindow):
         self.pinBox = PinBox()
         self.pinBox.textChanged.connect(lambda pins: print(f"PIN: {''.join(pins)}"))
         layout.addWidget(self.pinBox)
+
+        # MultiSelectComboBox example
+        layout.addWidget(BodyLabel("MultiSelectComboBox (多选下拉框):"))
+        self.multiCombo = MultiSelectComboBox()
+        self.multiCombo.setPlaceholderText("请选择...")
+        self.multiCombo.addItems(["Python", "JavaScript", "C++", "Java", "Go", "Rust"])
+        self.multiCombo.selectionChanged.connect(
+            lambda indices: print(f"Selected indices: {indices}")
+        )
+        self.multiCombo.selectedTextChanged.connect(
+            lambda texts: print(f"Selected texts: {texts}")
+        )
+        layout.addWidget(self.multiCombo)
 
         layout.addWidget(BodyLabel("LabelLineEdit"))
         self.labelLine = LabelLineEdit("a", "b")

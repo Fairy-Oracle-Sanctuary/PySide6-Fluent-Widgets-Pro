@@ -1,16 +1,17 @@
 # coding:utf-8
 import sys
-from typing import Iterable, Union
+from typing import Iterable, List, Set, Union
 
-from PySide6.QtCore import QEvent, QPoint, QRectF, Qt, Signal
-from PySide6.QtGui import QAction, QCursor, QIcon, QPainter
-from PySide6.QtWidgets import QApplication, QPushButton
+from PySide6.QtCore import QEvent, QPoint, QRect, QRectF, Qt, Signal, QSize
+from PySide6.QtGui import QAction, QCursor, QIcon, QPainter, QColor, QPen
+from PySide6.QtWidgets import QApplication, QPushButton, QStyledItemDelegate, QStyle
 
 from ...common.animation import TranslateYAnimation
+from ...common.color import fallbackThemeColor, validColor
 from ...common.font import setFont
 from ...common.icon import FluentIcon as FIF
 from ...common.icon import FluentIconBase, isDarkTheme
-from ...common.style_sheet import FluentStyleSheet
+from ...common.style_sheet import FluentStyleSheet, ThemeColor
 from .line_edit import LineEdit, LineEditButton
 from .menu import IndicatorMenuItemDelegate, MenuAnimationType, RoundMenu
 
@@ -577,3 +578,369 @@ class ComboBoxMenu(RoundMenu):
         self.view.adjustSize(pos, aniType)
         self.adjustSize()
         return super().exec(pos, ani, aniType)
+
+
+class CheckBoxMenuItemDelegate(QStyledItemDelegate):
+    """Check box menu item delegate for multi-select combo box
+    
+    Uses the same drawing logic as CheckBox widget
+    """
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    def _borderColor(self, isDark: bool, isChecked: bool, isHover: bool, isPressed: bool):
+        """Get border color based on state - matches CheckBox"""
+        if isDark:
+            if isChecked:
+                return fallbackThemeColor(QColor())
+            elif isPressed:
+                return QColor(255, 255, 255, 40)
+            elif isHover:
+                return QColor(255, 255, 255, 141)
+            else:
+                return QColor(255, 255, 255, 141)
+        else:
+            if isChecked:
+                return fallbackThemeColor(QColor())
+            elif isPressed:
+                return QColor(0, 0, 0, 69)
+            elif isHover:
+                return QColor(0, 0, 0, 143)
+            else:
+                return QColor(0, 0, 0, 122)
+
+    def _backgroundColor(self, isDark: bool, isChecked: bool, isHover: bool, isPressed: bool):
+        """Get background color based on state - matches CheckBox"""
+        if isDark:
+            if isChecked:
+                return fallbackThemeColor(QColor())
+            elif isPressed:
+                return QColor(255, 255, 255, 18)
+            elif isHover:
+                return QColor(255, 255, 255, 11)
+            else:
+                return QColor(0, 0, 0, 26)
+        else:
+            if isChecked:
+                return fallbackThemeColor(QColor())
+            elif isPressed:
+                return QColor(0, 0, 0, 31)
+            elif isHover:
+                return QColor(0, 0, 0, 13)
+            else:
+                return QColor(0, 0, 0, 6)
+
+    def paint(self, painter, option, index):
+        painter.setRenderHints(QPainter.Antialiasing)
+        
+        isDark = isDarkTheme()
+        isChecked = index.data(Qt.CheckStateRole) == Qt.Checked
+        isHover = option.state & QStyle.State_MouseOver
+        isPressed = option.state & QStyle.State_Sunken
+        
+        # draw background for checked or hover state with rounded corners and padding
+        bgRect = option.rect.adjusted(4, 1, -4, -1)
+        if isChecked:
+            # selected item background
+            bgColor = QColor(255, 255, 255, 9) if isDark else QColor(0, 0, 0, 9)
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(bgColor)
+            painter.drawRoundedRect(bgRect, 5, 5)
+        if isHover:
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(QColor(255, 255, 255, 10) if isDark else QColor(0, 0, 0, 10))
+            painter.drawRoundedRect(bgRect, 5, 5)
+        
+        # draw check box indicator with more left padding
+        rect = QRect(14, option.rect.top() + (option.rect.height() - 18) // 2, 18, 18)
+        
+        # draw border and background
+        borderColor = self._borderColor(isDark, isChecked, bool(isHover), isPressed)
+        bgColor = self._backgroundColor(isDark, isChecked, bool(isHover), isPressed)
+        
+        if isChecked:
+            bgColor = validColor(bgColor, ThemeColor.DARK_1.color() if isDark else ThemeColor.LIGHT_1.color())
+        
+        painter.setPen(QPen(borderColor, 1.5))
+        painter.setBrush(bgColor)
+        painter.drawRoundedRect(rect, 4.5, 4.5)
+        
+        # draw check mark using the same style as CheckBox
+        if isChecked:
+            from .check_box import CheckBoxIcon
+            CheckBoxIcon.ACCEPT.render(painter, rect)
+        
+        # draw text with more left padding
+        text = index.data(Qt.DisplayRole)
+        if text:
+            painter.setPen(Qt.white if isDark else Qt.black)
+            painter.setFont(option.font)
+            textRect = option.rect.adjusted(40, 0, -8, 0)
+            painter.drawText(textRect, Qt.AlignVCenter | Qt.AlignLeft, text)
+
+    def sizeHint(self, option, index):
+        return QSize(100, 33)
+
+    def editorEvent(self, event, model, option, index):
+        if event.type() == QEvent.MouseButtonRelease:
+            # toggle check state
+            currentState = index.data(Qt.CheckStateRole)
+            newState = Qt.Unchecked if currentState == Qt.Checked else Qt.Checked
+            model.setData(index, newState, Qt.CheckStateRole)
+            return True
+        return False
+
+
+class MultiSelectComboBoxMenu(RoundMenu):
+    """Multi-select combo box menu with check boxes"""
+
+    def __init__(self, parent=None):
+        super().__init__(title="", parent=parent)
+        self.view.setViewportMargins(0, 2, 0, 6)
+        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.view.setItemDelegate(CheckBoxMenuItemDelegate())
+        self.view.setObjectName("multiSelectComboListWidget")
+        self.setItemHeight(33)
+
+    def _onItemClicked(self, item):
+        """Override to prevent menu from closing on item click"""
+        action = item.data(Qt.UserRole)
+        if action and action.isEnabled():
+            action.trigger()
+
+    def exec(self, pos, ani=True, aniType=MenuAnimationType.DROP_DOWN):
+        self.view.adjustSize(pos, aniType)
+        self.adjustSize()
+        return super().exec(pos, ani, aniType)
+
+
+class MultiSelectComboBox(QPushButton):
+    """Multi-select combo box with check boxes"""
+
+    selectionChanged = Signal(set)
+    selectedTextChanged = Signal(list)
+
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self.arrowAni = TranslateYAnimation(self)
+        self._setUpUi()
+        setFont(self)
+
+    def _setUpUi(self):
+        self.isHover = False
+        self.isPressed = False
+        self.items: List[ComboItem] = []
+        self._selectedIndices: Set[int] = set()
+        self._placeholderText = ""
+        self._maxVisibleItems = -1
+        self.dropMenu = None
+
+        FluentStyleSheet.COMBO_BOX.apply(self)
+        self.installEventFilter(self)
+
+    def eventFilter(self, obj, e: QEvent):
+        if obj is self:
+            if e.type() == QEvent.MouseButtonPress:
+                self.isPressed = True
+            elif e.type() == QEvent.MouseButtonRelease:
+                self.isPressed = False
+            elif e.type() == QEvent.Enter:
+                self.isHover = True
+            elif e.type() == QEvent.Leave:
+                self.isHover = False
+        return super().eventFilter(obj, e)
+
+    def addItem(self, text: str, icon: Union[str, QIcon, FluentIconBase] = None, userData=None):
+        """Add an item"""
+        item = ComboItem(text, icon, userData)
+        self.items.append(item)
+
+    def addItems(self, texts: Iterable[str]):
+        """Add multiple items"""
+        for text in texts:
+            self.addItem(text)
+
+    def removeItem(self, index: int):
+        """Remove item at index"""
+        if not 0 <= index < len(self.items):
+            return
+        self.items.pop(index)
+        # update selected indices
+        newSelected = set()
+        for i in self._selectedIndices:
+            if i < index:
+                newSelected.add(i)
+            elif i > index:
+                newSelected.add(i - 1)
+        self._selectedIndices = newSelected
+        self._updateDisplayText()
+
+    def clear(self):
+        """Clear all items"""
+        self.items.clear()
+        self._selectedIndices.clear()
+        self.setText("")
+        self._currentIndex = -1
+
+    def count(self) -> int:
+        """Return number of items"""
+        return len(self.items)
+
+    def selectedIndices(self) -> Set[int]:
+        """Return set of selected indices"""
+        return self._selectedIndices.copy()
+
+    def selectedItems(self) -> List[ComboItem]:
+        """Return list of selected items"""
+        return [self.items[i] for i in self._selectedIndices if 0 <= i < len(self.items)]
+
+    def selectedTexts(self) -> List[str]:
+        """Return list of selected texts"""
+        return [self.items[i].text for i in self._selectedIndices if 0 <= i < len(self.items)]
+
+    def setSelectedIndices(self, indices: Set[int]):
+        """Set selected indices"""
+        self._selectedIndices = {i for i in indices if 0 <= i < len(self.items)}
+        self._updateDisplayText()
+        self.selectionChanged.emit(self._selectedIndices)
+        self.selectedTextChanged.emit(self.selectedTexts())
+
+    def setPlaceholderText(self, text: str):
+        """Set placeholder text"""
+        self._placeholderText = text
+        if not self._selectedIndices:
+            self.setText(text)
+
+    def _updateDisplayText(self):
+        """Update display text based on selection"""
+        if not self._selectedIndices:
+            self.setText(self._placeholderText or "")
+            return
+        
+        selected = self.selectedTexts()
+        if len(selected) <= 2:
+            self.setText(", ".join(selected))
+        else:
+            self.setText(f"已选择 {len(selected)} 项")
+
+    def setMaxVisibleItems(self, num: int):
+        self._maxVisibleItems = num
+
+    def maxVisibleItems(self) -> int:
+        return self._maxVisibleItems
+
+    def _createComboMenu(self):
+        return MultiSelectComboBoxMenu(self)
+
+    def _showComboMenu(self):
+        if not self.items:
+            return
+
+        menu = self._createComboMenu()
+        
+        # create actions with checkable state
+        for i, item in enumerate(self.items):
+            action = QAction(item.icon, item.text)
+            action.setEnabled(item.isEnabled)
+            action.setCheckable(True)
+            action.setChecked(i in self._selectedIndices)
+            menu.addAction(action)
+            
+            listItem = menu.view.item(i)
+            if listItem:
+                checkState = Qt.Checked if i in self._selectedIndices else Qt.Unchecked
+                listItem.setData(Qt.CheckStateRole, checkState)
+
+        # connect to handle selection changes
+        menu.view.itemClicked.connect(self._onItemClicked)
+
+        if menu.view.width() < self.width():
+            menu.view.setMinimumWidth(self.width())
+            menu.adjustSize()
+
+        menu.setMaxVisibleItems(self.maxVisibleItems())
+        menu.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        menu.closedSignal.connect(self._onDropMenuClosed)
+        self.dropMenu = menu
+
+        # determine animation type
+        x = -menu.width() // 2 + menu.layout().contentsMargins().left() + self.width() // 2
+        pd = self.mapToGlobal(QPoint(x, self.height()))
+        hd = menu.view.heightForAnimation(pd, MenuAnimationType.DROP_DOWN)
+
+        pu = self.mapToGlobal(QPoint(x, 0))
+        hu = menu.view.heightForAnimation(pu, MenuAnimationType.PULL_UP)
+
+        if hd >= hu:
+            menu.view.adjustSize(pd, MenuAnimationType.DROP_DOWN)
+            menu.exec(pd, aniType=MenuAnimationType.DROP_DOWN)
+        else:
+            menu.view.adjustSize(pu, MenuAnimationType.PULL_UP)
+            menu.exec(pu, aniType=MenuAnimationType.PULL_UP)
+
+    def _toggleComboMenu(self):
+        if self.dropMenu:
+            self._closeComboMenu()
+        else:
+            self._showComboMenu()
+
+    def _closeComboMenu(self):
+        if not self.dropMenu:
+            return
+        try:
+            self.dropMenu.close()
+        except Exception:
+            pass
+        self.dropMenu = None
+
+    def _onDropMenuClosed(self):
+        if sys.platform != "win32":
+            self.dropMenu = None
+        else:
+            pos = self.mapFromGlobal(QCursor.pos())
+            if not self.rect().contains(pos):
+                self.dropMenu = None
+
+    def _onItemClicked(self, item):
+        """Handle item click - toggle selection without closing menu"""
+        index = self._findItemByText(item.text())
+        if index < 0 or not self.items[index].isEnabled:
+            return
+        
+        if index in self._selectedIndices:
+            self._selectedIndices.discard(index)
+        else:
+            self._selectedIndices.add(index)
+        
+        self._updateDisplayText()
+        self.selectionChanged.emit(self._selectedIndices)
+        self.selectedTextChanged.emit(self.selectedTexts())
+
+    def _findItemByText(self, text: str) -> int:
+        """Find item index by text"""
+        for i, item in enumerate(self.items):
+            if item.text == text:
+                return i
+        return -1
+
+    def mouseReleaseEvent(self, e):
+        super().mouseReleaseEvent(e)
+        self._toggleComboMenu()
+
+    def paintEvent(self, e):
+        QPushButton.paintEvent(self, e)
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing)
+        if self.isHover:
+            painter.setOpacity(0.8)
+        elif self.isPressed:
+            painter.setOpacity(0.7)
+
+        rect = QRectF(
+            self.width() - 22, self.height() / 2 - 5 + self.arrowAni.y, 10, 10
+        )
+        if isDarkTheme():
+            FIF.ARROW_DOWN.render(painter, rect)
+        else:
+            FIF.ARROW_DOWN.render(painter, rect, fill="#646464")
