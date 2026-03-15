@@ -49,10 +49,20 @@ from .card_widget import (
 )
 from .chart_widget import ChartWidget
 from .check_box import CheckBox, SubtitleCheckBox
-from .combo_box import ComboBox, EditableComboBox, MultiSelectComboBox
+from .combo_box import (
+    ComboBox,
+    EditableComboBox,
+    MultiSelectComboBox,
+    MultiSelectComboBoxClip,
+)
 from .command_bar import CommandBar, CommandBarView, CommandButton
 from .cycle_list_widget import CycleListWidget
-from .drop_widget import DropMultiFilesWidget, DropMultiFoldersWidget, DropSingleFileWidget, DropSingleFolderWidget
+from .drop_widget import (
+    DropMultiFilesWidget,
+    DropMultiFoldersWidget,
+    DropSingleFileWidget,
+    DropSingleFolderWidget,
+)
 from .flip_view import FlipImageDelegate, FlipView, HorizontalFlipView, VerticalFlipView
 from .flyout import (
     Flyout,
