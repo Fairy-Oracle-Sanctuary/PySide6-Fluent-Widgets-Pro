@@ -49,7 +49,7 @@ from .card_widget import (
 )
 from .chart_widget import ChartWidget
 from .check_box import CheckBox, SubtitleCheckBox
-from .combo_box import ComboBox, EditableComboBox
+from .combo_box import ComboBox, EditableComboBox, MultiSelectComboBox
 from .command_bar import CommandBar, CommandBarView, CommandButton
 from .cycle_list_widget import CycleListWidget
 from .drop_widget import DropMultiFilesWidget, DropMultiFoldersWidget, DropSingleFileWidget, DropSingleFolderWidget
