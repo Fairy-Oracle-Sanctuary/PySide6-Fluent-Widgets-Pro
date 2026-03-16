@@ -1,5 +1,6 @@
 # coding:utf-8
 from math import floor
+import sys
 
 from PySide6.QtCore import (
     Property,
@@ -635,7 +636,6 @@ class StepProgressBar(QWidget):
             stepWidget = QWidget(self)
             vLayout = QVBoxLayout(stepWidget)
             vLayout.setContentsMargins(0, 0, 0, 0)
-            vLayout.setSpacing(4)
             vLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
             btn = StepProgressBarButton(icon, str(i + 1), self)
@@ -646,6 +646,8 @@ class StepProgressBar(QWidget):
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
             vLayout.addWidget(btn, 0, Qt.AlignmentFlag.AlignHCenter)
+            if sys.platform == 'drawin':
+                vLayout.addSpacing(6)
             vLayout.addWidget(label, 0, Qt.AlignmentFlag.AlignHCenter)
 
             self.hBoxLayout.addWidget(stepWidget)
@@ -668,7 +670,6 @@ class StepProgressBar(QWidget):
 
     def _updateButtonStates(self):
         for i, btn in enumerate(self._buttons):
-            # All buttons are always clickable
             btn.setEnabled(True)
 
             # First button is always checked
@@ -791,9 +792,7 @@ class StepProgressBar(QWidget):
             btn2 = self._buttons[i + 1]
 
             btnSize = btn1.width()
-            # Button circle is drawn with 1px adjustment on each side
-            # So actual radius is (size - 2) / 2, but we need to connect to circle edge
-            radius = btnSize / 2 - 1  # accounts for the 1px border adjustment
+            radius = btnSize / 2 - 1
 
             # Get button center position in parent coordinates
             btn1Rect = btn1.geometry()
