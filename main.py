@@ -10,7 +10,6 @@ from qfluentwidgets_pro import (
     LabelLineEdit,
     LineTableWidget,
     MultiSelectComboBox,
-    MultiSelectComboBoxClip,
     OutlinedPushButton,
     PinBox,
     PushButton,
@@ -20,6 +19,7 @@ from qfluentwidgets_pro import (
     ScrollArea,
     Splitter,
     StepProgressBar,
+    SubClip,
     SubtitleCheckBox,
     Tag,
     TopFluentWindow,
@@ -282,13 +282,13 @@ class MainWindow(TopFluentWindow):
 
         layout.addWidget(SubtitleCheckBox("Title", "subtitle"))
 
-        # MultiSelectComboBoxClip test
+        # SubClip test
         clipLayout = QHBoxLayout()
-        clip1 = MultiSelectComboBoxClip("Python")
+        clip1 = SubClip("Python")
         clip1.closed.connect(lambda text: print(f"Closed: {text}"))
-        clip2 = MultiSelectComboBoxClip("JavaScript")
+        clip2 = SubClip("JavaScript")
         clip2.closed.connect(lambda text: print(f"Closed: {text}"))
-        clip3 = MultiSelectComboBoxClip("C++")
+        clip3 = SubClip("C++")
         clip3.closed.connect(lambda text: print(f"Closed: {text}"))
         clipLayout.addWidget(clip1)
         clipLayout.addWidget(clip2)

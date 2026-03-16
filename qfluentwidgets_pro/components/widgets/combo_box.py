@@ -7,7 +7,6 @@ from PySide6.QtGui import QAction, QColor, QCursor, QIcon, QPainter, QPen
 from PySide6.QtWidgets import (
     QApplication,
     QHBoxLayout,
-    QLabel,
     QPushButton,
     QScrollArea,
     QStyle,
@@ -21,9 +20,11 @@ from ...common.font import setFont
 from ...common.icon import FluentIcon as FIF
 from ...common.icon import FluentIconBase, isDarkTheme
 from ...common.style_sheet import FluentStyleSheet, ThemeColor
+from .button import SubClip
 from .line_edit import LineEdit, LineEditButton
 from .menu import IndicatorMenuItemDelegate, MenuAnimationType, RoundMenu
 from .scroll_area import SingleDirectionScrollArea
+
 
 class ComboItem:
     """Combo box item"""
@@ -847,6 +848,7 @@ class MultiSelectComboBox(QPushButton):
         """Set placeholder text"""
         self._placeholderText = text
         if not self._selectedIndices:
+            self._updateTextState(True)
             self.setText(text)
 
     def _updateDisplay(self):
@@ -856,12 +858,24 @@ class MultiSelectComboBox(QPushButton):
         else:
             self._updateDisplayText()
 
+    def _updateTextState(self, isPlaceholder):
+        """Update placeholder text state for styling"""
+        if self.property("isPlaceholderText") == isPlaceholder:
+            return
+
+        self.setProperty("isPlaceholderText", isPlaceholder)
+        self.style().unpolish(self)
+        self.style().polish(self)
+        self.update()
+
     def _updateDisplayText(self):
         """Update display text based on selection (TEXT mode)"""
         if not self._selectedIndices:
+            self._updateTextState(True)
             self.setText(self._placeholderText or "")
             return
 
+        self._updateTextState(False)
         selected = self.selectedTexts()
         self.setText(", ".join(selected))
 
@@ -880,13 +894,16 @@ class MultiSelectComboBox(QPushButton):
         # Create chips for selected items
         if not self._selectedIndices:
             if self._placeholderText:
+                self._updateTextState(True)
                 self.setText(self._placeholderText)
             self._chipsScrollArea.setVisible(False)
             return
 
+        self._updateTextState(False)
+
         for idx in sorted(self._selectedIndices):
             if 0 <= idx < len(self.items):
-                chip = MultiSelectComboBoxClip(self.items[idx].text)
+                chip = SubClip(self.items[idx].text)
                 chip.closed.connect(lambda text, i=idx: self._onChipClosed(i))
                 self._chipsLayout.insertWidget(0, chip)
 
@@ -1064,106 +1081,3 @@ class MultiSelectComboBox(QPushButton):
             FIF.ARROW_DOWN.render(painter, rect)
         else:
             FIF.ARROW_DOWN.render(painter, rect, fill="#646464")
-
-
-class MultiSelectComboBoxClipCloseButton(QPushButton):
-    """Close button for MultiSelectComboBoxClip"""
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setFixedSize(24, 24)
-        self.setCursor(Qt.PointingHandCursor)
-        self.setObjectName("clipCloseButton")
-
-    def paintEvent(self, e):
-        painter = QPainter(self)
-        painter.setRenderHints(QPainter.Antialiasing)
-
-        # Draw background on hover/press
-        isHover = self.underMouse()
-        isPressed = self.isDown()
-
-        if isPressed:
-            painter.setBrush(
-                QColor(255, 255, 255, 11) if isDarkTheme() else QColor(0, 0, 0, 11)
-            )
-        elif isHover:
-            painter.setBrush(
-                QColor(255, 255, 255, 20) if isDarkTheme() else QColor(0, 0, 0, 20)
-            )
-        else:
-            painter.setBrush(Qt.NoBrush)
-
-        painter.setPen(Qt.NoPen)
-        painter.drawRoundedRect(self.rect(), 5, 5)
-
-        if isPressed:
-            painter.setOpacity(0.6)
-        painter.setPen(
-            QPen(
-                QColor(255, 255, 255, 200) if isDarkTheme() else QColor(0, 0, 0, 180),
-                1.5,
-            )
-        )
-        r = QRect(8, 8, 8, 8)
-        painter.drawLine(r.topLeft(), r.bottomRight())
-        painter.drawLine(r.topRight(), r.bottomLeft())
-
-
-class MultiSelectComboBoxClip(QWidget):
-    """Clip/tag component for MultiSelectComboBox chips mode"""
-
-    closed = Signal(str)
-
-    def __init__(self, text: str, parent=None):
-        super().__init__(parent)
-        self._text = text
-        self._setUpUi()
-
-    def _setUpUi(self):
-
-        self.setObjectName("multiSelectComboBoxClip")
-        self.setAttribute(Qt.WA_StyledBackground, True)
-        self.setFixedHeight(24)
-        self._isPressed = False
-
-        # Layout - no right margin so close button fits edge
-        self.hLayout = QHBoxLayout(self)
-        self.hLayout.setContentsMargins(8, 0, 0, 0)
-        self.hLayout.setSpacing(4)
-
-        # Text label
-        self.textLabel = QLabel(self._text, self)
-        self.textLabel.setObjectName("clipTextLabel")
-        self.hLayout.addWidget(self.textLabel)
-
-        # Close button
-        self.closeButton = MultiSelectComboBoxClipCloseButton(self)
-        self.closeButton.clicked.connect(self._onClose)
-        self.hLayout.addWidget(self.closeButton)
-
-        # Apply style
-        FluentStyleSheet.COMBO_BOX.apply(self)
-
-        self.adjustSize()
-
-    def mousePressEvent(self, e):
-        self._isPressed = True
-        self.setProperty("isPressed", True)
-        self.setStyle(self.style())
-        super().mousePressEvent(e)
-
-    def mouseReleaseEvent(self, e):
-        self._isPressed = False
-        self.setProperty("isPressed", False)
-        self.setStyle(self.style())
-        super().mouseReleaseEvent(e)
-
-    def _onClose(self):
-        self.closed.emit(self._text)
-
-    def text(self) -> str:
-        return self._text
-
-    def sizeHint(self):
-        return QSize(self.hLayout.totalMinimumSize().width() + 16, 24)

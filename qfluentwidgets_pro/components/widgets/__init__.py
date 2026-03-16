@@ -24,6 +24,7 @@ from .button import (
     SplitPushButton,
     SplitToolButton,
     SplitWidgetBase,
+    SubClip,
     SubtitleRadioButton,
     Tag,
     TextPushButton,
@@ -53,7 +54,6 @@ from .combo_box import (
     ComboBox,
     EditableComboBox,
     MultiSelectComboBox,
-    MultiSelectComboBoxClip,
 )
 from .command_bar import CommandBar, CommandBarView, CommandButton
 from .cycle_list_widget import CycleListWidget
