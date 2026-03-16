@@ -197,7 +197,7 @@ class RoundListItemDelegate(ListItemDelegate):
 
         # Icon position: left side with padding
         iconSize = 16
-        x = option.rect.x() + 11
+        x = option.rect.x() + 16
         y = option.rect.y() + (option.rect.height() - iconSize) // 2
         rect = QRectF(x, y, iconSize, iconSize)
 
