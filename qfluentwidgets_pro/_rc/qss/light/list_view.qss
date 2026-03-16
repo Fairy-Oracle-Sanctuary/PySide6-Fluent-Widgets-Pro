@@ -29,3 +29,36 @@ ListWidget::indicator {
     margin-right: 4px;
 }
 
+RoundListView,
+RoundListWidget {
+    background: transparent;
+    outline: none;
+    border: none;
+    selection-background-color: transparent;
+    alternate-background-color: transparent;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+RoundListView::item,
+RoundListWidget::item {
+    background: rgba(0, 0, 0, 0.015);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 5px;
+    padding-left: 11px;
+    padding-right: 11px;
+    height: 42px;
+}
+
+RoundListView::item:hover,
+RoundListWidget::item:hover {
+    background: rgba(0, 0, 0, 0.01);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+RoundListView::item:selected,
+RoundListWidget::item:selected {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid --ThemeColorPrimary;
+}
+

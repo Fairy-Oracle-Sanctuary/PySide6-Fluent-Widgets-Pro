@@ -1,12 +1,19 @@
 # coding:utf-8
 from typing import List
 
-from PySide6.QtCore import Property, QModelIndex, Qt
-from PySide6.QtGui import QPainter
-from PySide6.QtWidgets import QListView, QListWidget, QStyleOptionViewItem, QWidget
+from PySide6.QtCore import Property, QModelIndex, QRectF, Qt
+from PySide6.QtGui import QIcon, QPainter
+from PySide6.QtWidgets import (
+    QListView,
+    QListWidget,
+    QListWidgetItem,
+    QStyleOptionViewItem,
+    QWidget,
+)
 
 from ...common.color import autoFallbackThemeColor
-from ...common.style_sheet import FluentStyleSheet
+from ...common.icon import FluentIconBase, Icon, drawIcon
+from ...common.style_sheet import FluentStyleSheet, themeColor
 from .scroll_bar import SmoothScrollDelegate
 from .table_view import TableItemDelegate
 
@@ -152,6 +159,139 @@ class ListWidget(ListBase, QListWidget):
 
 class ListView(ListBase, QListView):
     """List view"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    def isSelectRightClickedRow(self):
+        return self._isSelectRightClickedRow
+
+    def setSelectRightClickedRow(self, isSelect: bool):
+        self._isSelectRightClickedRow = isSelect
+
+    selectRightClickedRow = Property(
+        bool, isSelectRightClickedRow, setSelectRightClickedRow
+    )
+
+
+class RoundListItemDelegate(ListItemDelegate):
+    """Round list item delegate with no indicator and theme-aware icon support"""
+
+    def __init__(self, parent: QListView):
+        super().__init__(parent)
+        self.showIndicator = False
+
+    def _drawIndicator(
+        self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex
+    ):
+        """Do not draw indicator"""
+        pass
+
+    def _drawIcon(
+        self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex
+    ):
+        """Draw theme-aware icon"""
+        icon = index.data(Qt.DecorationRole)
+        if icon is None:
+            return
+
+        # Icon position: left side with padding
+        iconSize = 16
+        x = option.rect.x() + 11
+        y = option.rect.y() + (option.rect.height() - iconSize) // 2
+        rect = QRectF(x, y, iconSize, iconSize)
+
+        if isinstance(icon, (FluentIconBase, Icon)):
+            if isinstance(icon, FluentIconBase):
+                if index.row() in self.selectedRows:
+                    icon = icon.icon(color=themeColor())
+                else:
+                    icon = icon.icon()
+            drawIcon(icon, painter, rect)
+        elif isinstance(icon, QIcon):
+            # Regular QIcon
+            icon.paint(painter, rect.toRect(), Qt.AlignCenter)
+
+    def paint(self, painter, option, index):
+        super(ListItemDelegate, self).paint(painter, option, index)
+
+        # Draw icon on top
+        painter.save()
+        self._drawIcon(painter, option, index)
+        painter.restore()
+
+
+class RoundListBase(ListBase):
+    """Round list base with border and background styling"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.delegate = RoundListItemDelegate(self)
+        self.setItemDelegate(self.delegate)
+        self.setSpacing(1)
+
+
+class RoundListWidget(RoundListBase, QListWidget):
+    """Round list widget with border, background, no indicator, and icon support"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    def addItem(self, text: str, icon=None):
+        """Add an item with optional icon
+
+        Parameters
+        ----------
+        text : str
+            Item text
+        icon : FluentIconBase | QIcon | None
+            Optional icon (FluentIcon for theme support, or QIcon)
+        """
+        item = QListWidgetItem(self)
+        item.setText(text)
+        if icon is not None:
+            item.setData(Qt.DecorationRole, icon)
+        super().addItem(item)
+
+    def addItems(self, items: list):
+        """Add multiple items
+
+        Parameters
+        ----------
+        items : list
+            List of items, each can be:
+            - str: item text without icon
+            - tuple (text, icon): item text with icon
+        """
+        for item in items:
+            if isinstance(item, tuple):
+                self.addItem(item[0], item[1] if len(item) > 1 else None)
+            else:
+                self.addItem(item)
+
+    def setCurrentItem(self, item, command=None):
+        self.setCurrentRow(self.row(item), command)
+
+    def setCurrentRow(self, row: int, command=None):
+        if not command:
+            super().setCurrentRow(row)
+        else:
+            super().setCurrentRow(row, command)
+        self.updateSelectedRows()
+
+    def isSelectRightClickedRow(self):
+        return self._isSelectRightClickedRow
+
+    def setSelectRightClickedRow(self, isSelect: bool):
+        self._isSelectRightClickedRow = isSelect
+
+    selectRightClickedRow = Property(
+        bool, isSelectRightClickedRow, setSelectRightClickedRow
+    )
+
+
+class RoundListView(RoundListBase, QListView):
+    """Round list view with border, background, no indicator, and icon support"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
