@@ -45,7 +45,7 @@ RoundListWidget::item {
     background: rgba(0, 0, 0, 0.015);
     border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 5px;
-    padding-left: 11px;
+    padding-left: 16px;
     padding-right: 11px;
     height: 42px;
 }
