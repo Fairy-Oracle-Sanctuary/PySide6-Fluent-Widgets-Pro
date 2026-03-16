@@ -266,4 +266,56 @@
         <translation>Total </translation>
     </message>
 </context>
+<context>
+    <name>DropMultiFilesWidget</name>
+    <message>
+        <source>Drag &amp; drop any files here</source>
+        <translation>Arrastra y suelta cualquier archivo aquí</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>o</translation>
+    </message>
+    <message>
+        <source>Browse files</source>
+        <translation>Explorar archivos</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFileWidget</name>
+    <message>
+        <source>Drag &amp; drop any file here</source>
+        <translation>Arrastra y suelta cualquier archivo aquí</translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation>Explorar archivo</translation>
+    </message>
+    <message>
+        <source>All files (*.*);; Text files (*.txt)</source>
+        <translation>Todos los archivos (*.*);; Archivos de texto (*.txt)</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFolderWidget</name>
+    <message>
+        <source>Drag &amp; drop a folder here</source>
+        <translation>Arrastra y suelta una carpeta aquí</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>Explorar carpeta</translation>
+    </message>
+</context>
+<context>
+    <name>DropMultiFoldersWidget</name>
+    <message>
+        <source>Drag &amp; drop folders here</source>
+        <translation>Arrastra y suelta carpetas aquí</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>Explorar carpeta</translation>
+    </message>
+</context>
 </TS>

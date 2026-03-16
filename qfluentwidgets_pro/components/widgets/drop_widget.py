@@ -1,18 +1,19 @@
 # coding:utf-8
 from typing import Union
 
-from PySide6.QtCore import QSize, Signal, QFileInfo, Qt
-from PySide6.QtGui import QPainter, QPen, QColor
-from PySide6.QtWidgets import QFileDialog, QWidget, QVBoxLayout
+from PySide6.QtCore import QFileInfo, QSize, Qt, Signal
+from PySide6.QtGui import QColor, QPainter, QPen
+from PySide6.QtWidgets import QFileDialog, QVBoxLayout, QWidget
 
-from ...common.font import setFont
 from ...common.color import isDarkTheme
+from ...common.font import setFont
 from ..widgets.button import HyperlinkButton
 from ..widgets.label import BodyLabel
 
 
 class DropMultiFilesWidget(QWidget):
-    """ get drag folder widget"""
+    """get drag folder widget"""
+
     draggedChange = Signal(list)
     selectionChange = Signal(list)
 
@@ -28,28 +29,37 @@ class DropMultiFilesWidget(QWidget):
 
         self.__initWidget()
         self.button.clicked.connect(self._showDialog)
-        
+
     def __initWidget(self):
-        self.label: BodyLabel = BodyLabel(self.tr("拖动文件夹到此"), self)
-        self.orLabel: BodyLabel = BodyLabel(self.tr("或"), self)
-        self.button: HyperlinkButton = HyperlinkButton('', "选择文件夹", self)
+        self.label: BodyLabel = BodyLabel(self.tr("Drag & drop any files here"), self)
+        self.orLabel: BodyLabel = BodyLabel(self.tr("or"), self)
+        self.button: HyperlinkButton = HyperlinkButton(
+            "", self.tr("Browse files"), self
+        )
+
         self.label.setAlignment(Qt.AlignHCenter)
         self.orLabel.setAlignment(Qt.AlignHCenter)
-        
+
         for w in [self.button, self.label, self.orLabel]:
             setFont(w, 15)
-        
+
         self.viewLayout.setAlignment(Qt.AlignCenter)
         self.viewLayout.addWidget(self.label)
         self.viewLayout.addWidget(self.orLabel)
         self.viewLayout.addWidget(self.button)
 
     def _showDialog(self) -> None:
-        self.selectionChange.emit([QFileDialog.getExistingDirectory(self, "选择文件夹", self._defaultDir)])
+        self.selectionChange.emit(
+            [
+                QFileDialog.getExistingDirectory(
+                    self, self.tr("Browse files"), self._defaultDir
+                )
+            ]
+        )
 
     def setLabelText(self, text) -> None:
         self.label.setText(text)
-    
+
     def setDefaultDir(self, dir: str) -> None:
         self._defaultDir = dir
 
@@ -60,7 +70,7 @@ class DropMultiFilesWidget(QWidget):
             return
         self.__lineColor = color
         self.update()
-    
+
     def enableDashLine(self, isEnable: bool) -> None:
         if self.__enableDashLine == isEnable:
             return
@@ -91,7 +101,9 @@ class DropMultiFilesWidget(QWidget):
         elif self.__lineColor:
             color = self.__lineColor
         else:
-            color = QColor(255, 255, 255, 120) if isDarkTheme() else QColor(0, 0, 0, 100)
+            color = (
+                QColor(255, 255, 255, 120) if isDarkTheme() else QColor(0, 0, 0, 100)
+            )
         pen = QPen(color)
         pen.setWidth(self.borderWidth())
         if self.__enableDashLine:
@@ -120,29 +132,30 @@ class DropMultiFilesWidget(QWidget):
 
 
 class DropSingleFileWidget(DropMultiFilesWidget):
-    """ get dray file widget """
-    def __init__(
-            self,
-            defaultDir=".\\",
-            fileFilter="所有文件 (*.*);; 文本文件 (*.txt)",
-            isDashLine=True,
-            parent=None
-    ):
-        """ 多个文件类型用;;分开 """
+    """get dray file widget"""
+
+    def __init__(self, defaultDir=".\\", fileFilter=None, isDashLine=True, parent=None):
+        """Multiple file types are separated by ';;'"""
         super().__init__(defaultDir, isDashLine, parent)
-        self.setLabelText("拖动任意文件到此")
-        self.button.setText("选择文件")
-        self._fileFilter = fileFilter
+        self.setLabelText(self.tr("Drag & drop any file here"))
+        self.button.setText(self.tr("Browse file"))
+        self._fileFilter = (
+            self.tr("All files (*.*);; Text files (*.txt)")
+            if fileFilter is None
+            else fileFilter
+        )
 
     def _showDialog(self):
         return self.selectionChange.emit(
-            QFileDialog.getOpenFileNames(self, "选择文件", self._defaultDir, self._fileFilter)[0]
+            QFileDialog.getOpenFileNames(
+                self, self.tr("Browse file"), self._defaultDir, self._fileFilter
+            )[0]
         )
-    
+
     def setFileFilter(self, filter: str) -> None:
-        """ 多个文件类型用;;分开 [所有文件 (*.*);; 文本文件 (*.txt)] """
+        """Multiple file types are separated by ';;'"""
         self._fileFilter = filter
-    
+
     def fileFilter(self) -> str:
         return self._fileFilter
 
@@ -162,8 +175,8 @@ class DropSingleFolderWidget(DropMultiFilesWidget):
 
     def __init__(self, defaultDir=".\\", isDashLine=True, parent=None):
         super().__init__(defaultDir, isDashLine, parent)
-        self.setLabelText("拖动文件夹到此")
-        self.button.setText("选择文件夹")
+        self.setLabelText(self.tr("Drag & drop a folder here"))
+        self.button.setText(self.tr("Browse folder"))
 
     def dropEvent(self, event):
         urls = [url.toLocalFile() for url in event.mimeData().urls()]
@@ -182,20 +195,20 @@ class DropMultiFoldersWidget(DropMultiFilesWidget):
 
     def __init__(self, defaultDir=".\\", isDashLine=True, parent=None):
         super().__init__(defaultDir, isDashLine, parent)
-        self.setLabelText("拖动多个文件夹到此")
-        self.button.setText("选择文件夹")
+        self.setLabelText(self.tr("Drag & drop folders here"))
+        self.button.setText(self.tr("Browse folder"))
 
     def _showDialog(self) -> None:
         """Open dialog to select multiple folders"""
-        dialog = QFileDialog(self, "选择文件夹", self._defaultDir)
+        dialog = QFileDialog(self, self.tr("Browse folder"), self._defaultDir)
         dialog.setFileMode(QFileDialog.Directory)
         dialog.setOption(QFileDialog.ShowDirsOnly, True)
         dialog.setOption(QFileDialog.DontUseNativeDialog, True)
-        
+
         listView = dialog.findChild(QWidget, "listView")
         if listView:
-            listView.setSelectionMode(3)  # ExtendedSelection
-        
+            listView.setSelectionMode(3)
+
         if dialog.exec():
             folders = dialog.selectedFiles()
             self.selectionChange.emit(folders)

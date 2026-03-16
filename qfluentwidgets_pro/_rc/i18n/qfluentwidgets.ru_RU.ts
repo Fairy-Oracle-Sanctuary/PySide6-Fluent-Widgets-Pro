@@ -548,4 +548,56 @@
         <translation>Всего </translation>
     </message>
 </context>
+<context>
+    <name>DropMultiFilesWidget</name>
+    <message>
+        <source>Drag &amp; drop any files here</source>
+        <translation>Перетащите любые файлы сюда</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>или</translation>
+    </message>
+    <message>
+        <source>Browse files</source>
+        <translation>Обзор файлов</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFileWidget</name>
+    <message>
+        <source>Drag &amp; drop any file here</source>
+        <translation>Перетащите любой файл сюда</translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation>Обзор файла</translation>
+    </message>
+    <message>
+        <source>All files (*.*);; Text files (*.txt)</source>
+        <translation>Все файлы (*.*);; Текстовые файлы (*.txt)</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFolderWidget</name>
+    <message>
+        <source>Drag &amp; drop a folder here</source>
+        <translation>Перетащите папку сюда</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>Обзор папки</translation>
+    </message>
+</context>
+<context>
+    <name>DropMultiFoldersWidget</name>
+    <message>
+        <source>Drag &amp; drop folders here</source>
+        <translation>Перетащите папки сюда</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>Обзор папки</translation>
+    </message>
+</context>
 </TS>

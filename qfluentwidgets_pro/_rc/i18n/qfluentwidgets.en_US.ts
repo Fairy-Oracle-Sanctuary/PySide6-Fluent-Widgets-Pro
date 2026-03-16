@@ -267,4 +267,56 @@
         <translation>Total </translation>
     </message>
 </context>
+<context>
+    <name>DropMultiFilesWidget</name>
+    <message>
+        <source>Drag &amp; drop any files here</source>
+        <translation>Drag &amp; drop any files here</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>or</translation>
+    </message>
+    <message>
+        <source>Browse files</source>
+        <translation>Browse files</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFileWidget</name>
+    <message>
+        <source>Drag &amp; drop any file here</source>
+        <translation>Drag &amp; drop any file here</translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation>Browse file</translation>
+    </message>
+    <message>
+        <source>All files (*.*);; Text files (*.txt)</source>
+        <translation>All files (*.*);; Text files (*.txt)</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFolderWidget</name>
+    <message>
+        <source>Drag &amp; drop a folder here</source>
+        <translation>Drag &amp; drop a folder here</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>Browse folder</translation>
+    </message>
+</context>
+<context>
+    <name>DropMultiFoldersWidget</name>
+    <message>
+        <source>Drag &amp; drop folders here</source>
+        <translation>Drag &amp; drop folders here</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>Browse folder</translation>
+    </message>
+</context>
 </TS>
