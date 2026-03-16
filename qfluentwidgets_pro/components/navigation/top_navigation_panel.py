@@ -3,11 +3,12 @@ from enum import Enum
 from typing import Union
 
 from PySide6.QtCore import (
+    QPoint,
     QRectF,
     Qt,
     Signal,
 )
-from PySide6.QtGui import QColor, QIcon, QPainter
+from PySide6.QtGui import QAction, QColor, QIcon, QPainter
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QWidget
 
 from ...common.animation import ScaleSlideAnimation
@@ -16,6 +17,7 @@ from ...common.icon import FluentIcon as FIF
 from ...common.icon import FluentIconBase
 from ...common.router import qrouter
 from ...common.style_sheet import FluentStyleSheet
+from ..widgets.menu import MenuAnimationType, RoundMenu
 from ..widgets.scroll_area import ScrollArea
 from ..widgets.tool_tip import ToolTipFilter
 from .navigation_widget import (
@@ -50,6 +52,8 @@ class TopNavigationPanel(QFrame):
         self._isReturnButtonVisible = False
         self._displayMode = TopNavigationDisplayMode.COMPACT
 
+        self._overflowWidgets = []
+
         # indicator animation (like Pivot)
         self.slideAni = ScaleSlideAnimation(self, Qt.Horizontal)
         self.lightIndicatorColor = QColor()
@@ -59,6 +63,7 @@ class TopNavigationPanel(QFrame):
         self.scrollWidget = QWidget()
 
         self.returnButton = NavigationToolButton(FIF.RETURN, self)
+        self.moreButton = NavigationToolButton(FIF.MORE, self)
 
         self.hBoxLayout = QHBoxLayout(self)
         self.leftLayout = QHBoxLayout()
@@ -83,6 +88,9 @@ class TopNavigationPanel(QFrame):
         self.returnButton.hide()
         self.returnButton.setDisabled(True)
 
+        self.moreButton.hide()
+        self.moreButton.clicked.connect(self._showOverflowMenu)
+
         self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scrollArea.verticalScrollBar().setEnabled = False
@@ -97,6 +105,9 @@ class TopNavigationPanel(QFrame):
         # add tool tip
         self.returnButton.installEventFilter(ToolTipFilter(self.returnButton, 1000))
         self.returnButton.setToolTip(self.tr("Back"))
+
+        self.moreButton.installEventFilter(ToolTipFilter(self.moreButton, 1000))
+        self.moreButton.setToolTip(self.tr("More"))
 
         self.scrollWidget.setObjectName("scrollWidget")
         FluentStyleSheet.NAVIGATION_INTERFACE.apply(self)
@@ -127,6 +138,7 @@ class TopNavigationPanel(QFrame):
         self.scrollLayout.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.leftLayout.addWidget(self.returnButton)
+        self.rightLayout.addWidget(self.moreButton)
 
     def displayMode(self):
         return self._displayMode
@@ -140,6 +152,8 @@ class TopNavigationPanel(QFrame):
 
         for item in self.items.values():
             item.setCompacted(mode == TopNavigationDisplayMode.COMPACT)
+
+        self._updateOverflow()
 
     def isCompact(self):
         return self._displayMode == TopNavigationDisplayMode.COMPACT
@@ -257,6 +271,7 @@ class TopNavigationPanel(QFrame):
 
         self._registerWidget(routeKey, widget, onClick, tooltip)
         self._insertWidgetToLayout(index, widget, position)
+        self._updateOverflow()
 
     def _registerWidget(
         self, routeKey: str, widget: NavigationWidget, onClick, tooltip: str = None
@@ -279,18 +294,18 @@ class TopNavigationPanel(QFrame):
     ):
         """insert widget to layout"""
         if position == TopNavigationItemPosition.LEFT:
-            widget.setParent(self)
-            # returnButton is at index 0, so items should be inserted after it
-            # if index is -1 (append), insert at the end; otherwise insert at index+1
-            insertIndex = index + 1 if index >= 0 else -1
-            self.leftLayout.insertWidget(
-                insertIndex, widget, 0, Qt.AlignLeft | Qt.AlignVCenter
+            widget.setParent(self.scrollWidget)
+            self.scrollLayout.insertWidget(
+                index, widget, 0, Qt.AlignLeft | Qt.AlignVCenter
             )
         elif position == TopNavigationItemPosition.CENTER:
             widget.setParent(self)
             self.centerLayout.insertWidget(index, widget, 0, Qt.AlignCenter)
         elif position == TopNavigationItemPosition.RIGHT:
             widget.setParent(self)
+            # Keep `moreButton` as the last widget in right layout
+            if index < 0:
+                index = max(self.rightLayout.count() - 1, 0)
             self.rightLayout.insertWidget(
                 index, widget, 0, Qt.AlignRight | Qt.AlignVCenter
             )
@@ -310,6 +325,11 @@ class TopNavigationPanel(QFrame):
         widget = self.items.pop(routeKey)
         widget.deleteLater()
         self.history.remove(routeKey)
+
+        if widget in self._overflowWidgets:
+            self._overflowWidgets.remove(widget)
+
+        self._updateOverflow()
 
     def currentItem(self):
         return self.widget(self._currentRouteKey) if self._currentRouteKey else None
@@ -343,7 +363,12 @@ class TopNavigationPanel(QFrame):
         if not item:
             return QRectF(0, self.height() - 6, 16, 3)
 
-        rect = item.geometry()
+        anchor = item if item.isVisible() else self.moreButton
+        if not anchor.isVisible():
+            return QRectF(0, self.height() - 6, 16, 3)
+
+        topLeft = anchor.mapTo(self, QPoint(0, 0))
+        rect = QRectF(topLeft.x(), topLeft.y(), anchor.width(), anchor.height())
         return QRectF(
             rect.x() - 8 + rect.width() // 2,
             self.height() - 9,
@@ -387,6 +412,80 @@ class TopNavigationPanel(QFrame):
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
+        self._adjustIndicatorPos()
+        self._updateOverflow()
+
+    def _showOverflowMenu(self):
+        if not self._overflowWidgets:
+            return
+
+        menu = RoundMenu("", self)
+        for w in self._overflowWidgets:
+            text = w.text() if hasattr(w, "text") else str(w.property("routeKey") or "")
+            action = QAction(text, menu)
+            if hasattr(w, "icon"):
+                try:
+                    action.setIcon(w.icon())
+                except Exception:
+                    pass
+            action.triggered.connect(lambda checked=False, widget=w: widget.click())
+            menu.addAction(action)
+
+        pos = self.moreButton.mapToGlobal(self.moreButton.rect().bottomLeft())
+        menu.exec(pos, aniType=MenuAnimationType.DROP_DOWN)
+
+    def _updateOverflow(self):
+        """Hide trailing LEFT widgets (in scroll area) into overflow menu when width is insufficient."""
+
+        def _scrollWidgets():
+            widgets = []
+            for i in range(self.scrollLayout.count()):
+                it = self.scrollLayout.itemAt(i)
+                w = it.widget() if it else None
+                if w is not None:
+                    widgets.append(w)
+            return widgets
+
+        # restore
+        for w in self._overflowWidgets:
+            if w:
+                w.show()
+        self._overflowWidgets.clear()
+        self.moreButton.hide()
+
+        # allow layout to settle (this determines scrollArea width)
+        self.hBoxLayout.activate()
+
+        widgets = _scrollWidgets()
+        if not widgets:
+            return
+
+        spacing = self.scrollLayout.spacing()
+
+        def _totalWidth(ws):
+            if not ws:
+                return 0
+            return sum(w.width() for w in ws) + spacing * (len(ws) - 1)
+
+        # First pass without moreButton
+        available = self.scrollArea.width()
+        if _totalWidth(widgets) <= available:
+            return
+
+        # Show moreButton, relayout, and recompute available width
+        self.moreButton.show()
+        self.hBoxLayout.activate()
+        available = self.scrollArea.width()
+
+        visible = widgets.copy()
+        while visible and _totalWidth(visible) > available:
+            w = visible.pop()
+            w.hide()
+            self._overflowWidgets.insert(0, w)
+
+        if not self._overflowWidgets:
+            self.moreButton.hide()
+
         self._adjustIndicatorPos()
 
     def _adjustIndicatorPos(self):
