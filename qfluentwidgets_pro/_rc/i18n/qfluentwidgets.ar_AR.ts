@@ -263,7 +263,59 @@
     </message>
     <message>
         <source>Total </source>
-        <translation>المجموع </translation>
+        <translation>إجمالي </translation>
+    </message>
+</context>
+<context>
+    <name>DropMultiFilesWidget</name>
+    <message>
+        <source>Drag &amp; drop any files here</source>
+        <translation>سحب وإسقاط أي ملفات هنا</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>أو</translation>
+    </message>
+    <message>
+        <source>Browse files</source>
+        <translation>تصفح الملفات</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFileWidget</name>
+    <message>
+        <source>Drag &amp; drop any file here</source>
+        <translation>سحب وإسقاط أي ملف هنا</translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation>تصفح الملف</translation>
+    </message>
+    <message>
+        <source>All files (*.*);; Text files (*.txt)</source>
+        <translation>جميع الملفات (*.*);; ملفات نصية (*.txt)</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFolderWidget</name>
+    <message>
+        <source>Drag &amp; drop a folder here</source>
+        <translation>سحب وإسقاط مجلد هنا</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>تصفح المجلد</translation>
+    </message>
+</context>
+<context>
+    <name>DropMultiFoldersWidget</name>
+    <message>
+        <source>Drag &amp; drop folders here</source>
+        <translation>سحب وإسقاط مجلدات هنا</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>تصفح المجلد</translation>
     </message>
 </context>
 </TS>

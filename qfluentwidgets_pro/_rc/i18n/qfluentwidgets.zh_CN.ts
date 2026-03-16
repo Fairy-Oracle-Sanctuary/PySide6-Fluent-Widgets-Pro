@@ -548,4 +548,56 @@
         <translation>共计 </translation>
     </message>
 </context>
+<context>
+    <name>DropMultiFilesWidget</name>
+    <message>
+        <source>Drag &amp; drop any files here</source>
+        <translation>拖动任意文件到此</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>或</translation>
+    </message>
+    <message>
+        <source>Browse files</source>
+        <translation>浏览文件</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFileWidget</name>
+    <message>
+        <source>Drag &amp; drop any file here</source>
+        <translation>拖动任意文件到此</translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation>选择文件</translation>
+    </message>
+    <message>
+        <source>All files (*.*);; Text files (*.txt)</source>
+        <translation>所有文件 (*.*);; 文本文件 (*.txt)</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFolderWidget</name>
+    <message>
+        <source>Drag &amp; drop a folder here</source>
+        <translation>拖动文件夹到此</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>选择文件夹</translation>
+    </message>
+</context>
+<context>
+    <name>DropMultiFoldersWidget</name>
+    <message>
+        <source>Drag &amp; drop folders here</source>
+        <translation>拖动多个文件夹到此</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>选择文件夹</translation>
+    </message>
+</context>
 </TS>

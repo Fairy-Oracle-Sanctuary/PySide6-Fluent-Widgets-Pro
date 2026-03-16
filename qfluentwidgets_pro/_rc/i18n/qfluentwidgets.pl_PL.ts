@@ -263,7 +263,59 @@
     </message>
     <message>
         <source>Total </source>
-        <translation>Razem </translation>
+        <translation>Łącznie </translation>
+    </message>
+</context>
+<context>
+    <name>DropMultiFilesWidget</name>
+    <message>
+        <source>Drag &amp; drop any files here</source>
+        <translation>Przeciągnij i upuść pliki tutaj</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>lub</translation>
+    </message>
+    <message>
+        <source>Browse files</source>
+        <translation>Przeglądaj pliki</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFileWidget</name>
+    <message>
+        <source>Drag &amp; drop any file here</source>
+        <translation>Przeciągnij i upuść plik tutaj</translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation>Przeglądaj plik</translation>
+    </message>
+    <message>
+        <source>All files (*.*);; Text files (*.txt)</source>
+        <translation>Wszystkie pliki (*.*);; Pliki tekstowe (*.txt)</translation>
+    </message>
+</context>
+<context>
+    <name>DropSingleFolderWidget</name>
+    <message>
+        <source>Drag &amp; drop a folder here</source>
+        <translation>Przeciągnij i upuść folder tutaj</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>Przeglądaj folder</translation>
+    </message>
+</context>
+<context>
+    <name>DropMultiFoldersWidget</name>
+    <message>
+        <source>Drag &amp; drop folders here</source>
+        <translation>Przeciągnij i upuść foldery tutaj</translation>
+    </message>
+    <message>
+        <source>Browse folder</source>
+        <translation>Przeglądaj folder</translation>
     </message>
 </context>
 </TS>
