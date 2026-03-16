@@ -1,4 +1,10 @@
-from PySide6.QtWidgets import QHBoxLayout, QTableWidgetItem, QVBoxLayout, QWidget
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 from gallery.view.chart.home_interface import ChartMainWindow  # noqa
 from qfluentwidgets_pro import (
@@ -13,6 +19,7 @@ from qfluentwidgets_pro import (
     OutlinedPushButton,
     PinBox,
     PushButton,
+    RoundListWidget,
     RoundPushButton,
     RoundTableWidget,
     RoundToolButton,
@@ -237,6 +244,33 @@ class MainWindow(TopFluentWindow):
         lineTable.setFixedHeight(300)
         layout.addWidget(lineTable)
 
+        # RoundListWidget
+        layout.addWidget(BodyLabel("RoundListWidget:"))
+        roundList = RoundListWidget()
+        roundList.setFixedHeight(200)
+
+        # Add items with icons using addItems
+        roundList.addItems(
+            [
+                ("Home", FluentIcon.HOME),
+                ("Settings", FluentIcon.SETTING),
+                ("Folder", FluentIcon.FOLDER),
+                ("Search", FluentIcon.SEARCH),
+                ("User", FluentIcon.APPLICATION),
+            ]
+        )
+
+        layout.addWidget(roundList)
+
+        # RoundListWidget without icons
+        layout.addWidget(BodyLabel("RoundListWidget (no icons):"))
+        roundListNoIcon = RoundListWidget()
+        roundListNoIcon.setFixedHeight(150)
+
+        roundListNoIcon.addItems(["Plain Item 1", "Plain Item 2", "Plain Item 3"])
+
+        layout.addWidget(roundListNoIcon)
+
         # 切换主题
         self.theme_button = PushButton("切换主题")
         layout.addWidget(self.theme_button)
@@ -300,7 +334,6 @@ class MainWindow(TopFluentWindow):
 
     def _createSplitterPage(self):
         """Create splitter demo page"""
-        from PySide6.QtCore import Qt
         from PySide6.QtGui import QColor, QPainter
         from PySide6.QtWidgets import QWidget
 

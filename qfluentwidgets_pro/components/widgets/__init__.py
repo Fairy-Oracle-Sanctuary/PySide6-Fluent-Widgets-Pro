@@ -106,7 +106,14 @@ from .line_edit import (
     TextBrowser,
     TextEdit,
 )
-from .list_view import ListItemDelegate, ListView, ListWidget
+from .list_view import (
+    ListItemDelegate,
+    ListView,
+    ListWidget,
+    RoundListItemDelegate,
+    RoundListView,
+    RoundListWidget,
+)
 from .menu import (
     CheckableMenu,
     CheckableSystemTrayMenu,
