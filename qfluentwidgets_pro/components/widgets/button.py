@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QToolButton,
     QWidget,
+    QLabel
 )
 
 from ...common.animation import (
@@ -2970,3 +2971,105 @@ class Tag(QWidget):
 
             textRect = QRect(int(textX), 0, int(textWidth + 8), self.height())
             painter.drawText(textRect, Qt.AlignLeft | Qt.AlignVCenter, self._text)
+
+
+class SubClipCloseButton(QPushButton):
+    """Close button for SubClip"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setFixedSize(24, 24)
+        self.setCursor(Qt.PointingHandCursor)
+        self.setObjectName("clipCloseButton")
+
+    def paintEvent(self, e):
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing)
+
+        # Draw background on hover/press
+        isHover = self.underMouse()
+        isPressed = self.isDown()
+
+        if isPressed:
+            painter.setBrush(
+                QColor(255, 255, 255, 11) if isDarkTheme() else QColor(0, 0, 0, 11)
+            )
+        elif isHover:
+            painter.setBrush(
+                QColor(255, 255, 255, 20) if isDarkTheme() else QColor(0, 0, 0, 20)
+            )
+        else:
+            painter.setBrush(Qt.NoBrush)
+
+        painter.setPen(Qt.NoPen)
+        painter.drawRoundedRect(self.rect(), 5, 5)
+
+        if isPressed:
+            painter.setOpacity(0.6)
+        painter.setPen(
+            QPen(
+                QColor(255, 255, 255, 200) if isDarkTheme() else QColor(0, 0, 0, 180),
+                1.5,
+            )
+        )
+        r = QRect(8, 8, 8, 8)
+        painter.drawLine(r.topLeft(), r.bottomRight())
+        painter.drawLine(r.topRight(), r.bottomLeft())
+
+
+class SubClip(QWidget):
+    """Clip/tag component with close button"""
+
+    closed = Signal(str)
+
+    def __init__(self, text: str, parent=None):
+        super().__init__(parent)
+        self._text = text
+        self._setUpUi()
+
+    def _setUpUi(self):
+        self.setObjectName("subClip")
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setFixedHeight(24)
+        self._isPressed = False
+
+        # Layout - no right margin so close button fits edge
+        self.hLayout = QHBoxLayout(self)
+        self.hLayout.setContentsMargins(8, 0, 0, 0)
+        self.hLayout.setSpacing(4)
+
+        # Text label
+        self.textLabel = QLabel(self._text, self)
+        self.textLabel.setObjectName("clipTextLabel")
+        self.hLayout.addWidget(self.textLabel)
+
+        # Close button
+        self.closeButton = SubClipCloseButton(self)
+        self.closeButton.clicked.connect(self._onClose)
+        self.hLayout.addWidget(self.closeButton)
+
+        # Apply style
+        FluentStyleSheet.COMBO_BOX.apply(self)
+
+        self.adjustSize()
+
+    def mousePressEvent(self, e):
+        self._isPressed = True
+        self.setProperty("isPressed", True)
+        self.setStyle(self.style())
+        super().mousePressEvent(e)
+
+    def mouseReleaseEvent(self, e):
+        self._isPressed = False
+        self.setProperty("isPressed", False)
+        self.setStyle(self.style())
+        super().mouseReleaseEvent(e)
+
+    def _onClose(self):
+        self.closed.emit(self._text)
+
+    def text(self) -> str:
+        return self._text
+
+    def sizeHint(self):
+        return QSize(self.hLayout.totalMinimumSize().width() + 16, 24)
