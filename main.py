@@ -40,7 +40,7 @@ class MainWindow(TopFluentWindow):
         self.addSubInterface(
             self.homeInterface,
             FluentIcon.HOME,
-            "Home",
+            "Homeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
             TopNavigationItemPosition.LEFT,
             expanded=True,  # show both icon and text for Home
         )
