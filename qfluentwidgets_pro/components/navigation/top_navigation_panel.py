@@ -32,6 +32,7 @@ class TopNavigationDisplayMode(Enum):
 
     COMPACT = 0  # only icons
     EXPAND = 1  # icons + text
+    MENU = 2  # menu mode
 
 
 class TopNavigationItemPosition(Enum):
