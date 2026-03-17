@@ -41,7 +41,7 @@
 - **[兼容性]** Python 3.9+ / Windows、macOS、Linux
 
 
-## 已还原组件（41）
+## 已还原组件（42）
 
 已还原或扩展的组件（列表将持续更新）：
 
@@ -59,6 +59,7 @@
 `MultiSelectComboBox` `RoundListWidget` `RoundListView`
 `TransparentRoundListWidget` `TransparentRoundListView`
 `CategoryCardListWidget` `CategoryCardListView`
+`Toast`
 
 ## 使用方式
 
