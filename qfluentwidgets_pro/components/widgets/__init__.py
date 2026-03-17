@@ -107,12 +107,16 @@ from .line_edit import (
     TextEdit,
 )
 from .list_view import (
+    CategoryCardListView,
+    CategoryCardListWidget,
     ListItemDelegate,
     ListView,
     ListWidget,
     RoundListItemDelegate,
     RoundListView,
     RoundListWidget,
+    TransparentRoundListView,
+    TransparentRoundListWidget,
 )
 from .menu import (
     CheckableMenu,

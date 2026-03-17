@@ -62,3 +62,46 @@ RoundListWidget::item:selected {
     border: 1px solid --ThemeColorPrimary;
 }
 
+TransparentRoundListView::item,
+TransparentRoundListWidget::item {
+    background: transparent;
+    border: transparent;
+    border-radius: 5px;
+    padding-left: 16px;
+    padding-right: 11px;
+    height: 42px;
+}
+
+TransparentRoundListView::item:hover,
+TransparentRoundListWidget::item:hover {
+    background: rgba(0, 0, 0, 0.01);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+TransparentRoundListView::item:selected,
+TransparentRoundListWidget::item:selected {
+    background: transparent;
+    border: 1px solid --ThemeColorPrimary;
+}
+
+CategoryCardListView::item,
+CategoryCardListWidget::item {
+    background: rgba(0, 0, 0, 0.015);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 5px;
+    padding-left: 16px;
+    padding-right: 11px;
+    height: 42px;
+}
+
+CategoryCardListView::item:hover,
+CategoryCardListWidget::item:hover {
+    background: rgba(0, 0, 0, 0.01);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+CategoryCardListView::item:selected,
+CategoryCardListWidget::item:selected {
+    background: rgba(0, 0, 0, 0.015);
+    border: 1px solid --ThemeColorPrimary;
+}

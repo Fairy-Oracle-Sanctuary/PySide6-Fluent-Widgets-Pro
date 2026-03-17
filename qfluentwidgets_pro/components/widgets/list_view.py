@@ -2,7 +2,7 @@
 from typing import List
 
 from PySide6.QtCore import Property, QModelIndex, QRectF, Qt
-from PySide6.QtGui import QIcon, QPainter
+from PySide6.QtGui import QColor, QIcon, QPainter
 from PySide6.QtWidgets import (
     QListView,
     QListWidget,
@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 
 from ...common.color import autoFallbackThemeColor
 from ...common.icon import FluentIconBase, Icon, drawIcon
-from ...common.style_sheet import FluentStyleSheet, themeColor
+from ...common.style_sheet import FluentStyleSheet, isDarkTheme, themeColor
 from .scroll_bar import SmoothScrollDelegate
 from .table_view import TableItemDelegate
 
@@ -180,6 +180,30 @@ class RoundListItemDelegate(ListItemDelegate):
     def __init__(self, parent: QListView):
         super().__init__(parent)
         self.showIndicator = False
+        self._transparentSelection = False
+        self._keepNormalBackground = False
+
+    def setTransparentSelection(self, transparent: bool):
+        """Set whether selected items should have transparent background"""
+        self._transparentSelection = transparent
+
+    def isTransparentSelection(self):
+        return self._transparentSelection
+
+    transparentSelection = Property(
+        bool, isTransparentSelection, setTransparentSelection
+    )
+
+    def setKeepNormalBackground(self, keep: bool):
+        """Set whether selected items should keep normal background color"""
+        self._keepNormalBackground = keep
+
+    def isKeepNormalBackground(self):
+        return self._keepNormalBackground
+
+    keepNormalBackground = Property(
+        bool, isKeepNormalBackground, setKeepNormalBackground
+    )
 
     def _drawIndicator(
         self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex
@@ -213,7 +237,45 @@ class RoundListItemDelegate(ListItemDelegate):
             icon.paint(painter, rect.toRect(), Qt.AlignCenter)
 
     def paint(self, painter, option, index):
-        super(ListItemDelegate, self).paint(painter, option, index)
+        painter.save()
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setPen(Qt.NoPen)
+
+        # Draw background based on state
+        isHover = self.hoverRow == index.row()
+        isSelected = index.row() in self.selectedRows
+        isDark = isDarkTheme()
+
+        # Determine if we should draw background
+        shouldDrawBg = True
+        if self._transparentSelection and isSelected and not isHover:
+            shouldDrawBg = False
+
+        if shouldDrawBg:
+            # Get background color from QSS via option.backgroundBrush
+            if option.backgroundBrush and option.backgroundBrush.style() != Qt.NoBrush:
+                painter.setBrush(option.backgroundBrush)
+            else:
+                # Fallback: draw background manually
+                c = 255 if isDark else 0
+                if isSelected and not self._keepNormalBackground:
+                    alpha = 17
+                elif isHover:
+                    alpha = 12
+                else:
+                    alpha = 0
+                painter.setBrush(QColor(c, c, c, alpha))
+
+            # Draw rounded background
+            rect = option.rect.adjusted(1, 1, -1, -1)
+            painter.drawRoundedRect(rect, 5, 5)
+
+        painter.restore()
+
+        # Call parent paint to draw text
+        from PySide6.QtWidgets import QStyledItemDelegate
+
+        QStyledItemDelegate.paint(self, painter, option, index)
 
         # Draw icon on top
         painter.save()
@@ -305,3 +367,35 @@ class RoundListView(RoundListBase, QListView):
     selectRightClickedRow = Property(
         bool, isSelectRightClickedRow, setSelectRightClickedRow
     )
+
+
+class TransparentRoundListWidget(RoundListWidget):
+    """Transparent Round List Widget"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.delegate.setTransparentSelection(True)
+
+
+class TransparentRoundListView(RoundListView):
+    """Transparent Round List View"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.delegate.setTransparentSelection(True)
+
+
+class CategoryCardListWidget(RoundListWidget):
+    """CategoryCard List Widget"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.delegate.setKeepNormalBackground(True)
+
+
+class CategoryCardListView(RoundListView):
+    """CategoryCard List View"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.delegate.setKeepNormalBackground(True)
