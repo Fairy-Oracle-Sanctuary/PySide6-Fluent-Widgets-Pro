@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
 
 from gallery.view.chart.home_interface import ChartMainWindow  # noqa
 from qfluentwidgets_pro import (
+    CategoryCardListWidget,
     DropMultiFilesWidget,
     DropSingleFileWidget,
     FilledPushButton,
@@ -19,6 +20,7 @@ from qfluentwidgets_pro import (
     OutlinedPushButton,
     PinBox,
     PushButton,
+    RoundListWidget,
     RoundPushButton,
     RoundTableWidget,
     RoundToolButton,
@@ -30,10 +32,9 @@ from qfluentwidgets_pro import (
     Tag,
     TopFluentWindow,
     TopNavigationItemPosition,
-    toggleTheme,
-    RoundListWidget,
     TransparentRoundListWidget,
-    CategoryCardListWidget
+    toggleTheme,
+    Toast
 )
 
 
@@ -254,6 +255,38 @@ class MainWindow(TopFluentWindow):
                 )
         lineTable.setFixedHeight(300)
         layout.addWidget(lineTable)
+
+        # Toast demo
+        from qfluentwidgets_pro import BodyLabel
+
+        layout.addWidget(BodyLabel("Toast:"))
+        toastLayout = QHBoxLayout()
+
+        self.infoToastBtn = PushButton("Info")
+        self.infoToastBtn.clicked.connect(
+            lambda: Toast.info("Info", "This is an info toast", parent=self)
+        )
+        toastLayout.addWidget(self.infoToastBtn)
+
+        self.successToastBtn = PushButton("Success")
+        self.successToastBtn.clicked.connect(
+            lambda: Toast.success("Success", "Operation completed!", parent=self)
+        )
+        toastLayout.addWidget(self.successToastBtn)
+
+        self.warningToastBtn = PushButton("Warning")
+        self.warningToastBtn.clicked.connect(
+            lambda: Toast.warning("Warning", "Please check your input", parent=self)
+        )
+        toastLayout.addWidget(self.warningToastBtn)
+
+        self.errorToastBtn = PushButton("Error")
+        self.errorToastBtn.clicked.connect(
+            lambda: Toast.error("Error", "Something went wrong", parent=self)
+        )
+        toastLayout.addWidget(self.errorToastBtn)
+
+        layout.addLayout(toastLayout)
 
         # 切换主题
         self.theme_button = PushButton("切换主题")
