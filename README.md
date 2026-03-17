@@ -125,7 +125,7 @@ app.exec()
 
 ## 🧮 Acknowledgments
 
-- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` `Splitter` `PinBox` `LabelLineEdit` component implementation references [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) by HiyorinI
+- `Pager` `DropMultiFilesWidget` `DropSingleFileWidget` `Splitter` `PinBox` `LabelLineEdit` `Toast` component implementation references [PySide6-Fluent-UI](https://github.com/HiyorinI/PySide6-Fluent-UI) by HiyorinI
 
 ## 🗺️ Roadmap
 

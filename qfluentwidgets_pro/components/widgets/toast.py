@@ -126,7 +126,7 @@ class Toast(QFrame):
         self.hBoxLayout.setSizeConstraint(QVBoxLayout.SetMinimumSize)
         self.textLayout.setSizeConstraint(QHBoxLayout.SetMinimumSize)
         self.textLayout.setAlignment(Qt.AlignTop)
-        self.textLayout.setContentsMargins(1, 8, 0, 8)
+        self.textLayout.setContentsMargins(6, 8, 0, 8)
 
         self.hBoxLayout.setSpacing(0)
         self.textLayout.setSpacing(5)
@@ -180,7 +180,7 @@ class Toast(QFrame):
         duration: int,
         isClosable: bool,
         position: ToastPosition,
-        orient=Qt.Horizontal,
+        orient=Qt.Vertical,
         toastColor: Union[str, QColor, ToastColor] = ToastColor.SUCCESS,
         parent: QWidget = None,
         backgroundColor: QColor = None,
@@ -209,7 +209,7 @@ class Toast(QFrame):
         duration: int = 2000,
         isClosable: bool = True,
         position: ToastPosition = ToastPosition.TOP_RIGHT,
-        orient: Qt.Orientation = Qt.Horizontal,
+        orient: Qt.Orientation = Qt.Vertical,
         parent: QWidget = None,
     ):
         return cls.new(
@@ -232,7 +232,7 @@ class Toast(QFrame):
         duration: int = 2000,
         isClosable: bool = True,
         position: ToastPosition = ToastPosition.TOP_RIGHT,
-        orient=Qt.Horizontal,
+        orient=Qt.Vertical,
         parent: QWidget = None,
     ):
         return cls.new(
@@ -254,7 +254,7 @@ class Toast(QFrame):
         duration: int = 2000,
         isClosable: bool = True,
         position: ToastPosition = ToastPosition.TOP_RIGHT,
-        orient=Qt.Horizontal,
+        orient=Qt.Vertical,
         parent: QWidget = None,
     ):
         return cls.new(
@@ -276,7 +276,7 @@ class Toast(QFrame):
         duration: int = -1,
         isClosable: bool = True,
         position: ToastPosition = ToastPosition.TOP_RIGHT,
-        orient=Qt.Horizontal,
+        orient=Qt.Vertical,
         parent: QWidget = None,
     ):
         return cls.new(
@@ -298,7 +298,7 @@ class Toast(QFrame):
         duration: int = 2000,
         isClosable: bool = True,
         position: ToastPosition = ToastPosition.TOP_RIGHT,
-        orient=Qt.Horizontal,
+        orient=Qt.Vertical,
         parent: QWidget = None,
         toastColor: Union[str, QColor] = None,
         backgroundColor: QColor = None,
