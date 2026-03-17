@@ -19,7 +19,6 @@ from qfluentwidgets_pro import (
     OutlinedPushButton,
     PinBox,
     PushButton,
-    RoundListWidget,
     RoundPushButton,
     RoundTableWidget,
     RoundToolButton,
@@ -32,6 +31,9 @@ from qfluentwidgets_pro import (
     TopFluentWindow,
     TopNavigationItemPosition,
     toggleTheme,
+    RoundListWidget,
+    TransparentRoundListWidget,
+    CategoryCardListWidget
 )
 
 
@@ -87,6 +89,15 @@ class MainWindow(TopFluentWindow):
             self.splitterInterface,
             FluentIcon.TILES,
             "Splitter",
+            TopNavigationItemPosition.LEFT,
+        )
+
+        self.listInterface = self._createListPage()
+        self.listInterface.setObjectName("listInterface")
+        self.addSubInterface(
+            self.listInterface,
+            FluentIcon.APPLICATION,
+            "List Widgets",
             TopNavigationItemPosition.LEFT,
         )
 
@@ -244,33 +255,6 @@ class MainWindow(TopFluentWindow):
         lineTable.setFixedHeight(300)
         layout.addWidget(lineTable)
 
-        # RoundListWidget
-        layout.addWidget(BodyLabel("RoundListWidget:"))
-        roundList = RoundListWidget()
-        roundList.setFixedHeight(200)
-
-        # Add items with icons using addItems
-        roundList.addItems(
-            [
-                ("Home", FluentIcon.HOME),
-                ("Settings", FluentIcon.SETTING),
-                ("Folder", FluentIcon.FOLDER),
-                ("Search", FluentIcon.SEARCH),
-                ("User", FluentIcon.APPLICATION),
-            ]
-        )
-
-        layout.addWidget(roundList)
-
-        # RoundListWidget without icons
-        layout.addWidget(BodyLabel("RoundListWidget (no icons):"))
-        roundListNoIcon = RoundListWidget()
-        roundListNoIcon.setFixedHeight(150)
-
-        roundListNoIcon.addItems(["Plain Item 1", "Plain Item 2", "Plain Item 3"])
-
-        layout.addWidget(roundListNoIcon)
-
         # 切换主题
         self.theme_button = PushButton("切换主题")
         layout.addWidget(self.theme_button)
@@ -384,6 +368,73 @@ class MainWindow(TopFluentWindow):
 
         layout.addStretch()
         return page
+
+    def _createListPage(self):
+        """Create list widgets demo page"""
+        scroll = ScrollArea(self)
+        scroll.setWidgetResizable(True)
+
+        page = QWidget(scroll)
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+        layout.setSpacing(20)
+
+        from qfluentwidgets_pro import BodyLabel
+
+        # RoundListWidget
+        layout.addWidget(BodyLabel("RoundListWidget:"))
+        roundList = RoundListWidget()
+        roundList.setFixedHeight(200)
+        roundList.addItems(
+            [
+                ("Home", FluentIcon.HOME),
+                ("Settings", FluentIcon.SETTING),
+                ("Folder", FluentIcon.FOLDER),
+                ("Search", FluentIcon.SEARCH),
+                ("User", FluentIcon.APPLICATION),
+            ]
+        )
+        layout.addWidget(roundList)
+
+        # TransparentRoundListWidget
+        layout.addWidget(BodyLabel("TransparentRoundListWidget:"))
+        transparentList = TransparentRoundListWidget()
+        transparentList.setFixedHeight(200)
+        transparentList.addItems(
+            [
+                ("Transparent 1", FluentIcon.HOME),
+                ("Transparent 2", FluentIcon.SETTING),
+                ("Transparent 3", FluentIcon.FOLDER),
+                ("Transparent 4", FluentIcon.SEARCH),
+                ("Transparent 5", FluentIcon.APPLICATION),
+            ]
+        )
+        layout.addWidget(transparentList)
+
+        # CategoryCardListWidget
+        layout.addWidget(BodyLabel("CategoryCardListWidget:"))
+        categoryList = CategoryCardListWidget()
+        categoryList.setFixedHeight(200)
+        categoryList.addItems(
+            [
+                ("Category 1", FluentIcon.HOME),
+                ("Category 2", FluentIcon.SETTING),
+                ("Category 3", FluentIcon.FOLDER),
+                ("Category 4", FluentIcon.SEARCH),
+                ("Category 5", FluentIcon.APPLICATION),
+            ]
+        )
+        layout.addWidget(categoryList)
+
+        # 切换主题
+        self.list_theme_button = PushButton("切换主题")
+        layout.addWidget(self.list_theme_button)
+        self.list_theme_button.clicked.connect(toggleTheme)
+
+        layout.addStretch()
+        scroll.setWidget(page)
+        scroll.enableTransparentBackground()
+        return scroll
 
     def _openChartWindow(self):
         """Open chart window with mica effect enabled"""

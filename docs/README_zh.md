@@ -41,7 +41,7 @@
 - **[兼容性]** Python 3.9+ / Windows、macOS、Linux
 
 
-## 已还原组件（37）
+## 已还原组件（41）
 
 已还原或扩展的组件（列表将持续更新）：
 
@@ -57,6 +57,8 @@
 `RoundTableView` `LineTableWidget` `LineTableView`
 `DropSingleFolderWidget` `DropMultiFoldersWidget`
 `MultiSelectComboBox` `RoundListWidget` `RoundListView`
+`TransparentRoundListWidget` `TransparentRoundListView`
+`CategoryCardListWidget` `CategoryCardListView`
 
 ## 使用方式
 
