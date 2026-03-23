@@ -14,6 +14,7 @@ from qfluentwidgets_pro import (
     FilledPushButton,
     FluentIcon,
     FluentTranslator,
+    FontComboBox,
     LabelLineEdit,
     LineTableWidget,
     MultiSelectComboBox,
@@ -30,11 +31,11 @@ from qfluentwidgets_pro import (
     SubClip,
     SubtitleCheckBox,
     Tag,
+    Toast,
     TopFluentWindow,
     TopNavigationItemPosition,
     TransparentRoundListWidget,
     toggleTheme,
-    Toast
 )
 
 
@@ -198,6 +199,9 @@ class MainWindow(TopFluentWindow):
             lambda texts: print(f"Selected texts: {texts}")
         )
         layout.addWidget(self.multiCombo)
+
+        self.fontComboBox = FontComboBox()
+        layout.addWidget(self.fontComboBox)
 
         # MultiSelectComboBox with chips mode
         layout.addWidget(BodyLabel("MultiSelectComboBox Chips Mode:"))

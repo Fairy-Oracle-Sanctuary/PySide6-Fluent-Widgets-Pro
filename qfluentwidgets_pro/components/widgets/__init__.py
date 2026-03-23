@@ -53,6 +53,7 @@ from .check_box import CheckBox, SubtitleCheckBox
 from .combo_box import (
     ComboBox,
     EditableComboBox,
+    FontComboBox,
     MultiSelectComboBox,
 )
 from .command_bar import CommandBar, CommandBarView, CommandButton
