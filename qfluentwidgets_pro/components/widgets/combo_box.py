@@ -3,7 +3,16 @@ import sys
 from typing import Iterable, List, Set, Union
 
 from PySide6.QtCore import QEvent, QPoint, QRect, QRectF, QSize, Qt, Signal
-from PySide6.QtGui import QAction, QColor, QCursor, QIcon, QPainter, QPen
+from PySide6.QtGui import (
+    QAction,
+    QColor,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QIcon,
+    QPainter,
+    QPen,
+)
 from PySide6.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -19,10 +28,15 @@ from ...common.color import fallbackThemeColor, validColor
 from ...common.font import setFont
 from ...common.icon import FluentIcon as FIF
 from ...common.icon import FluentIconBase, isDarkTheme
-from ...common.style_sheet import FluentStyleSheet, ThemeColor
+from ...common.style_sheet import FluentStyleSheet, ThemeColor, themeColor
 from .button import SubClip
 from .line_edit import LineEdit, LineEditButton
-from .menu import IndicatorMenuItemDelegate, MenuAnimationType, RoundMenu
+from .menu import (
+    IndicatorMenuItemDelegate,
+    MenuAnimationType,
+    MenuItemDelegate,
+    RoundMenu,
+)
 from .scroll_area import SingleDirectionScrollArea
 
 
@@ -377,10 +391,10 @@ class ComboBoxBase:
 
         if hd >= hu:
             menu.view.adjustSize(pd, MenuAnimationType.DROP_DOWN)
-            menu.exec(pd, aniType=MenuAnimationType.DROP_DOWN)
+            RoundMenu.exec(menu, pd, aniType=MenuAnimationType.DROP_DOWN)
         else:
             menu.view.adjustSize(pu, MenuAnimationType.PULL_UP)
-            menu.exec(pu, aniType=MenuAnimationType.PULL_UP)
+            RoundMenu.exec(menu, pu, aniType=MenuAnimationType.PULL_UP)
 
     def _toggleComboMenu(self):
         if self.dropMenu:
@@ -587,7 +601,192 @@ class ComboBoxMenu(RoundMenu):
     def exec(self, pos, ani=True, aniType=MenuAnimationType.DROP_DOWN):
         self.view.adjustSize(pos, aniType)
         self.adjustSize()
-        return super().exec(pos, ani, aniType)
+        return RoundMenu.exec(self, pos, ani, aniType)
+
+
+class FontMenuItemDelegate(MenuItemDelegate):
+    """Menu item delegate that renders text with its corresponding font"""
+
+    def paint(self, painter, option, index):
+        action = index.data(Qt.UserRole)
+        if not isinstance(action, QAction):
+            return
+
+        painter.save()
+        painter.setRenderHints(
+            QPainter.Antialiasing
+            | QPainter.SmoothPixmapTransform
+            | QPainter.TextAntialiasing
+        )
+
+        isDark = isDarkTheme()
+        isHover = option.state & QStyle.State_MouseOver
+        isSelected = option.state & QStyle.State_Selected
+
+        # Indicator
+        if isSelected:
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(themeColor())
+            painter.drawRoundedRect(6, 9 + option.rect.y(), 3, 15, 1.5, 1.5)
+
+        # 绘制背景
+        if isSelected:
+            bgColor = QColor(255, 255, 255, 9) if isDark else QColor(0, 0, 0, 9)
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(bgColor)
+            painter.drawRoundedRect(option.rect, 5, 5)
+
+        if isHover and not isSelected:
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(
+                QColor(255, 255, 255, 10) if isDark else QColor(0, 0, 0, 10)
+            )
+            painter.drawRoundedRect(option.rect, 5, 5)
+
+        fontName = action.text()
+        font = QFont(fontName)
+        font.setPixelSize(14)
+        painter.setFont(font)
+
+        textColor = QColor(255, 255, 255) if isDark else QColor(0, 0, 0)
+        if not action.isEnabled():
+            textColor = QColor(255, 255, 255, 80) if isDark else QColor(0, 0, 0, 80)
+
+        painter.setPen(textColor)
+        textRect = option.rect.adjusted(15, 0, -10, 0)
+        painter.drawText(textRect, Qt.AlignVCenter, fontName)
+
+        painter.restore()
+
+
+class FontComboBoxMenu(ComboBoxMenu):
+    """Combo box menu for font selection"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.view.setItemDelegate(FontMenuItemDelegate())
+
+
+class FontComboBox(ComboBox):
+    """Font combo box that mimics QFontComboBox"""
+
+    currentFontChanged = Signal(QFont)
+
+    AllFonts = 0
+    ScalableFonts = 1
+    NonScalableFonts = 2
+    MonospacedFonts = 4
+    ProportionalFonts = 8
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._fontFilters = self.AllFonts
+        self._writingSystem = QFontDatabase.Any
+        self.setMaxVisibleItems(10)
+        self._populateFonts()
+
+    def _createComboMenu(self):
+        return FontComboBoxMenu(self)
+
+    def _populateFonts(self):
+        """Populate the combo box with available fonts"""
+        self.clear()
+        db = QFontDatabase()
+        families = db.families(self._writingSystem)
+
+        for family in families:
+            if self._isFontFiltered(family, db):
+                self.addItem(family)
+
+        if self.count() > 0:
+            self.setCurrentIndex(0)
+
+    def _isFontFiltered(self, family: str, db: QFontDatabase) -> bool:
+        """Check if font matches the current filter"""
+        if self._fontFilters == self.AllFonts:
+            return True
+
+        writingSystem = self._writingSystem
+        isScalable = db.isSmoothlyScalable(family, writingSystem)
+        isFixedPitch = db.isFixedPitch(family, writingSystem)
+
+        if self._fontFilters & self.ScalableFonts and not isScalable:
+            return False
+        if self._fontFilters & self.NonScalableFonts and isScalable:
+            return False
+        if self._fontFilters & self.MonospacedFonts and not isFixedPitch:
+            return False
+        if self._fontFilters & self.ProportionalFonts and isFixedPitch:
+            return False
+
+        return True
+
+    def fontFilters(self) -> int:
+        """Get the current font filter"""
+        return self._fontFilters
+
+    def setFontFilters(self, filters: int):
+        """Set the font filter
+
+        Parameters
+        ----------
+        filters: int
+            Font filter flags (AllFonts, ScalableFonts, etc.)
+        """
+        if self._fontFilters == filters:
+            return
+
+        self._fontFilters = filters
+        self._populateFonts()
+
+    def writingSystem(self) -> QFontDatabase.WritingSystem:
+        """Get the current writing system"""
+        return self._writingSystem
+
+    def setWritingSystem(self, system: QFontDatabase.WritingSystem):
+        """Set the writing system for fonts
+
+        Parameters
+        ----------
+        system: QFontDatabase.WritingSystem
+            Writing system to filter fonts by
+        """
+        if self._writingSystem == system:
+            return
+
+        self._writingSystem = system
+        self._populateFonts()
+
+    def currentFont(self) -> QFont:
+        """Get the currently selected font"""
+        fontName = self.currentText()
+        if not fontName:
+            return QFont()
+
+        font = QFont(fontName)
+        return font
+
+    def setCurrentFont(self, font: QFont):
+        """Set the current font
+
+        Parameters
+        ----------
+        font: QFont
+            Font to select
+        """
+        family = font.family()
+        index = self.findText(family)
+        if index >= 0:
+            self.setCurrentIndex(index)
+
+    def setCurrentIndex(self, index: int):
+        if index < 0:
+            self._currentIndex = -1
+            self.setPlaceholderText(self._placeholderText)
+        elif 0 <= index < len(self.items):
+            self._updateTextState(False)
+            super().setCurrentIndex(index)
+            self.currentFontChanged.emit(self.currentFont())
 
 
 class CheckBoxMenuItemDelegate(QStyledItemDelegate):
