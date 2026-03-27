@@ -37,7 +37,7 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 - **[target]** Restore commonly used Pro widgets/components first
 - **[compatibility]** Python 3.9+ / Windows, macOS, Linux
 
-## 🧩 Restored Components (43)
+## 🧩 Restored Components (47)
 
 The following components have been restored or extended in this repo (the list will be updated continuously):
 
@@ -55,7 +55,9 @@ The following components have been restored or extended in this repo (the list w
 `MultiSelectComboBox` `RoundListWidget` `RoundListView`
 `TransparentRoundListWidget` `TransparentRoundListView`
 `CategoryCardListWidget` `CategoryCardListView`
-`Toast` `FontComboBox`
+`Toast` `FontComboBox` `ExclusiveLiteFilter`
+`OutlinedExclusiveLiteFilter` `MultiSelectionLiteFilter`
+`OutlinedMultiSelectionLiteFilter`
 
 ## 🚀 Installation
 

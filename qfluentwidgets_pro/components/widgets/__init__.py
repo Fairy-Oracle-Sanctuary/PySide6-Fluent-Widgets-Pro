@@ -64,6 +64,12 @@ from .drop_widget import (
     DropSingleFileWidget,
     DropSingleFolderWidget,
 )
+from .exclusive_filter import (
+    ExclusiveLiteFilter,
+    MultiSelectionLiteFilter,
+    OutlinedExclusiveLiteFilter,
+    OutlinedMultiSelectionLiteFilter,
+)
 from .flip_view import FlipImageDelegate, FlipView, HorizontalFlipView, VerticalFlipView
 from .flyout import (
     Flyout,

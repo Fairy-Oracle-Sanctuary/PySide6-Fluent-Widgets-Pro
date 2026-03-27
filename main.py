@@ -11,6 +11,7 @@ from qfluentwidgets_pro import (
     CategoryCardListWidget,
     DropMultiFilesWidget,
     DropSingleFileWidget,
+    ExclusiveLiteFilter,
     FilledPushButton,
     FluentIcon,
     FluentTranslator,
@@ -18,6 +19,9 @@ from qfluentwidgets_pro import (
     LabelLineEdit,
     LineTableWidget,
     MultiSelectComboBox,
+    MultiSelectionLiteFilter,
+    OutlinedExclusiveLiteFilter,
+    OutlinedMultiSelectionLiteFilter,
     OutlinedPushButton,
     PinBox,
     PushButton,
@@ -291,6 +295,56 @@ class MainWindow(TopFluentWindow):
         toastLayout.addWidget(self.errorToastBtn)
 
         layout.addLayout(toastLayout)
+
+        # ExclusiveLiteFilter demo
+        from qfluentwidgets_pro import BodyLabel
+
+        layout.addWidget(BodyLabel("ExclusiveLiteFilter:"))
+        self.filter = ExclusiveLiteFilter()
+        self.filter.setMaximumWidth(300)
+        self.filter.addItems(
+            ["All", "Active", "Completed", "Pending", "Archived", "Deleted"]
+        )
+        self.filter.currentTextChanged.connect(
+            lambda text: print(f"Filter changed: {text}")
+        )
+        layout.addWidget(self.filter)
+
+        # OutlinedExclusiveLiteFilter demo
+        layout.addWidget(BodyLabel("OutlinedExclusiveLiteFilter:"))
+        self.outlinedFilter = OutlinedExclusiveLiteFilter()
+        self.outlinedFilter.setMaximumWidth(300)
+        self.outlinedFilter.addItems(
+            ["All", "Active", "Completed", "Pending", "Archived", "Deleted"]
+        )
+        self.outlinedFilter.currentTextChanged.connect(
+            lambda text: print(f"Outlined filter changed: {text}")
+        )
+        layout.addWidget(self.outlinedFilter)
+
+        # MultiSelectionLiteFilter demo
+        layout.addWidget(BodyLabel("MultiSelectionLiteFilter:"))
+        self.multiFilter = MultiSelectionLiteFilter()
+        self.multiFilter.setMaximumWidth(300)
+        self.multiFilter.addItems(
+            ["Active", "Completed", "Pending", "Archived", "Deleted"]
+        )
+        self.multiFilter.currentItemsChanged.connect(
+            lambda items: print(f"Multi filter changed: {items}")
+        )
+        layout.addWidget(self.multiFilter)
+
+        # OutlinedMultiSelectionLiteFilter demo
+        layout.addWidget(BodyLabel("OutlinedMultiSelectionLiteFilter:"))
+        self.outlinedMultiFilter = OutlinedMultiSelectionLiteFilter()
+        self.outlinedMultiFilter.setMaximumWidth(300)
+        self.outlinedMultiFilter.addItems(
+            ["Active", "Completed", "Pending", "Archived", "Deleted"]
+        )
+        self.outlinedMultiFilter.currentItemsChanged.connect(
+            lambda items: print(f"Outlined multi filter changed: {items}")
+        )
+        layout.addWidget(self.outlinedMultiFilter)
 
         # 切换主题
         self.theme_button = PushButton("切换主题")
