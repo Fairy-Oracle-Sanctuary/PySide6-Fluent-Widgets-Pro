@@ -391,10 +391,10 @@ class ComboBoxBase:
 
         if hd >= hu:
             menu.view.adjustSize(pd, MenuAnimationType.DROP_DOWN)
-            RoundMenu.exec(menu, pd, aniType=MenuAnimationType.DROP_DOWN)
+            menu.exec(pd, aniType=MenuAnimationType.DROP_DOWN)
         else:
             menu.view.adjustSize(pu, MenuAnimationType.PULL_UP)
-            RoundMenu.exec(menu, pu, aniType=MenuAnimationType.PULL_UP)
+            menu.exec(pu, aniType=MenuAnimationType.PULL_UP)
 
     def _toggleComboMenu(self):
         if self.dropMenu:
@@ -601,7 +601,7 @@ class ComboBoxMenu(RoundMenu):
     def exec(self, pos, ani=True, aniType=MenuAnimationType.DROP_DOWN):
         self.view.adjustSize(pos, aniType)
         self.adjustSize()
-        return RoundMenu.exec(self, pos, ani, aniType)
+        return super().exec(pos, ani, aniType)
 
 
 class FontMenuItemDelegate(MenuItemDelegate):
@@ -665,6 +665,11 @@ class FontComboBoxMenu(ComboBoxMenu):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.view.setItemDelegate(FontMenuItemDelegate())
+
+    def exec(self, pos, ani=True, aniType=MenuAnimationType.DROP_DOWN):
+        self.view.adjustSize(pos, aniType)
+        self.adjustSize()
+        return RoundMenu.exec(self, pos, ani, aniType)
 
 
 class FontComboBox(ComboBox):
