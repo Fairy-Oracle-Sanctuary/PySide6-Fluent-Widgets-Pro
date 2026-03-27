@@ -40,6 +40,7 @@ from qfluentwidgets_pro import (
     TopNavigationItemPosition,
     TransparentRoundListWidget,
     toggleTheme,
+    EditableComboBox
 )
 
 
@@ -182,6 +183,11 @@ class MainWindow(TopFluentWindow):
         self.tagWarning.setIcon(FluentIcon.EDIT)
         self.tagWarning.setType(Tag.WARNING)
         hLayout7.addWidget(self.tagWarning)
+
+        self.editcombox = EditableComboBox()
+        list1 = [str(a) for a in range(20)]
+        self.editcombox.addItems(list1)
+        hLayout7.addWidget(self.editcombox)
 
         # PinBox example
         from qfluentwidgets_pro import BodyLabel
