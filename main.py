@@ -180,7 +180,6 @@ class MainWindow(TopFluentWindow):
         hLayout7.addWidget(self.tagSuccess)
 
         self.tagWarning = Tag("Warning")
-        self.tagWarning.setIcon(FluentIcon.EDIT)
         self.tagWarning.setType(Tag.WARNING)
         hLayout7.addWidget(self.tagWarning)
 
