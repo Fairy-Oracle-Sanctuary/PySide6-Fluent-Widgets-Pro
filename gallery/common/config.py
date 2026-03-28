@@ -3,7 +3,7 @@ import sys
 from enum import Enum
 
 from PySide6.QtCore import QLocale
-from qfluentwidgets import (
+from qfluentwidgets_pro import (
     BoolValidator,
     ConfigItem,
     ConfigSerializer,
