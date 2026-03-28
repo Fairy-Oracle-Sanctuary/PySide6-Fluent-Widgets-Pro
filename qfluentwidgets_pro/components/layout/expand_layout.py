@@ -1,11 +1,10 @@
 # coding:utf-8
-from PySide6.QtCore import QSize, QPoint, Qt, QEvent, QRect
-from PySide6.QtGui import QResizeEvent
+from PySide6.QtCore import QEvent, QPoint, QRect, QSize, Qt
 from PySide6.QtWidgets import QLayout, QWidget
 
 
 class ExpandLayout(QLayout):
-    """ Expand layout """
+    """Expand layout"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -45,7 +44,7 @@ class ExpandLayout(QLayout):
         return True
 
     def heightForWidth(self, width):
-        """ get the minimal height according to width """
+        """get the minimal height according to width"""
         return self.__doLayout(QRect(0, 0, width, 0), False)
 
     def setGeometry(self, rect):
@@ -62,12 +61,12 @@ class ExpandLayout(QLayout):
             size = size.expandedTo(w.minimumSize())
 
         m = self.contentsMargins()
-        size += QSize(m.left()+m.right(), m.top()+m.bottom())
+        size += QSize(m.left() + m.right(), m.top() + m.bottom())
 
         return size
 
     def __doLayout(self, rect, move):
-        """ adjust widgets position according to the window size """
+        """adjust widgets position according to the window size"""
         margin = self.contentsMargins()
         x = rect.x() + margin.left()
         y = rect.y() + margin.top()
@@ -77,7 +76,7 @@ class ExpandLayout(QLayout):
             if w.isHidden():
                 continue
 
-            y += (i>0)*self.spacing()
+            y += (i > 0) * self.spacing()
             if move:
                 w.setGeometry(QRect(QPoint(x, y), QSize(width, w.height())))
 

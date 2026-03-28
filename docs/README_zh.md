@@ -41,7 +41,7 @@
 - **[兼容性]** Python 3.9+ / Windows、macOS、Linux
 
 
-## 已还原组件（47）
+## 已还原组件（48）
 
 已还原或扩展的组件（列表将持续更新）：
 
@@ -61,7 +61,7 @@
 `CategoryCardListWidget` `CategoryCardListView`
 `Toast` `FontComboBox` `ExclusiveLiteFilter`
 `OutlinedExclusiveLiteFilter` `MultiSelectionLiteFilter`
-`OutlinedMultiSelectionLiteFilter`
+`OutlinedMultiSelectionLiteFilter` `WaterfallLayout`
 
 ## 使用方式
 
