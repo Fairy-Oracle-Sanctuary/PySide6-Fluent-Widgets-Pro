@@ -18,12 +18,12 @@ from PySide6.QtWidgets import (
     QApplication,
     QGraphicsDropShadowEffect,
     QHBoxLayout,
+    QLabel,
     QPushButton,
     QRadioButton,
     QSizePolicy,
     QToolButton,
     QWidget,
-    QLabel
 )
 
 from ...common.animation import (
@@ -2938,11 +2938,7 @@ class Tag(QWidget):
         fm = self.fontMetrics()
         textWidth = fm.boundingRect(self._text).width() if self._text else 0
 
-        # Calculate starting x position for centered content
-        totalContentWidth = (
-            (8 if hasIcon else 0) + iconW + (6 if hasIcon else 0) + textWidth
-        )
-        startX = (self.width() - totalContentWidth) // 2
+        startX = 8
 
         # Draw icon with text color
         if hasIcon:
