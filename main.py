@@ -38,6 +38,7 @@ from qfluentwidgets_pro import (
     Tag,
     Toast,
     TopFluentWindow,
+    TopNavigationBar,
     TopNavigationItemPosition,
     TransparentRoundListWidget,
     WaterfallLayout,
@@ -115,6 +116,15 @@ class MainWindow(TopFluentWindow):
             self.waterfallInterface,
             FluentIcon.PHOTO,
             "Waterfall",
+            TopNavigationItemPosition.LEFT,
+        )
+
+        self.navBarInterface = self._createNavBarPage()
+        self.navBarInterface.setObjectName("navBarInterface")
+        self.addSubInterface(
+            self.navBarInterface,
+            FluentIcon.CHECKBOX,
+            "NavBar",
             TopNavigationItemPosition.LEFT,
         )
 
@@ -637,6 +647,40 @@ class MainWindow(TopFluentWindow):
         scroll.setWidget(page)
         scroll.enableTransparentBackground()
         return scroll
+
+    def _createNavBarPage(self):
+        """Create TopNavigationBar demo page"""
+        from qfluentwidgets_pro import BodyLabel
+
+        page = QWidget(self)
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+        layout.setSpacing(20)
+
+        layout.addWidget(BodyLabel("TopNavigationBar (顶部导航栏):"))
+        layout.addWidget(BodyLabel("可独立使用的水平导航栏组件:"))
+
+        # Create a standalone TopNavigationBar
+        navBar = TopNavigationBar()
+        navBar.setFixedHeight(48)
+
+        # Add items to the navigation bar
+        navBar.addItem("home", FluentIcon.HOME, "首页")
+        navBar.addItem("search", FluentIcon.SEARCH, "搜索")
+        navBar.addItem("settings", FluentIcon.SETTING, "设置")
+        navBar.addItem("user", FluentIcon.PEOPLE, "用户")
+
+        # Set default selected item
+        navBar.setCurrentItem("home")
+
+        layout.addWidget(navBar)
+
+        # Info label
+        infoLabel = BodyLabel("点击上方导航项查看切换效果")
+        layout.addWidget(infoLabel)
+
+        layout.addStretch()
+        return page
 
     def _openChartWindow(self):
         """Open chart window with mica effect enabled"""
