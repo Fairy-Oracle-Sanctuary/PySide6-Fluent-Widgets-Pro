@@ -245,6 +245,9 @@ class NavigationToolButton(NavigationPushButton):
     def __init__(self, icon: Union[str, QIcon, FIF], parent=None):
         super().__init__(icon, "", False, parent)
 
+    def _margins(self):
+        return QMargins(1, 0, 0, 0)
+
     def setCompacted(self, isCompacted: bool):
         self.setFixedSize(40, 36)
 

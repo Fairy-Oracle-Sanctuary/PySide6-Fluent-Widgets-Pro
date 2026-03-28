@@ -41,7 +41,7 @@
 - **[兼容性]** Python 3.9+ / Windows、macOS、Linux
 
 
-## 已还原组件（48）
+## 已还原组件（49）
 
 已还原或扩展的组件（列表将持续更新）：
 
@@ -62,6 +62,7 @@
 `Toast` `FontComboBox` `ExclusiveLiteFilter`
 `OutlinedExclusiveLiteFilter` `MultiSelectionLiteFilter`
 `OutlinedMultiSelectionLiteFilter` `WaterfallLayout`
+`TopNavigationBar`
 
 ## 使用方式
 

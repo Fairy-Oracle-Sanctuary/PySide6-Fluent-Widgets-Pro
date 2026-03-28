@@ -28,6 +28,7 @@ from .segmented_widget import (
 )
 from .top_navigation_interface import TopNavigationInterface
 from .top_navigation_panel import (
+    TopNavigationBar,
     TopNavigationDisplayMode,
     TopNavigationItemPosition,
     TopNavigationPanel,

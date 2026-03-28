@@ -569,3 +569,6 @@ class TopNavigationPushButton(NavigationPushButton):
             self.setFixedSize(width, 36)
         else:
             self.setFixedSize(40, 36)
+
+
+TopNavigationBar = TopNavigationPanel
