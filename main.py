@@ -11,6 +11,7 @@ from qfluentwidgets_pro import (
     CategoryCardListWidget,
     DropMultiFilesWidget,
     DropSingleFileWidget,
+    EditableComboBox,
     ExclusiveLiteFilter,
     FilledPushButton,
     FluentIcon,
@@ -39,8 +40,8 @@ from qfluentwidgets_pro import (
     TopFluentWindow,
     TopNavigationItemPosition,
     TransparentRoundListWidget,
+    WaterfallLayout,
     toggleTheme,
-    EditableComboBox
 )
 
 
@@ -105,6 +106,15 @@ class MainWindow(TopFluentWindow):
             self.listInterface,
             FluentIcon.APPLICATION,
             "List Widgets",
+            TopNavigationItemPosition.LEFT,
+        )
+
+        self.waterfallInterface = self._createWaterfallPage()
+        self.waterfallInterface.setObjectName("waterfallInterface")
+        self.addSubInterface(
+            self.waterfallInterface,
+            FluentIcon.PHOTO,
+            "Waterfall",
             TopNavigationItemPosition.LEFT,
         )
 
@@ -526,6 +536,102 @@ class MainWindow(TopFluentWindow):
         self.list_theme_button = PushButton("切换主题")
         layout.addWidget(self.list_theme_button)
         self.list_theme_button.clicked.connect(toggleTheme)
+
+        layout.addStretch()
+        scroll.setWidget(page)
+        scroll.enableTransparentBackground()
+        return scroll
+
+    def _createWaterfallPage(self):
+        """Create waterfall layout demo page"""
+
+        from qfluentwidgets_pro import BodyLabel, CardWidget
+
+        scroll = ScrollArea(self)
+        scroll.setWidgetResizable(True)
+
+        page = QWidget(scroll)
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+        layout.setSpacing(20)
+
+        layout.addWidget(BodyLabel("WaterfallLayout (瀑布流布局):"))
+
+        # Create container for waterfall layout
+        container = QWidget()
+        waterfallLayout = WaterfallLayout(container, needAni=True)
+        waterfallLayout.setColumnWidth(150)  # Fixed column width
+        waterfallLayout.setHorizontalSpacing(10)
+        waterfallLayout.setVerticalSpacing(5)  # Reduced vertical spacing
+
+        # Add cards with different heights to demonstrate waterfall effect
+        heights = [80, 120, 60, 100, 140, 90, 70, 130, 85, 110, 95, 75, 150, 65, 105]
+        colors = [
+            "#FF6B6B",
+            "#4ECDC4",
+            "#45B7D1",
+            "#96CEB4",
+            "#FFEAA7",
+            "#DDA0DD",
+            "#98D8C8",
+            "#F7DC6F",
+            "#BB8FCE",
+            "#85C1E9",
+            "#F8B500",
+            "#00CED1",
+            "#FF69B4",
+            "#32CD32",
+            "#FFD700",
+        ]
+
+        for i, (h, c) in enumerate(zip(heights, colors)):
+            card = CardWidget()
+            card.setFixedHeight(h)
+            card.setStyleSheet(f"""
+                CardWidget {{
+                    background-color: {c};
+                    border-radius: 8px;
+                }}
+            """)
+
+            # Add a label inside
+            cardLayout = QVBoxLayout(card)
+            cardLayout.setContentsMargins(0, 0, 0, 0)  # Remove default margins
+            label = BodyLabel(f"Card {i + 1}")
+            label.setStyleSheet("color: white; font-weight: bold;")
+            label.setAlignment(Qt.AlignCenter)
+            cardLayout.addWidget(label)
+
+            waterfallLayout.addWidget(card)
+
+        container.setLayout(waterfallLayout)
+        layout.addWidget(container)
+
+        # Column width control
+        colLayout = QHBoxLayout()
+        layout.addLayout(colLayout)
+
+        colLayout.addWidget(BodyLabel("列宽:"))
+
+        from qfluentwidgets_pro import ComboBox
+
+        widthCombo = ComboBox()
+        widthCombo.addItems(["固定 150px", "固定 200px", "固定 250px", "自动分配"])
+        widthCombo.setCurrentIndex(0)  # Default 150px
+
+        def onWidthChanged(index):
+            widths = [150, 200, 250, 0]  # 0 means auto distribute
+            waterfallLayout.setColumnWidth(widths[index])
+            waterfallLayout.invalidate()
+
+        widthCombo.currentIndexChanged.connect(onWidthChanged)
+        colLayout.addWidget(widthCombo)
+        colLayout.addStretch()
+
+        # 切换主题
+        self.waterfall_theme_button = PushButton("切换主题")
+        layout.addWidget(self.waterfall_theme_button)
+        self.waterfall_theme_button.clicked.connect(toggleTheme)
 
         layout.addStretch()
         scroll.setWidget(page)

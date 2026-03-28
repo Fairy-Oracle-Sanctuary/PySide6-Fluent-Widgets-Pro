@@ -3,19 +3,20 @@ import sys
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QFrame, QHBoxLayout
+from qfluentwidgets import EditableComboBox, FluentWindow
 from qfluentwidgets import FluentIcon as FIF
-from qfluentwidgets import FluentWindow, SubtitleLabel, setFont
 
 
 class Widget(QFrame):
     def __init__(self, text: str, parent=None):
         super().__init__(parent=parent)
-        self.label = SubtitleLabel(text, self)
-        self.hBoxLayout = QHBoxLayout(self)
 
-        setFont(self.label, 24)
-        self.label.setAlignment(Qt.AlignCenter)
-        self.hBoxLayout.addWidget(self.label, 1, Qt.AlignCenter)
+        self.hBoxLayout = QHBoxLayout(self)
+        self.editcombox = EditableComboBox()
+        list1 = [str(a) for a in range(20)]
+        self.editcombox.addItems(list1)
+        self.hBoxLayout.addWidget(self.editcombox)
+        self.hBoxLayout.addWidget(self.editcombox, 1, Qt.AlignCenter)
 
         # 必须给子界面设置全局唯一的对象名
         self.setObjectName(text.replace(" ", "-"))

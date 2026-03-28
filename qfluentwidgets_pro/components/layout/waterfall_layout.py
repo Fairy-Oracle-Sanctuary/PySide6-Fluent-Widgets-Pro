@@ -15,8 +15,12 @@ from PySide6.QtCore import (
 from PySide6.QtWidgets import QLayout, QWidgetItem
 
 
-class FlowLayout(QLayout):
-    """Flow layout"""
+class WaterfallLayout(QLayout):
+    """Waterfall layout - multi-column layout with equal width and variable height
+
+    Items are placed into the shortest column to minimize vertical gaps.
+    Suitable for image galleries, card layouts, etc.
+    """
 
     def __init__(self, parent=None, needAni=False, isTight=False):
         """
@@ -35,8 +39,11 @@ class FlowLayout(QLayout):
         self._items = []  # type: List[QLayoutItem]
         self._anis = []  # type: List[QPropertyAnimation]
         self._aniGroup = QParallelAnimationGroup(self)
-        self._verticalSpacing = 10
+        self._verticalSpacing = 5
         self._horizontalSpacing = 10
+        self._columnCount = 3  # default column count
+        self._columnWidth = 0  # 0 means auto calculate based on available width
+        self._fixedColumnWidth = 0  # fixed column width, 0 means use _columnWidth
         self.duration = 300
         self.ease = QEasingCurve.Linear
         self.needAni = needAni
@@ -79,7 +86,7 @@ class FlowLayout(QLayout):
         ani.setEndValue(QRect(QPoint(0, 0), w.size()))
         ani.setDuration(self.duration)
         ani.setEasingCurve(self.ease)
-        w.setProperty("flowAni", ani)
+        w.setProperty("waterfallAni", ani)
         self._aniGroup.addAnimation(ani)
 
         if index == -1:
@@ -120,7 +127,7 @@ class FlowLayout(QLayout):
     def takeAt(self, index: int):
         if 0 <= index < len(self._items):
             item = self._items[index]  # type: QLayoutItem
-            ani = item.widget().property("flowAni")
+            ani = item.widget().property("waterfallAni")
             if ani:
                 self._anis.remove(ani)
                 self._aniGroup.removeAnimation(ani)
@@ -195,6 +202,36 @@ class FlowLayout(QLayout):
         """get horizontal spacing between widgets"""
         return self._horizontalSpacing
 
+    def setColumnCount(self, count: int):
+        """set the number of columns
+
+        Parameters
+        ----------
+        count: int
+            number of columns, set to 0 for auto calculation
+        """
+        self._columnCount = max(0, count)
+        self.invalidate()
+
+    def columnCount(self):
+        """get the number of columns"""
+        return self._columnCount
+
+    def setColumnWidth(self, width: int):
+        """set fixed column width
+
+        Parameters
+        ----------
+        width: int
+            fixed column width, set to 0 to auto calculate
+        """
+        self._fixedColumnWidth = max(0, width)
+        self.invalidate()
+
+    def columnWidth(self):
+        """get the fixed column width (0 means auto)"""
+        return self._fixedColumnWidth
+
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         if (
             obj in [w.widget() for w in self._items]
@@ -210,30 +247,80 @@ class FlowLayout(QLayout):
 
         return super().eventFilter(obj, event)
 
+    def _calculateColumnCount(self, availableWidth: int):
+        """calculate the number of columns based on available width"""
+        if self._columnCount > 0:
+            return self._columnCount
+
+        # Auto calculate based on minimum item width
+        minItemWidth = 150  # default minimum width
+        for item in self._items:
+            if item.widget() and item.widget().isVisible():
+                minItemWidth = max(minItemWidth, item.widget().minimumWidth() or 150)
+                break
+
+        spaceX = self.horizontalSpacing()
+        count = max(1, (availableWidth + spaceX) // (minItemWidth + spaceX))
+        return int(count)
+
     def _doLayout(self, rect: QRect, move: bool):
-        """adjust widgets position according to the window size"""
+        """adjust widgets position using waterfall algorithm"""
         aniRestart = False
         margin = self.contentsMargins()
-        x = rect.x() + margin.left()
-        y = rect.y() + margin.top()
-        rowHeight = 0
+        availableWidth = rect.width() - margin.left() - margin.right()
+
         spaceX = self.horizontalSpacing()
         spaceY = self.verticalSpacing()
+
+        # Calculate column count and width
+        if self._fixedColumnWidth > 0:
+            # Fixed column width mode: calculate column count from available width
+            columnWidth = self._fixedColumnWidth
+            columnCount = max(1, (availableWidth + spaceX) // (columnWidth + spaceX))
+        else:
+            # Auto column width mode: use column count setting
+            columnCount = self._calculateColumnCount(availableWidth)
+            if columnCount <= 0:
+                columnCount = 1
+            columnWidth = (availableWidth - spaceX * (columnCount - 1)) // columnCount
+
+        # Track the Y position for each column
+        columns = [margin.top()] * columnCount
 
         for i, item in enumerate(self._items):
             if item.widget() and not item.widget().isVisible() and self.isTight:
                 continue
 
-            nextX = x + item.sizeHint().width() + spaceX
+            # Find the shortest column
+            minCol = 0
+            minY = columns[0]
+            for col in range(1, columnCount):
+                if columns[col] < minY:
+                    minY = columns[col]
+                    minCol = col
 
-            if nextX - spaceX > rect.right() - margin.right() and rowHeight > 0:
-                x = rect.x() + margin.left()
-                y = y + rowHeight + spaceY
-                nextX = x + item.sizeHint().width() + spaceX
-                rowHeight = 0
+            # Calculate position
+            x = rect.x() + margin.left() + minCol * (columnWidth + spaceX)
+            y = rect.y() + columns[minCol]
+
+            # Use fixed column width
+            itemWidth = columnWidth
+
+            # Get actual item height
+            widget = item.widget()
+            if widget:
+                # Check if widget has fixed height (min == max)
+                minH = widget.minimumHeight()
+                maxH = widget.maximumHeight()
+                if minH > 0 and minH == maxH:
+                    itemHeight = minH
+                else:
+                    itemHeight = widget.sizeHint().height()
+            else:
+                itemHeight = item.sizeHint().height()
 
             if move:
-                target = QRect(QPoint(x, y), item.sizeHint())
+                target = QRect(QPoint(x, y), QSize(itemWidth, itemHeight))
                 if not self.needAni:
                     item.setGeometry(target)
                 elif target != self._anis[i].endValue():
@@ -241,11 +328,12 @@ class FlowLayout(QLayout):
                     self._anis[i].setEndValue(target)
                     aniRestart = True
 
-            x = nextX
-            rowHeight = max(rowHeight, item.sizeHint().height())
+            # Update column Y position
+            columns[minCol] += itemHeight + spaceY
 
         if self.needAni and aniRestart:
             self._aniGroup.stop()
             self._aniGroup.start()
 
-        return y + rowHeight + margin.bottom() - rect.y()
+        # Return total height (tallest column)
+        return max(columns) + margin.bottom() - rect.y()
