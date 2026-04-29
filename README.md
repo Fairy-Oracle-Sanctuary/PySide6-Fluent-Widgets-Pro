@@ -22,7 +22,7 @@ English | <a href="docs/README_zh.md">简体中文</a>
 </p>
 
 <p align="center">
-  <img src="docs/source/_static/Interface_en.png" alt="interface"/>
+  <img src="docs/source/_static/Interface.png" alt="interface"/>
 </p>
 
 ## 📌 Introduction
