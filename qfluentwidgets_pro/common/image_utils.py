@@ -1,21 +1,20 @@
 # coding:utf-8
-from math import floor
 from io import BytesIO
+from math import floor
 from typing import Union
 
 import numpy as np
 from colorthief import ColorThief
 from PIL import Image
-from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtCore import QIODevice, QBuffer
+from PyQt5.QtCore import QBuffer, QIODevice
+from PyQt5.QtGui import QImage, QPixmap
 from scipy.ndimage.filters import gaussian_filter
 
 from .exception_handler import exceptionHandler
 
 
-
-def gaussianBlur(image, blurRadius=18, brightFactor=1, blurPicSize= None):
-    if isinstance(image, str) and not image.startswith(':'):
+def gaussianBlur(image, blurRadius=18, brightFactor=1, blurPicSize=None):
+    if isinstance(image, str) and not image.startswith(":"):
         image = Image.open(image)
     else:
         image = fromqpixmap(QPixmap(image))
@@ -37,8 +36,7 @@ def gaussianBlur(image, blurRadius=18, brightFactor=1, blurPicSize= None):
 
     # blur each channel
     for i in range(3):
-        image[:, :, i] = gaussian_filter(
-            image[:, :, i], blurRadius) * brightFactor
+        image[:, :, i] = gaussian_filter(image[:, :, i], blurRadius) * brightFactor
 
     # convert ndarray to QPixmap
     h, w, c = image.shape
@@ -47,7 +45,7 @@ def gaussianBlur(image, blurRadius=18, brightFactor=1, blurPicSize= None):
     else:
         format = QImage.Format_RGBA8888
 
-    return QPixmap.fromImage(QImage(image.data, w, h, c*w, format))
+    return QPixmap.fromImage(QImage(image.data, w, h, c * w, format))
 
 
 # https://github.com/python-pillow/Pillow/blob/main/src/PIL/ImageQt.py
@@ -56,7 +54,7 @@ def fromqpixmap(im: Union[QImage, QPixmap]):
     :param im: QImage or PIL ImageQt object
     """
     buffer = QBuffer()
-    buffer.open(QIODevice.OpenModeFlag.ReadWrite)
+    buffer.open(QIODevice.ReadWrite)
 
     # preserve alpha channel with png
     # otherwise ppm is more friendly with Image.open
@@ -74,12 +72,12 @@ def fromqpixmap(im: Union[QImage, QPixmap]):
 
 
 class DominantColor:
-    """ Dominant color class """
+    """Dominant color class"""
 
     @classmethod
     @exceptionHandler((24, 24, 24))
     def getDominantColor(cls, imagePath):
-        """ extract dominant color from image
+        """extract dominant color from image
 
         Parameters
         ----------
@@ -91,7 +89,7 @@ class DominantColor:
         r, g, b: int
             gray value of each color channel
         """
-        if imagePath.startswith(':'):
+        if imagePath.startswith(":"):
             return (24, 24, 24)
 
         colorThief = ColorThief(imagePath)
@@ -118,7 +116,7 @@ class DominantColor:
 
     @classmethod
     def __adjustPaletteValue(cls, palette):
-        """ adjust the brightness of palette """
+        """adjust the brightness of palette"""
         newPalette = []
         for rgb in palette:
             h, s, v = cls.rgb2hsv(rgb)
@@ -137,7 +135,7 @@ class DominantColor:
 
     @staticmethod
     def rgb2hsv(rgb):
-        """ convert rgb to hsv """
+        """convert rgb to hsv"""
         r, g, b = [i / 255 for i in rgb]
         mx = max(r, g, b)
         mn = min(r, g, b)
@@ -156,7 +154,7 @@ class DominantColor:
 
     @staticmethod
     def hsv2rgb(h, s, v):
-        """ convert hsv to rgb """
+        """convert hsv to rgb"""
         h60 = h / 60.0
         h60f = floor(h60)
         hi = int(h60f) % 6
@@ -190,9 +188,7 @@ class DominantColor:
         yb_mean, yb_std = (np.mean(yb), np.std(yb))
 
         # Combine the mean and standard deviations.
-        std_root = np.sqrt((rg_std ** 2) + (yb_std ** 2))
-        mean_root = np.sqrt((rg_mean ** 2) + (yb_mean ** 2))
+        std_root = np.sqrt((rg_std**2) + (yb_std**2))
+        mean_root = np.sqrt((rg_mean**2) + (yb_mean**2))
 
         return std_root + (0.3 * mean_root)
-
-

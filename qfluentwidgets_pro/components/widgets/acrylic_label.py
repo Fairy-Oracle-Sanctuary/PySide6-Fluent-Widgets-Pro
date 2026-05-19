@@ -2,9 +2,9 @@
 import warnings
 from typing import Union
 
-from PySide6.QtCore import QRect, Qt, QThread, Signal
-from PySide6.QtGui import QBrush, QColor, QImage, QPainter, QPainterPath, QPixmap
-from PySide6.QtWidgets import QApplication, QLabel, QWidget
+from PyQt5.QtCore import QRect, Qt, QThread, pyqtSignal
+from PyQt5.QtGui import QBrush, QColor, QImage, QPainter, QPainterPath, QPixmap
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget
 
 from ...common.screen import getCurrentScreen
 
@@ -22,7 +22,7 @@ except ImportError:
 def checkAcrylicAvailability():
     if not isAcrylicAvailable:
         warnings.warn(
-            "Acrylic is not supported in current qfluentwidgets, use `pip install PySide6-Fluent-Widgets[full]` to enable it."
+            "`AcrylicLabel` is not supported in current qfluentwidgets, use `pip install PyQt-Fluent-Widgets[full]` to enable it."
         )
 
     return isAcrylicAvailable
@@ -31,7 +31,7 @@ def checkAcrylicAvailability():
 class BlurCoverThread(QThread):
     """Blur album cover thread"""
 
-    blurFinished = Signal(QPixmap)
+    blurFinished = pyqtSignal(QPixmap)
 
     def __init__(self, parent=None):
         super().__init__(parent)
