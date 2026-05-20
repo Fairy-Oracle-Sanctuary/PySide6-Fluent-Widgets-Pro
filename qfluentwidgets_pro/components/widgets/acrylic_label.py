@@ -2,9 +2,9 @@
 import warnings
 from typing import Union
 
-from PyQt5.QtCore import QRect, Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QBrush, QColor, QImage, QPainter, QPainterPath, QPixmap
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget
+from PySide6.QtCore import QRect, QSize, Qt, QThread, Signal
+from PySide6.QtGui import QBrush, QColor, QImage, QPainter, QPainterPath, QPixmap
+from PySide6.QtWidgets import QApplication, QLabel, QWidget
 
 from ...common.screen import getCurrentScreen
 
@@ -22,7 +22,7 @@ except ImportError:
 def checkAcrylicAvailability():
     if not isAcrylicAvailable:
         warnings.warn(
-            "`AcrylicLabel` is not supported in current qfluentwidgets, use `pip install PyQt-Fluent-Widgets[full]` to enable it."
+            "Acrylic is not supported in current qfluentwidgets, use `pip install PySide6-Fluent-Widgets[full]` to enable it."
         )
 
     return isAcrylicAvailable
@@ -31,7 +31,7 @@ def checkAcrylicAvailability():
 class BlurCoverThread(QThread):
     """Blur album cover thread"""
 
-    blurFinished = pyqtSignal(QPixmap)
+    blurFinished = Signal(QPixmap)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -185,6 +185,7 @@ class AcrylicBrush:
     ):
         self.device = device
         self.blurRadius = blurRadius
+        self.blurPicSize = None
         self.tintColor = QColor(tintColor)
         self.luminosityColor = QColor(luminosityColor)
         self.noiseOpacity = noiseOpacity
@@ -240,13 +241,18 @@ class AcrylicBrush:
         if not image.isNull():
             checkAcrylicAvailability()
 
-            self.image = gaussianBlur(image, self.blurRadius)
+            self.image = gaussianBlur(
+                image, self.blurRadius, blurPicSize=self.blurPicSize
+            )
 
         self.device.update()
 
     def setClipPath(self, path: QPainterPath):
         self.clipPath = path
         self.device.update()
+
+    def setBlurPicSize(self, size: QSize):
+        self.blurPicSize = (size.width(), size.height())
 
     def textureImage(self):
         texture = QImage(64, 64, QImage.Format_ARGB32_Premultiplied)
