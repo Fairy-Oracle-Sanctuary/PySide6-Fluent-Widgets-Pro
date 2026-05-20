@@ -6,8 +6,8 @@ from typing import Union
 import numpy as np
 from colorthief import ColorThief
 from PIL import Image
-from PyQt5.QtCore import QBuffer, QIODevice
-from PyQt5.QtGui import QImage, QPixmap
+from PySide6.QtCore import QBuffer, QIODevice
+from PySide6.QtGui import QImage, QPixmap
 from scipy.ndimage.filters import gaussian_filter
 
 from .exception_handler import exceptionHandler
@@ -26,7 +26,7 @@ def gaussianBlur(image, blurRadius=18, brightFactor=1, blurPicSize=None):
         w_, h_ = w * ratio, h * ratio
 
         if w_ < w:
-            image = image.resize((int(w_), int(h_)), Image.ANTIALIAS)
+            image = image.resize((int(w_), int(h_)))
 
     image = np.array(image)
 
@@ -54,7 +54,7 @@ def fromqpixmap(im: Union[QImage, QPixmap]):
     :param im: QImage or PIL ImageQt object
     """
     buffer = QBuffer()
-    buffer.open(QIODevice.ReadWrite)
+    buffer.open(QIODevice.OpenModeFlag.ReadWrite)
 
     # preserve alpha channel with png
     # otherwise ppm is more friendly with Image.open
