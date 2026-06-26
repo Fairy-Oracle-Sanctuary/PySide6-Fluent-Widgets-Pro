@@ -410,6 +410,7 @@ class MainWindow(TopFluentWindow):
         # DropMultiFilesWidget
         layout.addWidget(BodyLabel("Drop Multiple Files:"))
         self.multiDrop = DropMultiFilesWidget()
+        self.multiDrop.setBorderRadius(8)
         self.multiDrop.setFixedHeight(120)
         self.multiDrop.selectionChange.connect(
             lambda paths: print(f"Multiple files: {paths}")
