@@ -20,6 +20,7 @@ class DropMultiFilesWidget(QWidget):
     def __init__(self, defaultDir=".\\", isDashLine=True, parent=None):
         super().__init__(parent)
         self.__borderWidth: int = 2
+        self.__borderRadius: int = 16
         self._defaultDir: str = defaultDir
         self.__lineColor: QColor = None
         self.__enableDashLine: bool = isDashLine
@@ -83,8 +84,17 @@ class DropMultiFilesWidget(QWidget):
         self.__borderWidth = width
         self.update()
 
+    def setBorderRadius(self, radius: int) -> None:
+        if self.__borderRadius == radius:
+            return
+        self.__borderRadius = radius
+        self.update()
+
     def borderWidth(self) -> int:
         return self.__borderWidth
+
+    def borderRadius(self) -> int:
+        return self.__borderRadius
 
     def defaultDir(self) -> str:
         return self._defaultDir
@@ -110,7 +120,11 @@ class DropMultiFilesWidget(QWidget):
             pen.setStyle(Qt.DashLine)
             pen.setDashPattern([4, 4])
         painter.setPen(pen)
-        painter.drawRoundedRect(self.rect().adjusted(2, 2, -2, -2), 16, 16)
+        painter.drawRoundedRect(
+            self.rect().adjusted(2, 2, -2, -2),
+            self.borderRadius(),
+            self.borderRadius(),
+        )
 
     def dragEnterEvent(self, event):
         super().dragEnterEvent(event)
