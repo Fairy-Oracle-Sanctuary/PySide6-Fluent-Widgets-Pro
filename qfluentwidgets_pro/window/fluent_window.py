@@ -399,6 +399,13 @@ class FluentWidgetTitleBar(FluentTitleBar):
             FluentStyleSheet.FLUENT_WINDOW.apply(button)
 
 
+class TopFluentTitleBar(FluentTitleBar):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.hBoxLayout.setContentsMargins(16, 0, 0, 0)
+        self.hBoxLayout.insertSpacing(2, 2)
+
+
 class MSFluentWindow(FluentWindowBase):
     """Fluent window in Microsoft Store style"""
 
@@ -538,7 +545,7 @@ class TopFluentWindow(FluentWindowBase):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-        self.setTitleBar(FluentTitleBar(self))
+        self.setTitleBar(TopFluentTitleBar(self))
 
         from ..components.navigation import TopNavigationInterface
 

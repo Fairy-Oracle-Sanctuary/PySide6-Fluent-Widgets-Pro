@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QTableWidgetItem,
@@ -50,6 +51,7 @@ class MainWindow(TopFluentWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("TopFluentWindow Demo")
+        self.setWindowIcon(QIcon(":qfluentwidgets/images/logo.png"))
         self.resize(900, 600)
 
         # create sub interfaces
