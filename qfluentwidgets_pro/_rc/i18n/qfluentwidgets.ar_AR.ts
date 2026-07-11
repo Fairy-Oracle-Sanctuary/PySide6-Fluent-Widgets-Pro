@@ -318,4 +318,19 @@
         <translation>تصفح المجلد</translation>
     </message>
 </context>
+<context>
+    <name>DropAnyWidget</name>
+    <message>
+        <source>Drag &amp; drop files or folders here</source>
+        <translation>سحب وإسقاط الملفات أو المجلدات هنا</translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>تصفح</translation>
+    </message>
+    <message>
+        <source>All files (*.*)</source>
+        <translation>جميع الملفات (*.*)</translation>
+    </message>
+</context>
 </TS>

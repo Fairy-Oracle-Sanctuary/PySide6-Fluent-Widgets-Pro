@@ -319,4 +319,19 @@
         <translation>Browse folder</translation>
     </message>
 </context>
+<context>
+    <name>DropAnyWidget</name>
+    <message>
+        <source>Drag &amp; drop files or folders here</source>
+        <translation>Drag &amp; drop files or folders here</translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>Browse</translation>
+    </message>
+    <message>
+        <source>All files (*.*)</source>
+        <translation>All files (*.*)</translation>
+    </message>
+</context>
 </TS>
