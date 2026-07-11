@@ -236,3 +236,42 @@ class DropMultiFoldersWidget(DropMultiFilesWidget):
                     folderPaths.append(url)
             self.draggedChange.emit(folderPaths)
         event.acceptProposedAction()
+
+
+class DropAnyWidget(DropMultiFilesWidget):
+    """Multiple files and folders selector (drag or click to select any files and folders)"""
+
+    def __init__(self, defaultDir=".\\", fileFilter=None, isDashLine=True, parent=None):
+        """Multiple file types are separated by ';;'"""
+        super().__init__(defaultDir, isDashLine, parent)
+        self.setLabelText(self.tr("Drag & drop files or folders here"))
+        self.button.setText(self.tr("Browse"))
+        self._fileFilter = (
+            self.tr("All files (*.*)") if fileFilter is None else fileFilter
+        )
+
+    def _showDialog(self) -> None:
+        """Open dialog to select multiple files"""
+        files, _ = QFileDialog.getOpenFileNames(
+            self, self.tr("Browse"), self._defaultDir, self._fileFilter
+        )
+        if files:
+            self.selectionChange.emit(files)
+
+    def setFileFilter(self, filter: str) -> None:
+        """Multiple file types are separated by ';;'"""
+        self._fileFilter = filter
+
+    def fileFilter(self) -> str:
+        return self._fileFilter
+
+    def dropEvent(self, event):
+        urls = [url.toLocalFile() for url in event.mimeData().urls()]
+        paths = []
+        if urls:
+            for url in urls:
+                info = QFileInfo(url)
+                if info.isFile() or info.isDir():
+                    paths.append(url)
+            self.draggedChange.emit(paths)
+        event.acceptProposedAction()
