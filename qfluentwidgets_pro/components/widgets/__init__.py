@@ -59,6 +59,7 @@ from .combo_box import (
 from .command_bar import CommandBar, CommandBarView, CommandButton
 from .cycle_list_widget import CycleListWidget
 from .drop_widget import (
+    DropAnyWidget,
     DropMultiFilesWidget,
     DropMultiFoldersWidget,
     DropSingleFileWidget,
