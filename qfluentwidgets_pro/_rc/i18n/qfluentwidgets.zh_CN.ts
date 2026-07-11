@@ -600,4 +600,19 @@
         <translation>选择文件夹</translation>
     </message>
 </context>
+<context>
+    <name>DropAnyWidget</name>
+    <message>
+        <source>Drag &amp; drop files or folders here</source>
+        <translation>拖动文件或文件夹到此</translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>浏览</translation>
+    </message>
+    <message>
+        <source>All files (*.*)</source>
+        <translation>所有文件 (*.*)</translation>
+    </message>
+</context>
 </TS>

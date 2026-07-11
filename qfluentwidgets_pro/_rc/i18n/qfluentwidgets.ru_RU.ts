@@ -600,4 +600,19 @@
         <translation>Обзор папки</translation>
     </message>
 </context>
+<context>
+    <name>DropAnyWidget</name>
+    <message>
+        <source>Drag &amp; drop files or folders here</source>
+        <translation>Перетащите файлы или папки сюда</translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>Обзор</translation>
+    </message>
+    <message>
+        <source>All files (*.*)</source>
+        <translation>Все файлы (*.*)</translation>
+    </message>
+</context>
 </TS>
