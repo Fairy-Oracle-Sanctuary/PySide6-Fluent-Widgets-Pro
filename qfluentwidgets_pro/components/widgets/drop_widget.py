@@ -22,6 +22,7 @@ class DropMultiFilesWidget(QWidget):
         self.__borderWidth: int = 2
         self.__borderRadius: int = 16
         self._defaultDir: str = defaultDir
+        self._fileFilter: str = "All files (*.*)"
         self.__lineColor: QColor = None
         self.__enableDashLine: bool = isDashLine
         self.viewLayout: QVBoxLayout = QVBoxLayout(self)
@@ -101,6 +102,28 @@ class DropMultiFilesWidget(QWidget):
 
     def isDashLine(self) -> bool:
         return self.__enableDashLine
+
+    def setFileExtensions(self, extensions: str, name: str = None) -> None:
+        """Set file extensions filter for the browse dialog.
+
+        Parameters
+        ----------
+        extensions: str
+            Semicolon-separated file extensions, e.g. "*.mp4;*.flv;*.mkv"
+        name: str
+            Optional filter name shown in the dialog, e.g. "Videos".
+            Defaults to "Files".
+        """
+        exts = [e.strip() for e in extensions.split(";") if e.strip()]
+        if exts:
+            filterName = name if name else self.tr("Files")
+            self._fileFilter = f"{filterName} ({' '.join(exts)})"
+        else:
+            self._fileFilter = "All files (*.*)"
+
+    def fileExtensions(self) -> str:
+        """Return the file extension filter in Qt format"""
+        return self._fileFilter
 
     def paintEvent(self, event):
         painter = QPainter(self)
