@@ -1,14 +1,17 @@
 # coding:utf-8
+from typing import Dict
 from enum import Enum
 from typing import Union
 
 from PySide6.QtCore import (
+    QEvent,
+    QMargins,
     QPoint,
     QRectF,
     Qt,
     Signal,
 )
-from PySide6.QtGui import QAction, QColor, QIcon, QPainter
+from PySide6.QtGui import QAction, QColor, QFontMetrics, QIcon, QPainter
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QWidget
 
 from ...common.animation import ScaleSlideAnimation
@@ -17,6 +20,7 @@ from ...common.icon import FluentIcon as FIF
 from ...common.icon import FluentIconBase
 from ...common.router import qrouter
 from ...common.style_sheet import FluentStyleSheet
+from ..widgets.info_badge import InfoBadgeManager, InfoBadgePosition
 from ..widgets.menu import MenuAnimationType, RoundMenu
 from ..widgets.scroll_area import ScrollArea
 from ..widgets.tool_tip import ToolTipFilter
@@ -569,6 +573,74 @@ class TopNavigationPushButton(NavigationPushButton):
             self.setFixedSize(width, 36)
         else:
             self.setFixedSize(40, 36)
+
+
+@InfoBadgeManager.register(InfoBadgePosition.TOP_NAVIGATION_ITEM)
+class TopNavigationItemInfoBadgeManager(InfoBadgeManager):
+    """Info badge manager dedicated to TopNavigationPushButton.
+
+    根据 target 自身的长宽 + 文字宽度动态计算徽章位置：
+    - compact 模式（仅图标）：徽章中心对齐到按钮图标右上角
+    - expanded 模式（图标+文字）：徽章中心对齐到「文字右边缘 + 偏移」，y 贴在按钮顶部
+
+    与按钮文字内容无关，改文字无需调整代码。
+    badge 的 parent 可能与 target 的 parent 不同（target 在 scrollWidget 里，
+    badge 挂在 navigationInterface 上），所以使用 mapTo 做坐标映射。
+    """
+
+    # 与 NavigationPushButton.paintEvent 中保持一致的常量
+    ICON_LEFT = 11.5       # 图标左边缘 x
+    ICON_SIZE = 16         # 图标尺寸
+    ICON_TOP = 10          # 图标顶部 y
+    TEXT_LEFT_OFFSET = 44  # 文本左边缘相对于按钮左边的偏移 (含 icon + padding)
+    BADGE_OFFSET = 2       # 徽章超出文字右边缘的偏移量
+
+    def eventFilter(self, obj, e: QEvent):
+        """target 显示时也触发一次定位，确保首次显示徽章在正确位置"""
+        if obj is self.target and e.type() == QEvent.Show:
+            self.badge.show()
+            self.badge.move(self.position())
+        return super().eventFilter(obj, e)
+
+    def position(self):
+        target = self.target
+        badge = self.badge
+        self.badge.setVisible(target.isVisible())
+
+        # badge 的 parent 可能与 target 的 parent 不同
+        # (TopFluentWindow 中 target 在 scrollWidget 里，badge 挂在 navigationInterface 上)
+        # 所以必须把 target 的局部坐标映射到 badge 的 parent 坐标系
+        parent = badge.parent()
+        if parent is None:
+            return QPoint()
+
+        # 取按钮的 _margins()，与 paintEvent 一致
+        m = target._margins() if hasattr(target, "_margins") else QMargins(0, 0, 0, 0)
+        pl = m.left()
+
+        # compact 模式：仅图标，徽章中心对齐图标右上角
+        if getattr(target, "isCompacted", True):
+            iconRight = self.ICON_LEFT + pl + self.ICON_SIZE
+            localPos = QPoint(
+                int(iconRight - badge.width() / 2),
+                int(self.ICON_TOP - badge.height() / 2),
+            )
+            return target.mapTo(parent, localPos)
+
+        # expanded 模式：徽章中心对齐到「文字右边缘 + 偏移」
+        # 文本左边缘 x 坐标 (相对 target)
+        textLeftX = self.TEXT_LEFT_OFFSET + pl
+        # 实际文字宽度（动态计算，与具体文字内容无关）
+        textWidth = QFontMetrics(target.font()).horizontalAdvance(target.text())
+        # 文字右边缘 x 坐标 (相对 target)
+        textRightX = textLeftX + textWidth
+
+        # y 坐标对齐到图标顶部 (与 compact 模式一致)，让徽章贴在按钮右上角
+        localPos = QPoint(
+            int(textRightX + self.BADGE_OFFSET - badge.width() / 2),
+            int(self.ICON_TOP - badge.height() / 2),
+        )
+        return target.mapTo(parent, localPos)
 
 
 TopNavigationBar = TopNavigationPanel
