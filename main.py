@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -18,6 +18,8 @@ from qfluentwidgets_pro import (
     FluentIcon,
     FluentTranslator,
     FontComboBox,
+    InfoBadge,
+    InfoBadgePosition,
     LabelLineEdit,
     LineTableWidget,
     MultiSelectComboBox,
@@ -57,13 +59,28 @@ class MainWindow(TopFluentWindow):
         # create sub interfaces
         self.homeInterface = self._createHomePage()
         self.homeInterface.setObjectName("homeInterface")
-        self.addSubInterface(
+        homeItem = self.addSubInterface(
             self.homeInterface,
             FluentIcon.HOME,
-            "Homeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "Homeeeeeeeeeeeeeeeeeeeee",
             TopNavigationItemPosition.LEFT,
             expanded=True,  # show both icon and text for Home
         )
+
+        # 给主页导航项附加一个数字徽章，并通过定时器实现"递增到上限再递减"的循环动画
+        self.homeBadge = InfoBadge.attension(
+            "1",
+            parent=self.navigationInterface,
+            target=homeItem,
+            position=InfoBadgePosition.TOP_NAVIGATION_ITEM,
+        )
+        self._badgeValue = 1
+        self._badgeStep = 1  # 1=递增, -1=递减
+        self._badgeMax = 99
+        self._badgeMin = 1
+        self._badgeTimer = QTimer(self)
+        self._badgeTimer.timeout.connect(self._updateHomeBadge)
+        self._badgeTimer.start(80)  # 每 80ms 更新一次
 
         self.buttonsInterface = self._createButtonsPage()
         self.buttonsInterface.setObjectName("buttonsInterface")
@@ -78,11 +95,20 @@ class MainWindow(TopFluentWindow):
         self.settingsInterface.setObjectName("settingsInterface")
         layout = QVBoxLayout(self.settingsInterface)
         layout.addWidget(PushButton("Settings Page"))
-        self.addSubInterface(
+        settingsItem = self.addSubInterface(
             self.settingsInterface,
             FluentIcon.SETTING,
             "Settings",
             TopNavigationItemPosition.RIGHT,
+        )
+
+        # 在 Settings 导航项右上角附加一个数字徽章
+        # TOP_NAVIGATION_ITEM 位置会自动适配 compact(仅图标)/expanded(图标+文字) 两种模式
+        self.settingsBadge = InfoBadge.attension(
+            "10",
+            parent=self.navigationInterface,
+            target=settingsItem,
+            position=InfoBadgePosition.TOP_NAVIGATION_ITEM,
         )
 
         self.dropInterface = self._createDropPage()
@@ -129,6 +155,19 @@ class MainWindow(TopFluentWindow):
             "NavBar",
             TopNavigationItemPosition.LEFT,
         )
+
+    def _updateHomeBadge(self):
+        """定时更新主页徽章的数字：递增到上限后切换为递减，循环往复"""
+        self._badgeValue += self._badgeStep
+        if self._badgeValue >= self._badgeMax:
+            self._badgeValue = self._badgeMax
+            self._badgeStep = -1  # 触顶，改为递减
+        elif self._badgeValue <= self._badgeMin:
+            self._badgeValue = self._badgeMin
+            self._badgeStep = 1  # 触底，改为递增
+
+        self.homeBadge.setText(str(self._badgeValue))
+        self.homeBadge.adjustSize()  # 位数变化时重算尺寸，保证居中
 
     def _createHomePage(self):
         page = QWidget(self)

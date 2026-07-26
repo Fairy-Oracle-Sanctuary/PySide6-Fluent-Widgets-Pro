@@ -32,6 +32,7 @@ class InfoBadgePosition(Enum):
     BOTTOM_LEFT = 4
     LEFT = 5
     NAVIGATION_ITEM = 6
+    TOP_NAVIGATION_ITEM = 7
 
 
 class InfoBadge(QLabel):
