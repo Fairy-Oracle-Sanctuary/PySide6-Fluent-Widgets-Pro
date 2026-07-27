@@ -1,6 +1,4 @@
-# coding:utf-8
 import sys
-from typing import Union
 
 from PySide6.QtCore import QRect, QRectF, QSize, Qt
 from PySide6.QtGui import QColor, QIcon, QPainter
@@ -143,7 +141,7 @@ class FluentWindowBase(FluentWidget):
     def addSubInterface(
         self,
         interface: QWidget,
-        icon: Union[FluentIconBase, QIcon, str],
+        icon: FluentIconBase | QIcon | str,
         text: str,
         position=NavigationItemPosition.TOP,
     ):
@@ -199,11 +197,11 @@ class FluentWindowBase(FluentWidget):
 class FluentTitleBarButton(TitleBarButton):
     """Fluent title bar button"""
 
-    def __init__(self, icon: Union[str, QIcon, FluentIconBase], parent=None):
+    def __init__(self, icon: str | QIcon | FluentIconBase, parent=None):
         super().__init__(parent)
         self.setIcon(icon)
 
-    def setIcon(self, icon: Union[str, QIcon, FluentIconBase]):
+    def setIcon(self, icon: str | QIcon | FluentIconBase):
         self._icon = icon
         self.update()
 
@@ -299,7 +297,7 @@ class FluentWindow(FluentWindowBase):
     def addSubInterface(
         self,
         interface: QWidget,
-        icon: Union[FluentIconBase, QIcon, str],
+        icon: FluentIconBase | QIcon | str,
         text: str,
         position=NavigationItemPosition.TOP,
         parent=None,
@@ -426,7 +424,7 @@ class MSFluentWindow(FluentWindowBase):
     def addSubInterface(
         self,
         interface: QWidget,
-        icon: Union[FluentIconBase, QIcon, str],
+        icon: FluentIconBase | QIcon | str,
         text: str,
         selectedIcon=None,
         position=NavigationItemPosition.TOP,
@@ -571,7 +569,7 @@ class TopFluentWindow(FluentWindowBase):
     def addSubInterface(
         self,
         interface: QWidget,
-        icon: Union[FluentIconBase, QIcon, str],
+        icon: FluentIconBase | QIcon | str,
         text: str,
         position=None,
         parent=None,

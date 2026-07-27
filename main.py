@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from gallery.view.chart.home_interface import ChartMainWindow  # noqa
+from gallery.view.chart.home_interface import ChartMainWindow
 from qfluentwidgets_pro import (
     CategoryCardListWidget,
     DropMultiFilesWidget,
@@ -485,7 +485,7 @@ class MainWindow(TopFluentWindow):
             def __init__(self, text, parent=None):
                 super().__init__(parent)
                 self.text = text
-                self.setMinimumSize(100, 80)
+                self.setMinimumSize(80, 80)
 
             def paintEvent(self, event):
                 painter = QPainter(self)

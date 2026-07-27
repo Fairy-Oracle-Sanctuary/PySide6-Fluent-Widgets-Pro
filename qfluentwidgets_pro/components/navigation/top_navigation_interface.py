@@ -1,11 +1,7 @@
-# coding:utf-8
-from typing import Union
-
 from PySide6.QtCore import QEvent, Qt
-from PySide6.QtGui import QIcon, QResizeEvent
+from PySide6.QtGui import QResizeEvent
 from PySide6.QtWidgets import QHBoxLayout, QWidget
 
-from ...common.icon import FluentIconBase
 from .navigation_widget import NavigationWidget
 from .top_navigation_panel import (
     TopNavigationDisplayMode,
@@ -47,7 +43,7 @@ class TopNavigationInterface(QWidget):
     def addItem(
         self,
         routeKey: str,
-        icon: Union[str, QIcon, FluentIconBase],
+        icon,
         text: str,
         onClick=None,
         selectable=True,
@@ -62,7 +58,7 @@ class TopNavigationInterface(QWidget):
         routKey: str
             the unique name of item
 
-        icon: str | QIcon | FluentIconBase
+        icon
             the icon of navigation item
 
         text: str
@@ -128,7 +124,7 @@ class TopNavigationInterface(QWidget):
         self,
         index: int,
         routeKey: str,
-        icon: Union[str, QIcon, FluentIconBase],
+        icon,
         text: str,
         onClick=None,
         selectable=True,
@@ -146,7 +142,7 @@ class TopNavigationInterface(QWidget):
         routKey: str
             the unique name of item
 
-        icon: str | QIcon | FluentIconBase
+        icon
             the icon of navigation item
 
         text: str
@@ -284,7 +280,3 @@ class TopNavigationInterface(QWidget):
                 self.setFixedHeight(event.size().height())
 
         return super().eventFilter(obj, e)
-
-    def resizeEvent(self, e: QResizeEvent):
-        if e.oldSize().width() != self.width():
-            self.panel.setFixedWidth(self.width())

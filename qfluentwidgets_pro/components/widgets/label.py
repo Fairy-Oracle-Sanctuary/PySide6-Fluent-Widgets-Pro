@@ -1,7 +1,3 @@
-# coding:utf-8
-
-from typing import Union
-
 from PySide6.QtCore import Property, QRectF, QSize, Qt, QUrl, Signal
 from PySide6.QtGui import (
     QColor,
@@ -293,7 +289,7 @@ class ImageLabel(QLabel):
         self._bottomRightRadius = bottomRight
         self.update()
 
-    def setImage(self, image: Union[str, QPixmap, QImage] = None):
+    def setImage(self, image: str | QPixmap | QImage = None):
         """set the image of label"""
         self.image = image or QImage()
 
@@ -471,7 +467,7 @@ class AvatarWidget(ImageLabel):
         self.setFixedSize(2 * radius, 2 * radius)
         self.update()
 
-    def setImage(self, image: Union[str, QPixmap, QImage] = None):
+    def setImage(self, image: str | QPixmap | QImage = None):
         super().setImage(image)
         self.setRadius(self.radius)
 
@@ -562,7 +558,7 @@ class HyperlinkLabel(QPushButton):
     def getUrl(self) -> QUrl:
         return self._url
 
-    def setUrl(self, url: Union[QUrl, str]):
+    def setUrl(self, url: QUrl | str):
         self._url = QUrl(url)
 
     def isUnderlineVisible(self):
