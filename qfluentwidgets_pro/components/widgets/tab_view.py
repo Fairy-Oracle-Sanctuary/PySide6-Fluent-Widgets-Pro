@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 from copy import deepcopy
 from enum import Enum
 from typing import Union

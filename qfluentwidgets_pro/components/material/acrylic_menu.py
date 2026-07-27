@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 from typing import List
 from PySide6.QtCore import Qt, QRect, QRectF, QSize
 from PySide6.QtGui import QPainter, QColor, QPainterPath, QAction

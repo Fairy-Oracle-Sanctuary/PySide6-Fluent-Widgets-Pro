@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 from typing import Iterable, List
 
 from PySide6.QtCore import QEvent, QPoint, QRectF, QSize, Qt

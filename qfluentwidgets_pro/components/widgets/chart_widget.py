@@ -1,5 +1,7 @@
 # coding:utf-8
 """
+from __future__ import annotations
+
 ECharts chart widget for PySide6 Fluent Widgets
 """
 

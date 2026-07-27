@@ -1,5 +1,7 @@
-import weakref
+from __future__ import annotations
+
 from enum import Enum
+import weakref
 
 from PySide6.QtCore import QEvent, QObject, QPoint, QRectF, QSize, Qt
 from PySide6.QtGui import QColor, QIcon, QPainter
