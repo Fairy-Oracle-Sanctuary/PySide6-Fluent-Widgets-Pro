@@ -549,6 +549,7 @@ class FluentIcon(FluentIconBase, Enum):
     VIDEO = "Video"
     TRAIN = "Train"
     ADD_TO = "AddTo"
+    SELECT = "Select"
     ACCEPT = "Accept"
     CAMERA = "Camera"
     CANCEL = "Cancel"
