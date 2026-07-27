@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import annotations
+
 from math import ceil
 from collections import defaultdict, Counter
 from typing import Tuple, Type

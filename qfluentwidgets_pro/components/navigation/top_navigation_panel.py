@@ -1,5 +1,7 @@
-from enum import Enum
+from __future__ import annotations
 
+from enum import Enum
+from typing import Dict
 from PySide6.QtCore import (
     QEvent,
     QMargins,

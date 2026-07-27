@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from PySide6.QtCore import Property, QRectF, QSize, Qt, QUrl, Signal
 from PySide6.QtGui import (
     QColor,

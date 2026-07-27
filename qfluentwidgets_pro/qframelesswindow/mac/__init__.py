@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 import Cocoa
 import objc
 from PySide6.QtCore import QEvent, Qt, QRect, QSize, QPoint

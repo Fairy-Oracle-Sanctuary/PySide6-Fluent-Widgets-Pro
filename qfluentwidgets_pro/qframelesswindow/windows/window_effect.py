@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 import sys
 import warnings
 from ctypes import POINTER, byref, c_bool, c_int, pointer, sizeof, WinDLL

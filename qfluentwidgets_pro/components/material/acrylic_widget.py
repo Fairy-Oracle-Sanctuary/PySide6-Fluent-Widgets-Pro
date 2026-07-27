@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 from PySide6.QtGui import QPainterPath, QPainter, QColor
 
 from ..widgets.acrylic_label import AcrylicBrush

@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 import sys
 
 from PySide6.QtCore import QPoint

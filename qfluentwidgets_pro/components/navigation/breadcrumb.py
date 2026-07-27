@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 import math
 
 from PySide6.QtCore import Property, QEvent, QPoint, QRectF, Qt, Signal

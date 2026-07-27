@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 from PySide6.QtCore import Qt, Signal, QUrl, QSizeF, QTimer
 from PySide6.QtGui import QPainter
 from PySide6.QtMultimediaWidgets import QGraphicsVideoItem

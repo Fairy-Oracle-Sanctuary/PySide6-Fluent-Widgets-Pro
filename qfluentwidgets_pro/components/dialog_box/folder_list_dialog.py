@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import annotations
+
 import os
 
 from PySide6.QtCore import Qt, Signal
