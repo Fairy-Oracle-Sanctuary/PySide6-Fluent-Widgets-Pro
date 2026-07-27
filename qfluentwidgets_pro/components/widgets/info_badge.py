@@ -1,6 +1,5 @@
-# coding:utf-8
+import weakref
 from enum import Enum
-from typing import Union
 
 from PySide6.QtCore import QEvent, QObject, QPoint, QRectF, QSize, Qt
 from PySide6.QtGui import QColor, QIcon, QPainter
@@ -138,7 +137,7 @@ class InfoBadge(QLabel):
     @classmethod
     def make(
         cls,
-        text: Union[str, float],
+        text,
         parent=None,
         level=InfoLevel.INFOAMTION,
         target: QWidget = None,
@@ -156,7 +155,7 @@ class InfoBadge(QLabel):
     @classmethod
     def info(
         cls,
-        text: Union[str, float],
+        text,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -166,7 +165,7 @@ class InfoBadge(QLabel):
     @classmethod
     def success(
         cls,
-        text: Union[str, float],
+        text,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -176,7 +175,7 @@ class InfoBadge(QLabel):
     @classmethod
     def attension(
         cls,
-        text: Union[str, float],
+        text,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -186,7 +185,7 @@ class InfoBadge(QLabel):
     @classmethod
     def warning(
         cls,
-        text: Union[str, float],
+        text,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -196,7 +195,7 @@ class InfoBadge(QLabel):
     @classmethod
     def error(
         cls,
-        text: Union[str, float],
+        text,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -206,7 +205,7 @@ class InfoBadge(QLabel):
     @classmethod
     def custom(
         cls,
-        text: Union[str, float],
+        text,
         light: QColor,
         dark: QColor,
         parent=None,
@@ -217,7 +216,7 @@ class InfoBadge(QLabel):
 
         Parameters
         ----------
-        text: str | float
+        text
             the text of badge
 
         light, dark: str | Qt.GlobalColor | QColor
@@ -349,7 +348,7 @@ class IconInfoBadge(InfoBadge):
         self.__init__(parent, level)
         self.setIcon(icon)
 
-    def setIcon(self, icon: Union[QIcon, FluentIconBase, str]):
+    def setIcon(self, icon):
         """set the icon of info badge"""
         self._icon = icon
         self.update()
@@ -384,7 +383,7 @@ class IconInfoBadge(InfoBadge):
     @classmethod
     def make(
         cls,
-        icon: Union[QIcon, FluentIconBase],
+        icon,
         parent=None,
         level=InfoLevel.INFOAMTION,
         target: QWidget = None,
@@ -401,7 +400,7 @@ class IconInfoBadge(InfoBadge):
     @classmethod
     def info(
         cls,
-        icon: Union[QIcon, FluentIconBase],
+        icon,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -411,7 +410,7 @@ class IconInfoBadge(InfoBadge):
     @classmethod
     def success(
         cls,
-        icon: Union[QIcon, FluentIconBase],
+        icon,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -421,7 +420,7 @@ class IconInfoBadge(InfoBadge):
     @classmethod
     def attension(
         cls,
-        icon: Union[QIcon, FluentIconBase],
+        icon,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -431,7 +430,7 @@ class IconInfoBadge(InfoBadge):
     @classmethod
     def warning(
         cls,
-        icon: Union[QIcon, FluentIconBase],
+        icon,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -441,7 +440,7 @@ class IconInfoBadge(InfoBadge):
     @classmethod
     def error(
         cls,
-        icon: Union[QIcon, FluentIconBase],
+        icon,
         parent=None,
         target: QWidget = None,
         position=InfoBadgePosition.TOP_RIGHT,
@@ -451,7 +450,7 @@ class IconInfoBadge(InfoBadge):
     @classmethod
     def custom(
         cls,
-        icon: Union[QIcon, FluentIconBase],
+        icon,
         light: QColor,
         dark: QColor,
         parent=None,
@@ -462,7 +461,7 @@ class IconInfoBadge(InfoBadge):
 
         Parameters
         ----------
-        icon: QIcon | FluentIconBase
+        icon
             the icon of badge
 
         light, dark: str | Qt.GlobalColor | QColor
@@ -480,6 +479,9 @@ class InfoBadgeManager(QObject):
     """Info badge manager"""
 
     managers = {}
+    # 所有活跃的 manager 实例的弱引用
+    # 用于在容器滚动等场景下批量更新徽章位置
+    _instances = []
 
     def __init__(self, target: QWidget, badge: InfoBadge):
         super().__init__()
@@ -487,6 +489,15 @@ class InfoBadgeManager(QObject):
         self.badge = badge
 
         self.target.installEventFilter(self)
+        # 用弱引用避免阻止 manager 被 GC，badge 销毁时 manager 也会被回收
+        self._instances.append(weakref.ref(self))
+        # badge 销毁时清理弱引用
+        badge.destroyed.connect(self._cleanupRefs)
+
+    @classmethod
+    def _cleanupRefs(cls, *args):
+        """清理已失效的弱引用"""
+        cls._instances = [r for r in cls._instances if r() is not None]
 
     def eventFilter(self, obj, e: QEvent):
         if obj is self.target:
@@ -494,6 +505,24 @@ class InfoBadgeManager(QObject):
                 self.badge.move(self.position())
 
         return super().eventFilter(obj, e)
+
+    @classmethod
+    def updateForTarget(cls, target: QWidget):
+        """更新所有 target 为指定 widget 的徽章位置。
+
+        用于容器滚动场景：按钮在 scrollWidget 中，滚动时按钮自身不触发 Move 事件，
+        调用此方法可批量重定位徽章。
+
+        Parameters
+        ----------
+        target: QWidget
+            直接的 target 按钮
+        """
+        cls._cleanupRefs()
+        for ref in cls._instances:
+            manager = ref()
+            if manager is not None and manager.target is target:
+                manager.badge.move(manager.position())
 
     @classmethod
     def register(cls, name):

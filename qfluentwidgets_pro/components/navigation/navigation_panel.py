@@ -1,6 +1,4 @@
-# coding:utf-8
 from enum import Enum
-from typing import Union
 
 from PySide6.QtCore import (
     QEasingCurve,
@@ -220,7 +218,7 @@ class NavigationPanel(QFrame):
     def addItem(
         self,
         routeKey: str,
-        icon: Union[str, QIcon, FluentIconBase],
+        icon: str | QIcon | FluentIconBase,
         text: str,
         onClick=None,
         selectable=True,
@@ -307,7 +305,7 @@ class NavigationPanel(QFrame):
         self,
         index: int,
         routeKey: str,
-        icon: Union[str, QIcon, FluentIconBase],
+        icon: str | QIcon | FluentIconBase,
         text: str,
         onClick=None,
         selectable=True,

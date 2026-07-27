@@ -1,7 +1,4 @@
-# coding:utf-8
-from typing import Dict
 from enum import Enum
-from typing import Union
 
 from PySide6.QtCore import (
     QEvent,
@@ -11,18 +8,16 @@ from PySide6.QtCore import (
     Qt,
     Signal,
 )
-from PySide6.QtGui import QAction, QColor, QFontMetrics, QIcon, QPainter
+from PySide6.QtGui import QColor, QFontMetrics, QPainter
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QWidget
 
 from ...common.animation import ScaleSlideAnimation
 from ...common.color import autoFallbackThemeColor
 from ...common.icon import FluentIcon as FIF
-from ...common.icon import FluentIconBase
 from ...common.router import qrouter
 from ...common.style_sheet import FluentStyleSheet
+from ...components.widgets.scroll_area import SingleDirectionScrollArea
 from ..widgets.info_badge import InfoBadgeManager, InfoBadgePosition
-from ..widgets.menu import MenuAnimationType, RoundMenu
-from ..widgets.scroll_area import ScrollArea
 from ..widgets.tool_tip import ToolTipFilter
 from .navigation_widget import (
     NavigationPushButton,
@@ -57,18 +52,18 @@ class TopNavigationPanel(QFrame):
         self._isReturnButtonVisible = False
         self._displayMode = TopNavigationDisplayMode.COMPACT
 
-        self._overflowWidgets = []
-
         # indicator animation (like Pivot)
         self.slideAni = ScaleSlideAnimation(self, Qt.Horizontal)
         self.lightIndicatorColor = QColor()
         self.darkIndicatorColor = QColor()
 
-        self.scrollArea = ScrollArea(self)
-        self.scrollWidget = QWidget()
-
         self.returnButton = NavigationToolButton(FIF.RETURN, self)
-        self.moreButton = NavigationToolButton(FIF.MORE, self)
+
+        # 中间区域使用可横向滚动的 ScrollArea 包裹 LEFT 按钮，
+        # 类似 FluentWindow 的左侧导航滚动机制：左右固定，中间可滚动。
+        # 不再使用 moreButton + overflow 折叠机制，避免 resize 抽搐。
+        self.scrollArea = SingleDirectionScrollArea(self, Qt.Horizontal)
+        self.scrollWidget = QWidget()
 
         self.hBoxLayout = QHBoxLayout(self)
         self.leftLayout = QHBoxLayout()
@@ -93,14 +88,18 @@ class TopNavigationPanel(QFrame):
         self.returnButton.hide()
         self.returnButton.setDisabled(True)
 
-        self.moreButton.hide()
-        self.moreButton.clicked.connect(self._showOverflowMenu)
-
-        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        # 配置横向滚动区域：隐藏滚动条，启用可缩放 widget
         self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scrollArea.verticalScrollBar().setEnabled = False
+        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scrollArea.setWidget(self.scrollWidget)
         self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.enableTransparentBackground()
+
+        # 滚动时更新指示器和徽章位置 (按钮在 scrollWidget 中，滚动时其 mapTo 坐标会变
+        # 但按钮自身不会触发 Move 事件，所以需要主动监听滚动条值变化)
+        self.scrollArea.horizontalScrollBar().valueChanged.connect(
+            self._onScrollChanged
+        )
 
         self.history.emptyChanged.connect(self.returnButton.setDisabled)
         self.returnButton.clicked.connect(self.history.pop)
@@ -110,9 +109,6 @@ class TopNavigationPanel(QFrame):
         # add tool tip
         self.returnButton.installEventFilter(ToolTipFilter(self.returnButton, 1000))
         self.returnButton.setToolTip(self.tr("Back"))
-
-        self.moreButton.installEventFilter(ToolTipFilter(self.moreButton, 1000))
-        self.moreButton.setToolTip(self.tr("More"))
 
         self.scrollWidget.setObjectName("scrollWidget")
         FluentStyleSheet.NAVIGATION_INTERFACE.apply(self)
@@ -133,8 +129,14 @@ class TopNavigationPanel(QFrame):
         self.rightLayout.setSpacing(4)
         self.scrollLayout.setSpacing(4)
 
+        # 布局结构: [返回按钮 | LEFT按钮(可横向滚动) | CENTER按钮 | RIGHT按钮]
+        # - leftLayout: 返回按钮 (固定，不参与滚动)
+        # - scrollArea: LEFT 位置按钮 (超出宽度时横向滚动)
+        # - centerLayout: CENTER 位置按钮 (固定居中)
+        # - rightLayout: RIGHT 位置按钮 (固定靠右)
         self.hBoxLayout.addLayout(self.leftLayout)
         self.hBoxLayout.addWidget(self.scrollArea, 1)
+        self.hBoxLayout.addLayout(self.centerLayout)
         self.hBoxLayout.addLayout(self.rightLayout)
 
         self.leftLayout.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -143,7 +145,6 @@ class TopNavigationPanel(QFrame):
         self.scrollLayout.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.leftLayout.addWidget(self.returnButton)
-        self.rightLayout.addWidget(self.moreButton)
 
     def displayMode(self):
         return self._displayMode
@@ -157,8 +158,6 @@ class TopNavigationPanel(QFrame):
 
         for item in self.items.values():
             item.setCompacted(mode == TopNavigationDisplayMode.COMPACT)
-
-        self._updateOverflow()
 
     def isCompact(self):
         return self._displayMode == TopNavigationDisplayMode.COMPACT
@@ -184,7 +183,7 @@ class TopNavigationPanel(QFrame):
     def addItem(
         self,
         routeKey: str,
-        icon: Union[str, QIcon, FluentIconBase],
+        icon,
         text: str,
         onClick=None,
         selectable=True,
@@ -207,7 +206,7 @@ class TopNavigationPanel(QFrame):
         self,
         index: int,
         routeKey: str,
-        icon: Union[str, QIcon, FluentIconBase],
+        icon,
         text: str,
         onClick=None,
         selectable=True,
@@ -276,7 +275,6 @@ class TopNavigationPanel(QFrame):
 
         self._registerWidget(routeKey, widget, onClick, tooltip)
         self._insertWidgetToLayout(index, widget, position)
-        self._updateOverflow()
 
     def _registerWidget(
         self, routeKey: str, widget: NavigationWidget, onClick, tooltip: str = None
@@ -308,9 +306,8 @@ class TopNavigationPanel(QFrame):
             self.centerLayout.insertWidget(index, widget, 0, Qt.AlignCenter)
         elif position == TopNavigationItemPosition.RIGHT:
             widget.setParent(self)
-            # Keep `moreButton` as the last widget in right layout
             if index < 0:
-                index = max(self.rightLayout.count() - 1, 0)
+                index = self.rightLayout.count()
             self.rightLayout.insertWidget(
                 index, widget, 0, Qt.AlignRight | Qt.AlignVCenter
             )
@@ -331,11 +328,6 @@ class TopNavigationPanel(QFrame):
         widget.deleteLater()
         self.history.remove(routeKey)
 
-        if widget in self._overflowWidgets:
-            self._overflowWidgets.remove(widget)
-
-        self._updateOverflow()
-
     def currentItem(self):
         return self.widget(self._currentRouteKey) if self._currentRouteKey else None
 
@@ -355,7 +347,15 @@ class TopNavigationPanel(QFrame):
             self.lightIndicatorColor = newItem.lightIndicatorColor
             self.darkIndicatorColor = newItem.darkIndicatorColor
 
+            # 如果目标按钮在滚动区域内，自动滚动到可见位置
+            # (返回按钮跳转、程序化切换路由时，目标按钮可能被滚出视口)
+            # ensureWidgetVisible 会同步触发 valueChanged → _onScrollChanged → 更新徽章位置
+            if newItem.parent() is self.scrollWidget:
+                self.scrollArea.ensureWidgetVisible(newItem, 50, 0)
+
         # start animation like Pivot
+        # 注意：必须在 ensureWidgetVisible 之后调用，这样 currentIndicatorGeometry
+        # 使用的 mapTo 坐标才是基于滚动后的正确位置
         if self._isIndicatorAnimationEnabled:
             self.slideAni.startAnimation(self.currentIndicatorGeometry())
 
@@ -365,15 +365,11 @@ class TopNavigationPanel(QFrame):
     def currentIndicatorGeometry(self):
         """get current indicator geometry like Pivot"""
         item = self.currentItem()
-        if not item:
+        if not item or not item.isVisible():
             return QRectF(0, self.height() - 6, 16, 3)
 
-        anchor = item if item.isVisible() else self.moreButton
-        if not anchor.isVisible():
-            return QRectF(0, self.height() - 6, 16, 3)
-
-        topLeft = anchor.mapTo(self, QPoint(0, 0))
-        rect = QRectF(topLeft.x(), topLeft.y(), anchor.width(), anchor.height())
+        topLeft = item.mapTo(self, QPoint(0, 0))
+        rect = QRectF(topLeft.x(), topLeft.y(), item.width(), item.height())
         return QRectF(
             rect.x() - 8 + rect.width() // 2,
             self.height() - 9,
@@ -418,80 +414,20 @@ class TopNavigationPanel(QFrame):
     def resizeEvent(self, e):
         super().resizeEvent(e)
         self._adjustIndicatorPos()
-        self._updateOverflow()
 
-    def _showOverflowMenu(self):
-        if not self._overflowWidgets:
-            return
+    def _onScrollChanged(self):
+        """滚动条值变化时，更新指示器和所有徽章的位置。
 
-        menu = RoundMenu("", self)
-        for w in self._overflowWidgets:
-            text = w.text() if hasattr(w, "text") else str(w.property("routeKey") or "")
-            action = QAction(text, menu)
-            if hasattr(w, "icon"):
-                try:
-                    action.setIcon(w.icon())
-                except Exception:
-                    pass
-            action.triggered.connect(lambda checked=False, widget=w: widget.click())
-            menu.addAction(action)
-
-        pos = self.moreButton.mapToGlobal(self.moreButton.rect().bottomLeft())
-        menu.exec(pos, aniType=MenuAnimationType.DROP_DOWN)
-
-    def _updateOverflow(self):
-        """Hide trailing LEFT widgets (in scroll area) into overflow menu when width is insufficient."""
-
-        def _scrollWidgets():
-            widgets = []
-            for i in range(self.scrollLayout.count()):
-                it = self.scrollLayout.itemAt(i)
-                w = it.widget() if it else None
-                if w is not None:
-                    widgets.append(w)
-            return widgets
-
-        # restore
-        for w in self._overflowWidgets:
-            if w:
-                w.show()
-        self._overflowWidgets.clear()
-        self.moreButton.hide()
-
-        # allow layout to settle (this determines scrollArea width)
-        self.hBoxLayout.activate()
-
-        widgets = _scrollWidgets()
-        if not widgets:
-            return
-
-        spacing = self.scrollLayout.spacing()
-
-        def _totalWidth(ws):
-            if not ws:
-                return 0
-            return sum(w.width() for w in ws) + spacing * (len(ws) - 1)
-
-        # First pass without moreButton
-        available = self.scrollArea.width()
-        if _totalWidth(widgets) <= available:
-            return
-
-        # Show moreButton, relayout, and recompute available width
-        self.moreButton.show()
-        self.hBoxLayout.activate()
-        available = self.scrollArea.width()
-
-        visible = widgets.copy()
-        while visible and _totalWidth(visible) > available:
-            w = visible.pop()
-            w.hide()
-            self._overflowWidgets.insert(0, w)
-
-        if not self._overflowWidgets:
-            self.moreButton.hide()
-
+        按钮在 scrollWidget 中，滚动时按钮自身的 geometry 不变 (是 viewport 在动)，
+        所以按钮不会触发 Move 事件，InfoBadgeManager 的 eventFilter 捕获不到。
+        这里主动遍历所有按钮，调用 InfoBadgeManager.updateForTarget 重定位徽章。
+        """
+        # 1. 更新指示器位置 (基于 mapTo，会自动包含滚动偏移)
         self._adjustIndicatorPos()
+
+        # 2. 更新所有按钮上的徽章位置
+        for item in self.items.values():
+            InfoBadgeManager.updateForTarget(item)
 
     def _adjustIndicatorPos(self):
         item = self.currentItem()
@@ -519,7 +455,7 @@ class TopNavigationPushButton(NavigationPushButton):
 
     def __init__(
         self,
-        icon: Union[str, QIcon, FluentIconBase],
+        icon,
         text: str,
         isSelectable: bool,
         parent=None,
@@ -589,11 +525,11 @@ class TopNavigationItemInfoBadgeManager(InfoBadgeManager):
     """
 
     # 与 NavigationPushButton.paintEvent 中保持一致的常量
-    ICON_LEFT = 11.5       # 图标左边缘 x
-    ICON_SIZE = 16         # 图标尺寸
-    ICON_TOP = 10          # 图标顶部 y
+    ICON_LEFT = 11.5  # 图标左边缘 x
+    ICON_SIZE = 16  # 图标尺寸
+    ICON_TOP = 10  # 图标顶部 y
     TEXT_LEFT_OFFSET = 44  # 文本左边缘相对于按钮左边的偏移 (含 icon + padding)
-    BADGE_OFFSET = 2       # 徽章超出文字右边缘的偏移量
+    BADGE_OFFSET = 2  # 徽章超出文字右边缘的偏移量
 
     def eventFilter(self, obj, e: QEvent):
         """target 显示时也触发一次定位，确保首次显示徽章在正确位置"""
@@ -605,7 +541,6 @@ class TopNavigationItemInfoBadgeManager(InfoBadgeManager):
     def position(self):
         target = self.target
         badge = self.badge
-        self.badge.setVisible(target.isVisible())
 
         # badge 的 parent 可能与 target 的 parent 不同
         # (TopFluentWindow 中 target 在 scrollWidget 里，badge 挂在 navigationInterface 上)
@@ -613,6 +548,38 @@ class TopNavigationItemInfoBadgeManager(InfoBadgeManager):
         parent = badge.parent()
         if parent is None:
             return QPoint()
+
+        # 判断按钮是否在滚动区域的可视范围内
+        # 按钮在 scrollWidget 中，滚动出视口时 isVisible() 仍为 True (只是被 viewport 裁剪)，
+        # 需要额外检查按钮映射到 scrollArea viewport 后是否与可视矩形相交
+        # 向上遍历父级定位到 scrollArea (target.parent() = scrollWidget,
+        # scrollWidget.parent() = scrollArea)
+        p = target.parent()
+        sa = None
+        while p is not None:
+            # 用 QAbstractScrollArea 的特征判断
+            if hasattr(p, "horizontalScrollBar") and hasattr(p, "viewport"):
+                sa = p
+                break
+            p = p.parent()
+
+        visible = target.isVisible()
+        if visible and sa is not None:
+            # 按钮映射到 scrollArea viewport 的矩形
+            viewRect = sa.viewport().rect()
+            targetRect = QRectF(
+                target.mapTo(sa.viewport(), QPoint(0, 0)),
+                target.size(),
+            )
+            # 不相交则隐藏徽章
+            if not viewRect.intersects(targetRect.toRect()):
+                visible = False
+
+        self.badge.setVisible(visible)
+
+        # 不可见时不需要更新位置，返回当前即可
+        if not visible:
+            return badge.pos()
 
         # 取按钮的 _margins()，与 paintEvent 一致
         m = target._margins() if hasattr(target, "_margins") else QMargins(0, 0, 0, 0)
