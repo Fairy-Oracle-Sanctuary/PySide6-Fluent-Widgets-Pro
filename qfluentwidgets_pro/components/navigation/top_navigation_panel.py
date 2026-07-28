@@ -536,7 +536,6 @@ class TopNavigationItemInfoBadgeManager(InfoBadgeManager):
     def eventFilter(self, obj, e: QEvent):
         """target 显示时也触发一次定位，确保首次显示徽章在正确位置"""
         if obj is self.target and e.type() == QEvent.Show:
-            self.badge.show()
             self.badge.move(self.position())
         return super().eventFilter(obj, e)
 
