@@ -531,7 +531,7 @@ class TopNavigationItemInfoBadgeManager(InfoBadgeManager):
     ICON_SIZE = 16  # 图标尺寸
     ICON_TOP = 10  # 图标顶部 y
     TEXT_LEFT_OFFSET = 44  # 文本左边缘相对于按钮左边的偏移 (含 icon + padding)
-    BADGE_OFFSET = 2  # 徽章超出文字右边缘的偏移量
+    BADGE_OFFSET = 6  # 徽章超出文字右边缘的偏移量
 
     def eventFilter(self, obj, e: QEvent):
         """target 显示时也触发一次定位，确保首次显示徽章在正确位置"""
