@@ -1,3 +1,4 @@
+from gallery.view.chart.home_interface import ChartMainWindow
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
@@ -6,8 +7,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
-from gallery.view.chart.home_interface import ChartMainWindow
 from qfluentwidgets_pro import (
     CategoryCardListWidget,
     DropMultiFilesWidget,
@@ -478,7 +477,6 @@ class MainWindow(TopFluentWindow):
         """Create splitter demo page"""
         from PySide6.QtGui import QColor, QPainter
         from PySide6.QtWidgets import QWidget
-
         from qfluentwidgets_pro import BodyLabel, isDarkTheme, themeColor
 
         class BackgroundCard(QWidget):
