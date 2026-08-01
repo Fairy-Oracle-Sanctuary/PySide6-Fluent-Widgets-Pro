@@ -9,3 +9,4 @@ config/
 main.build/
 main.dist/
 scripts/
+app/

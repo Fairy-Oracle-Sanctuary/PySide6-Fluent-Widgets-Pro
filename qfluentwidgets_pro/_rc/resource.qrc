@@ -1,11 +1,79 @@
 <!DOCTYPE RCC>
 <RCC>
   <qresource prefix="/qfluentwidgets">
+    <file>i18n/qfluentwidgets.af_ZA.qm</file>
+    <file>i18n/qfluentwidgets.am_ET.qm</file>
     <file>i18n/qfluentwidgets.ar_AR.qm</file>
+    <file>i18n/qfluentwidgets.az_AZ.qm</file>
+    <file>i18n/qfluentwidgets.be_BY.qm</file>
+    <file>i18n/qfluentwidgets.bg_BG.qm</file>
+    <file>i18n/qfluentwidgets.bn_BD.qm</file>
+    <file>i18n/qfluentwidgets.bs_BA.qm</file>
+    <file>i18n/qfluentwidgets.ca_ES.qm</file>
+    <file>i18n/qfluentwidgets.cs_CZ.qm</file>
+    <file>i18n/qfluentwidgets.cy_GB.qm</file>
+    <file>i18n/qfluentwidgets.da_DK.qm</file>
+    <file>i18n/qfluentwidgets.de_DE.qm</file>
+    <file>i18n/qfluentwidgets.el_GR.qm</file>
     <file>i18n/qfluentwidgets.en_US.qm</file>
     <file>i18n/qfluentwidgets.es_ES.qm</file>
+    <file>i18n/qfluentwidgets.et_EE.qm</file>
+    <file>i18n/qfluentwidgets.eu_ES.qm</file>
+    <file>i18n/qfluentwidgets.fa_IR.qm</file>
+    <file>i18n/qfluentwidgets.fi_FI.qm</file>
+    <file>i18n/qfluentwidgets.fr_FR.qm</file>
+    <file>i18n/qfluentwidgets.ga_IE.qm</file>
+    <file>i18n/qfluentwidgets.gl_ES.qm</file>
+    <file>i18n/qfluentwidgets.gu_IN.qm</file>
+    <file>i18n/qfluentwidgets.he_IL.qm</file>
+    <file>i18n/qfluentwidgets.hi_IN.qm</file>
+    <file>i18n/qfluentwidgets.hr_HR.qm</file>
+    <file>i18n/qfluentwidgets.hu_HU.qm</file>
+    <file>i18n/qfluentwidgets.hy_AM.qm</file>
+    <file>i18n/qfluentwidgets.id_ID.qm</file>
+    <file>i18n/qfluentwidgets.is_IS.qm</file>
+    <file>i18n/qfluentwidgets.it_IT.qm</file>
+    <file>i18n/qfluentwidgets.ja_JP.qm</file>
+    <file>i18n/qfluentwidgets.ka_GE.qm</file>
+    <file>i18n/qfluentwidgets.kk_KZ.qm</file>
+    <file>i18n/qfluentwidgets.km_KH.qm</file>
+    <file>i18n/qfluentwidgets.kn_IN.qm</file>
+    <file>i18n/qfluentwidgets.ko_KR.qm</file>
+    <file>i18n/qfluentwidgets.lt_LT.qm</file>
+    <file>i18n/qfluentwidgets.lv_LV.qm</file>
+    <file>i18n/qfluentwidgets.mk_MK.qm</file>
+    <file>i18n/qfluentwidgets.ml_IN.qm</file>
+    <file>i18n/qfluentwidgets.mn_MN.qm</file>
+    <file>i18n/qfluentwidgets.mr_IN.qm</file>
+    <file>i18n/qfluentwidgets.ms_MY.qm</file>
+    <file>i18n/qfluentwidgets.my_MM.qm</file>
+    <file>i18n/qfluentwidgets.nb_NO.qm</file>
+    <file>i18n/qfluentwidgets.ne_NP.qm</file>
+    <file>i18n/qfluentwidgets.nl_NL.qm</file>
+    <file>i18n/qfluentwidgets.nn_NO.qm</file>
+    <file>i18n/qfluentwidgets.pa_IN.qm</file>
     <file>i18n/qfluentwidgets.pl_PL.qm</file>
+    <file>i18n/qfluentwidgets.pt_BR.qm</file>
+    <file>i18n/qfluentwidgets.pt_PT.qm</file>
+    <file>i18n/qfluentwidgets.ro_RO.qm</file>
     <file>i18n/qfluentwidgets.ru_RU.qm</file>
+    <file>i18n/qfluentwidgets.si_LK.qm</file>
+    <file>i18n/qfluentwidgets.sk_SK.qm</file>
+    <file>i18n/qfluentwidgets.sl_SI.qm</file>
+    <file>i18n/qfluentwidgets.sq_AL.qm</file>
+    <file>i18n/qfluentwidgets.sr_RS.qm</file>
+    <file>i18n/qfluentwidgets.sv_SE.qm</file>
+    <file>i18n/qfluentwidgets.sw_KE.qm</file>
+    <file>i18n/qfluentwidgets.ta_IN.qm</file>
+    <file>i18n/qfluentwidgets.te_IN.qm</file>
+    <file>i18n/qfluentwidgets.tg_TJ.qm</file>
+    <file>i18n/qfluentwidgets.th_TH.qm</file>
+    <file>i18n/qfluentwidgets.tl_PH.qm</file>
+    <file>i18n/qfluentwidgets.tr_TR.qm</file>
+    <file>i18n/qfluentwidgets.uk_UA.qm</file>
+    <file>i18n/qfluentwidgets.ur_PK.qm</file>
+    <file>i18n/qfluentwidgets.uz_UZ.qm</file>
+    <file>i18n/qfluentwidgets.vi_VN.qm</file>
     <file>i18n/qfluentwidgets.zh_CN.qm</file>
     <file>i18n/qfluentwidgets.zh_HK.qm</file>
     <file>i18n/qfluentwidgets.zh_TW.qm</file>
