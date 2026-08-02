@@ -1,9 +1,15 @@
-# coding:utf-8
-from typing import Union
+from __future__ import annotations
 
 from PySide6.QtCore import Property, QPoint, QPropertyAnimation, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QFont, QIcon, QPainter, QPainterPath
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
 
 from ...common.animation import BackgroundAnimationWidget, DropShadowAnimation
 from ...common.font import setFont
@@ -252,7 +258,7 @@ class HeaderCardWidget(SimpleCardWidget):
 class CardGroupWidget(QWidget):
     def __init__(
         self,
-        icon: Union[str, FluentIconBase, QIcon],
+        icon: str | FluentIconBase | QIcon,
         title: str,
         content: str,
         parent=None,
@@ -305,10 +311,29 @@ class CardGroupWidget(QWidget):
     def setContent(self, text: str):
         self.contentLabel.setText(text)
 
+    def setContentWordWrap(self, enable: bool):
+        """设置 contentLabel 是否启用自动换行"""
+        self.contentLabel.setWordWrap(enable)
+        if enable:
+            # QLabel wordWrap 时 sizeHint 宽度不等于文本实际宽度（偏小），
+            # 布局按 sizeHint 分配空间会导致过早换行。
+            # 1. 水平方向设为 Expanding，让 contentLabel 优先占用剩余空间
+            sp = self.contentLabel.sizePolicy()
+            sp.setHorizontalPolicy(QSizePolicy.Expanding)
+            sp.setVerticalPolicy(QSizePolicy.Minimum)
+            self.contentLabel.setSizePolicy(sp)
+            # 2. 移除 hBoxLayout 中的弹簧，让 contentLabel 拿到所有剩余宽度
+            #    （ComboBox 仍会被推到右侧，视觉上保持右对齐）
+            for i in range(self.hBoxLayout.count()):
+                item = self.hBoxLayout.itemAt(i)
+                if item and item.spacerItem():
+                    self.hBoxLayout.removeItem(item)
+                    break
+
     def icon(self):
         return self.iconWidget.icon
 
-    def setIcon(self, icon: Union[str, FluentIconBase, QIcon]):
+    def setIcon(self, icon: str | FluentIconBase | QIcon):
         self.iconWidget.setIcon(icon)
 
     def setIconSize(self, size: QSize):
@@ -339,11 +364,12 @@ class GroupHeaderCardWidget(HeaderCardWidget):
 
     def addGroup(
         self,
-        icon: Union[str, FluentIconBase, QIcon],
+        icon: str | FluentIconBase | QIcon,
         title: str,
         content: str,
         widget: QWidget,
         stretch=0,
+        wordWrap=False,
     ) -> CardGroupWidget:
         """add widget to a new group
 
@@ -363,8 +389,12 @@ class GroupHeaderCardWidget(HeaderCardWidget):
 
         stretch: int
             the layout stretch of widget
+
+        wordWrap: bool
+            whether to enable word wrap for contentLabel
         """
         group = CardGroupWidget(icon, title, content, self)
+        group.setContentWordWrap(wordWrap)
         group.addWidget(widget, stretch=stretch)
 
         if self.groupWidgets:

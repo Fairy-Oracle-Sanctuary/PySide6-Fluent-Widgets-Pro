@@ -133,6 +133,7 @@ from .scroll_bar import (
     SmoothScrollBar,
     SmoothScrollDelegate,
 )
+from .separator import HorizontalSeparator, VerticalSeparator
 from .slider import (
     ClickableSlider,
     HollowHandleStyle,
