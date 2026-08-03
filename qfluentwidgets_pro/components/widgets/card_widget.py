@@ -264,6 +264,7 @@ class CardGroupWidget(QWidget):
         parent=None,
     ):
         super().__init__(parent=parent)
+        self._wordWrapExtraHeight = 0  # wordWrap 导致 sizeHint 虚高的高度
         self.vBoxLayout = QVBoxLayout(self)
         self.hBoxLayout = QHBoxLayout()
 
@@ -322,13 +323,33 @@ class CardGroupWidget(QWidget):
             sp.setHorizontalPolicy(QSizePolicy.Expanding)
             sp.setVerticalPolicy(QSizePolicy.Minimum)
             self.contentLabel.setSizePolicy(sp)
-            # 2. 移除 hBoxLayout 中的弹簧，让 contentLabel 拿到所有剩余宽度
-            #    （ComboBox 仍会被推到右侧，视觉上保持右对齐）
-            for i in range(self.hBoxLayout.count()):
-                item = self.hBoxLayout.itemAt(i)
-                if item and item.spacerItem():
-                    self.hBoxLayout.removeItem(item)
-                    break
+            # 2. 让 textLayout 参与 stretch 分配，拿到剩余空间显示完整文本
+            #    保留弹簧保证 widget 始终靠右对齐（某些 widget 如 Slider 的
+            #    sizePolicy 会被子控件影响成 Expanding，移除弹簧会导致它被拉伸）
+            self.hBoxLayout.setStretchFactor(self.textLayout, 1)
+            # 3. wordWrap=True 时 QLabel 的 sizeHint.height 按最窄宽度（两行）计算，
+            #    但实际通常单行显示。偏大的 sizeHint 会导致 layout 分配过多空间
+            #    产生卡片间空隙。计算虚高差值，在 sizeHint/minimumSizeHint 中扣除，
+            #    不限制 contentLabel 实际高度，避免文字被裁剪。
+            self.contentLabel.setWordWrap(False)
+            single_h = self.contentLabel.sizeHint().height()
+            self.contentLabel.setWordWrap(True)
+            wrap_h = self.contentLabel.sizeHint().height()
+            self._wordWrapExtraHeight = max(0, wrap_h - single_h)
+        else:
+            self._wordWrapExtraHeight = 0
+
+    def sizeHint(self):
+        hint = super().sizeHint()
+        if self._wordWrapExtraHeight > 0:
+            hint.setHeight(max(0, hint.height() - self._wordWrapExtraHeight))
+        return hint
+
+    def minimumSizeHint(self):
+        hint = super().minimumSizeHint()
+        if self._wordWrapExtraHeight > 0:
+            hint.setHeight(max(0, hint.height() - self._wordWrapExtraHeight))
+        return hint
 
     def icon(self):
         return self.iconWidget.icon
