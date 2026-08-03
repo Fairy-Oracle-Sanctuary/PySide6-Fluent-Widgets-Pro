@@ -316,21 +316,29 @@ class CardGroupWidget(QWidget):
         """设置 contentLabel 是否启用自动换行"""
         self.contentLabel.setWordWrap(enable)
         if enable:
-            # QLabel wordWrap 时 sizeHint 宽度不等于文本实际宽度（偏小），
-            # 布局按 sizeHint 分配空间会导致过早换行。
-            # 1. 水平方向设为 Expanding，让 contentLabel 优先占用剩余空间
+            # 1. contentLabel 水平 Expanding，拿到 textLayout 全部宽度
             sp = self.contentLabel.sizePolicy()
             sp.setHorizontalPolicy(QSizePolicy.Expanding)
             sp.setVerticalPolicy(QSizePolicy.Minimum)
             self.contentLabel.setSizePolicy(sp)
-            # 2. 让 textLayout 参与 stretch 分配，拿到剩余空间显示完整文本
-            #    保留弹簧保证 widget 始终靠右对齐（某些 widget 如 Slider 的
-            #    sizePolicy 会被子控件影响成 Expanding，移除弹簧会导致它被拉伸）
+            # 2. 移除弹簧，让 textLayout 独占剩余宽度（而非和弹簧平分）
+            for i in range(self.hBoxLayout.count()):
+                item = self.hBoxLayout.itemAt(i)
+                if item.spacerItem():
+                    self.hBoxLayout.takeAt(i)
+                    break
+            # 3. textLayout stretch=1 拿走全部剩余空间，把 widget 顶到最右
             self.hBoxLayout.setStretchFactor(self.textLayout, 1)
-            # 3. wordWrap=True 时 QLabel 的 sizeHint.height 按最窄宽度（两行）计算，
-            #    但实际通常单行显示。偏大的 sizeHint 会导致 layout 分配过多空间
-            #    产生卡片间空隙。计算虚高差值，在 sizeHint/minimumSizeHint 中扣除，
-            #    不限制 contentLabel 实际高度，避免文字被裁剪。
+            # 4. 设 widget 水平 Maximum 防止被拉伸
+            for i in range(self.hBoxLayout.count()):
+                item = self.hBoxLayout.itemAt(i)
+                if item.widget() and item.widget() is not self.iconWidget:
+                    wsp = item.widget().sizePolicy()
+                    wsp.setHorizontalPolicy(QSizePolicy.Maximum)
+                    item.widget().setSizePolicy(wsp)
+            # 4. wordWrap=True 时 sizeHint.height 按最窄宽度（两行）计算，
+            #    实际通常单行。重写 sizeHint/minimumSizeHint 扣除虚高差值，
+            #    不限制 contentLabel 实际高度，避免裁剪。
             self.contentLabel.setWordWrap(False)
             single_h = self.contentLabel.sizeHint().height()
             self.contentLabel.setWordWrap(True)
