@@ -313,7 +313,34 @@ class CardGroupWidget(QWidget):
         self.contentLabel.setText(text)
 
     def setContentWordWrap(self, enable: bool):
-        """设置 contentLabel 是否启用自动换行"""
+        """设置 contentLabel 是否启用自动换行
+
+        ## wordWrap 虚高问题
+
+        QLabel 开启 wordWrap 后，``sizeHint().height()`` 按最窄宽度计算
+        （即两行高度），但实际在足够宽的容器中通常只显示一行。这个偏大的
+        sizeHint 会导致父布局 ``CardGroupWidget`` 的 sizeHint/minimumSizeHint
+        虚高，在以下场景产生问题：
+
+        1. **卡片间距异常**：多个 group 的虚高累加，QVBoxLayout 按 sizeHint
+           分配空间，导致某些卡片之间出现远大于 spacing 的空隙。
+        2. **QStackedWidget 锁高后撑大**：外层用 ``setFixedHeight`` 锁定页面
+           高度后，多余空间会分发给 sizeHint 偏大的 group，进一步放大间距。
+
+        ## 修复策略
+
+        - 步骤 1-4：调整 sizePolicy 和 stretch，让 contentLabel 拿到足够宽度
+          尽量单行显示，避免过早换行。
+        - 步骤 5：计算 wordWrap 虚高差值 ``_wordWrapExtraHeight``，在重写的
+          ``sizeHint``/``minimumSizeHint`` 中扣除，使布局按真实单行高度分配。
+
+        ## 已知局限
+
+        ``_wordWrapExtraHeight`` 是一次性静态计算的（基于调用时的 QLabel 宽度）。
+        若后续容器宽度变化导致实际换行数改变，差值不会自动更新，可能出现轻微
+        偏差。配合 ``QVBoxLayout.addStretch()`` 可让多余空间被弹簧吸收而非分给
+        group，作为这一局限的兜底方案。
+        """
         self.contentLabel.setWordWrap(enable)
         if enable:
             # 1. contentLabel 水平 Expanding，拿到 textLayout 全部宽度
