@@ -1,7 +1,3 @@
-# coding:utf-8
-
-from typing import List
-
 from PySide6.QtCore import QSize, Qt, Signal
 from PySide6.QtWidgets import QHBoxLayout, QSizePolicy, QWidget
 
@@ -49,6 +45,10 @@ class ExclusiveLiteFilterBase(QWidget):
         # Connect scroll bar value change to update arrow visibility
         self.scrollArea.horizontalScrollBar().valueChanged.connect(
             self._updateArrowVisibility
+        )
+        # 滚动范围变化时也要更新箭头（修复首次显示时布局未 settle 导致箭头误现）
+        self.scrollArea.horizontalScrollBar().rangeChanged.connect(
+            lambda: self._updateArrowVisibility()
         )
 
         # Right arrow button
@@ -104,7 +104,7 @@ class ExclusiveLiteFilterBase(QWidget):
 
         return button
 
-    def addItems(self, texts: List[str]):
+    def addItems(self, texts: list[str]):
         """Add multiple items to the filter
 
         Parameters
@@ -154,7 +154,7 @@ class ExclusiveLiteFilterBase(QWidget):
         self._items.clear()
         self._currentText = None
 
-    def items(self) -> List[str]:
+    def items(self) -> list[str]:
         """Get all item texts
 
         Returns
@@ -250,7 +250,7 @@ class MultiSelectionLiteFilterBase(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._items = {}
-        self._selectedItems: List[str] = []
+        self._selectedItems: list[str] = []
 
         # Create layout
         self.hBoxLayout = QHBoxLayout(self)
@@ -281,6 +281,10 @@ class MultiSelectionLiteFilterBase(QWidget):
         # Connect scroll bar value change to update arrow visibility
         self.scrollArea.horizontalScrollBar().valueChanged.connect(
             self._updateArrowVisibility
+        )
+        # 滚动范围变化时也要更新箭头（修复首次显示时布局未 settle 导致箭头误现）
+        self.scrollArea.horizontalScrollBar().rangeChanged.connect(
+            lambda: self._updateArrowVisibility()
         )
 
         # Right arrow button
@@ -332,7 +336,7 @@ class MultiSelectionLiteFilterBase(QWidget):
 
         return button
 
-    def addItems(self, texts: List[str]):
+    def addItems(self, texts: list[str]):
         """Add multiple items to the filter
 
         Parameters
@@ -343,7 +347,7 @@ class MultiSelectionLiteFilterBase(QWidget):
         for text in texts:
             self.addItem(text)
 
-    def currentItems(self) -> List[str]:
+    def currentItems(self) -> list[str]:
         """Get the currently selected items
 
         Returns
@@ -353,7 +357,7 @@ class MultiSelectionLiteFilterBase(QWidget):
         """
         return self._selectedItems.copy()
 
-    def setCurrentItems(self, texts: List[str]):
+    def setCurrentItems(self, texts: list[str]):
         """Set the currently selected items
 
         Parameters
@@ -389,7 +393,7 @@ class MultiSelectionLiteFilterBase(QWidget):
         self._items.clear()
         self._selectedItems.clear()
 
-    def items(self) -> List[str]:
+    def items(self) -> list[str]:
         """Get all item texts
 
         Returns
