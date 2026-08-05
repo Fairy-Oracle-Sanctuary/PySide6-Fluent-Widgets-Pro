@@ -1,6 +1,3 @@
-# coding:utf-8
-from typing import List
-
 from PySide6.QtCore import Property, QModelIndex, QRectF, Qt
 from PySide6.QtGui import QColor, QIcon, QPainter
 from PySide6.QtWidgets import (
@@ -67,7 +64,7 @@ class ListBase:
         self.delegate.setPressedRow(row)
         self.viewport().update()
 
-    def _setSelectedRows(self, indexes: List[QModelIndex]):
+    def _setSelectedRows(self, indexes: list[QModelIndex]):
         if self.selectionMode() == QListView.SelectionMode.NoSelection:
             return
 
@@ -209,7 +206,6 @@ class RoundListItemDelegate(ListItemDelegate):
         self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex
     ):
         """Do not draw indicator"""
-        pass
 
     def _drawIcon(
         self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex

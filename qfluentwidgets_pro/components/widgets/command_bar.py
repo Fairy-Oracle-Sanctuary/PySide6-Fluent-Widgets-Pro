@@ -1,7 +1,6 @@
-# coding:utf-8
 from __future__ import annotations
 
-from typing import Iterable, List
+from collections.abc import Iterable
 
 from PySide6.QtCore import QEvent, QPoint, QRectF, QSize, Qt
 from PySide6.QtGui import QAction, QColor, QFont, QHoverEvent, QPainter, QPainterPath
@@ -249,7 +248,7 @@ class CommandBar(QFrame):
         self.updateGeometry()
         super().addAction(action)
 
-    def addHiddenActions(self, actions: List[QAction]):
+    def addHiddenActions(self, actions: list[QAction]):
         """add hidden action"""
         for action in actions:
             self.addHiddenAction(action)
@@ -386,7 +385,7 @@ class CommandBar(QFrame):
             widget.hide()
             self._hiddenWidgets.append(widget)
 
-    def _visibleWidgets(self) -> List[QWidget]:
+    def _visibleWidgets(self) -> list[QWidget]:
         """return the visible widgets in layout"""
         # have enough spacing to show all widgets
         if self.suitableWidth() <= self.width():
@@ -574,7 +573,7 @@ class CommandBarView(FlyoutViewBase):
     def addHiddenAction(self, action: QAction):
         self.bar.addHiddenAction(action)
 
-    def addHiddenActions(self, actions: List[QAction]):
+    def addHiddenActions(self, actions: list[QAction]):
         self.bar.addHiddenActions(actions)
 
     def insertAction(self, before: QAction, action: QAction):

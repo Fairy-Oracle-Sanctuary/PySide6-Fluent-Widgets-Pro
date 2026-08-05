@@ -56,18 +56,18 @@ from .combo_box import (
     MultiSelectComboBox,
 )
 from .command_bar import CommandBar, CommandBarView, CommandButton
-from .exclusive_filter import (
-    ExclusiveLiteFilter,
-    MultiSelectionLiteFilter,
-    OutlinedExclusiveLiteFilter,
-    OutlinedMultiSelectionLiteFilter,
-)
 from .drop_widget import (
     DropAnyWidget,
     DropMultiFilesWidget,
     DropMultiFoldersWidget,
     DropSingleFileWidget,
     DropSingleFolderWidget,
+)
+from .exclusive_filter import (
+    ExclusiveLiteFilter,
+    MultiSelectionLiteFilter,
+    OutlinedExclusiveLiteFilter,
+    OutlinedMultiSelectionLiteFilter,
 )
 from .flyout import (
     Flyout,

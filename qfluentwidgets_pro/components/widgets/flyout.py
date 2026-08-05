@@ -1,4 +1,3 @@
-# coding:utf-8
 from __future__ import annotations
 
 import sys
@@ -462,7 +461,7 @@ class FlyoutAnimationManager(QObject):
     @classmethod
     def make(
         cls, aniType: FlyoutAnimationType, flyout: Flyout
-    ) -> "FlyoutAnimationManager":
+    ) -> FlyoutAnimationManager:
         """mask animation manager"""
         if aniType not in cls.managers:
             raise ValueError(f"`{aniType}` is an invalid animation type.")

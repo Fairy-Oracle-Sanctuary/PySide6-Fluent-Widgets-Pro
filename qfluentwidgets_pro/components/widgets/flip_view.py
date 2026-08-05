@@ -1,5 +1,4 @@
-# coding:utf-8
-from typing import List, Union
+from typing import Union
 
 from PySide6.QtCore import (
     Property,
@@ -299,7 +298,7 @@ class FlipView(QListWidget):
         self.addImages([image])
 
     def addImages(
-        self, images: List[Union[QImage, QPixmap, str]], targetSize: QSize = None
+        self, images: list[Union[QImage, QPixmap, str]], targetSize: QSize = None
     ):
         """add images"""
         if not images:

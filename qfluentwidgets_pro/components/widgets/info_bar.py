@@ -1,4 +1,3 @@
-# coding:utf-8
 from __future__ import annotations
 
 import sys
@@ -426,7 +425,7 @@ class InfoBarManager(QObject):
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
-            cls._instance = super(InfoBarManager, cls).__new__(cls, *args, **kwargs)
+            cls._instance = super().__new__(cls, *args, **kwargs)
             cls._instance.__initialized = False
 
         return cls._instance

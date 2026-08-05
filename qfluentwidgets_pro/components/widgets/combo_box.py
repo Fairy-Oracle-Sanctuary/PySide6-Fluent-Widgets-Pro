@@ -1,8 +1,8 @@
-# coding:utf-8
 from __future__ import annotations
 
 import sys
-from typing import Iterable, List, Set, Union
+from collections.abc import Iterable
+from typing import Union
 
 from PySide6.QtCore import QEvent, QPoint, QRect, QRectF, QSize, Qt, Signal
 from PySide6.QtGui import (
@@ -956,8 +956,8 @@ class MultiSelectComboBox(QPushButton):
     def _setUpUi(self):
         self.isHover = False
         self.isPressed = False
-        self.items: List[ComboItem] = []
-        self._selectedIndices: Set[int] = set()
+        self.items: list[ComboItem] = []
+        self._selectedIndices: set[int] = set()
         self._placeholderText = ""
         self._maxVisibleItems = -1
         self.dropMenu = None
@@ -1025,17 +1025,17 @@ class MultiSelectComboBox(QPushButton):
         """Return number of items"""
         return len(self.items)
 
-    def selectedIndices(self) -> Set[int]:
+    def selectedIndices(self) -> set[int]:
         """Return set of selected indices"""
         return self._selectedIndices.copy()
 
-    def selectedItems(self) -> List[ComboItem]:
+    def selectedItems(self) -> list[ComboItem]:
         """Return list of selected items"""
         return [
             self.items[i] for i in self._selectedIndices if 0 <= i < len(self.items)
         ]
 
-    def selectedTexts(self) -> List[str]:
+    def selectedTexts(self) -> list[str]:
         """Return list of selected texts"""
         return [
             self.items[i].text
@@ -1043,7 +1043,7 @@ class MultiSelectComboBox(QPushButton):
             if 0 <= i < len(self.items)
         ]
 
-    def setSelectedIndices(self, indices: Set[int]):
+    def setSelectedIndices(self, indices: set[int]):
         """Set selected indices"""
         self._selectedIndices = {i for i in indices if 0 <= i < len(self.items)}
         self._updateDisplay()

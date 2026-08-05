@@ -1,4 +1,3 @@
-# coding:utf-8
 from typing import Union
 
 from PySide6.QtCore import QFileInfo, QSize, Qt, Signal

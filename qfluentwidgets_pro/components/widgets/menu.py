@@ -1,8 +1,7 @@
-# coding:utf-8
 from __future__ import annotations
 
 from enum import Enum
-from typing import List, Union
+from typing import Union
 
 from PySide6.QtCore import (
     QEasingCurve,
@@ -576,7 +575,7 @@ class RoundMenu(QMenu):
         self.view.insertItem(index, item)
         self.adjustSize()
 
-    def addActions(self, actions: List[Union[QAction, Action]]):
+    def addActions(self, actions: list[Union[QAction, Action]]):
         """add actions to menu
 
         Parameters
@@ -588,7 +587,7 @@ class RoundMenu(QMenu):
             self.addAction(action)
 
     def insertActions(
-        self, before: Union[QAction, Action], actions: List[Union[QAction, Action]]
+        self, before: Union[QAction, Action], actions: list[Union[QAction, Action]]
     ):
         """inserts the actions actions to menu, before the action before"""
         for action in actions:
