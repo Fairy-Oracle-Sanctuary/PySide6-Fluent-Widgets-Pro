@@ -1,4 +1,3 @@
-# coding:utf-8
 from __future__ import annotations
 
 from typing import Union
@@ -1750,11 +1749,11 @@ class FilledButtonBase(BackgroundAnimationWidget):
         painter.setBrush(bgColor)
         painter.drawRoundedRect(rect, r, r)
 
-        # draw border
+        # draw border (内缩 0.5px 使 1px 笔触完整居中，避免边缘被裁剪)
         if borderColor.alpha() > 0:
             painter.setPen(borderColor)
             painter.setBrush(Qt.NoBrush)
-            painter.drawRoundedRect(rect, r, r)
+            painter.drawRoundedRect(QRectF(rect).adjusted(0.5, 0.5, -0.5, -0.5), r, r)
 
     def _drawIcon(self, icon, painter, rect, state=QIcon.Off):
         """draw icon with theme color when checked"""
@@ -1781,7 +1780,7 @@ class FilledButtonBase(BackgroundAnimationWidget):
         )
         isDark = isDarkTheme()
 
-        rect = self.rect().adjusted(1, 1, -1, -1)
+        rect = self.rect()
         r = 5  # Fixed border-radius like PushButton
 
         self._drawBackground(painter, rect, r, isDark)
@@ -1798,8 +1797,13 @@ class FilledButtonBase(BackgroundAnimationWidget):
         ):
             w, h = self.iconSize().width(), self.iconSize().height()
             y = (self.height() - h) / 2
-            mw = self.minimumSizeHint().width()
-            x = 12 + (self.width() - mw) // 2 if mw > 0 else 12
+            if self.text().strip():
+                # 带文字：icon 偏左、文字在右侧
+                mw = self.minimumSizeHint().width()
+                x = 12 + (self.width() - mw) // 2 if mw > 0 else 12
+            else:
+                # 纯 icon（如 FilledToolButton）：水平居中
+                x = (self.width() - w) / 2
             if self.isRightToLeft():
                 x = self.width() - w - x
 
