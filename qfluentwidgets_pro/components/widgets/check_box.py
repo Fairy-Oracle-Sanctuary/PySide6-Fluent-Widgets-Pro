@@ -1,4 +1,3 @@
-# coding: utf-8
 from enum import Enum
 
 from PySide6.QtCore import QSize, Qt

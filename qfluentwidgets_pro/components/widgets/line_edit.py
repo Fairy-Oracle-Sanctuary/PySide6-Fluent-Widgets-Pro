@@ -1,7 +1,6 @@
-# coding: utf-8
 from __future__ import annotations
 
-from typing import List, Union
+from typing import Union
 
 from PySide6.QtCore import (
     Property,
@@ -344,7 +343,7 @@ class CompleterMenu(RoundMenu):
         self.setItems(items)
         return True
 
-    def setItems(self, items: List[str]):
+    def setItems(self, items: list[str]):
         """set completion items"""
         self.view.clear()
 
@@ -649,7 +648,7 @@ class PinBox(QWidget):
         self.__pinBoxHeight: int = 32
         self.__echoMode: QLineEdit.echoMode = None
         self.__validator: QValidator = None
-        self.__pinBoxLineEdits: List[PinBoxLineEdit] = []  # type: List[PinBoxLineEdit]
+        self.__pinBoxLineEdits: list[PinBoxLineEdit] = []  # type: List[PinBoxLineEdit]
 
         self.hBoxLayout.setSpacing(10)
         self.__initPinBox()
