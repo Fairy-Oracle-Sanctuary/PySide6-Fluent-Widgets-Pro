@@ -1,7 +1,5 @@
-# coding:utf-8
 from __future__ import annotations
 
-from typing import List
 from collections import deque
 from typing import Union
 
@@ -441,7 +439,7 @@ class NavigationTreeItem(NavigationPushButton):
         painter.rotate(self.arrowAngle)
         FIF.ARROW_DOWN.render(painter, QRectF(-5, -5, 9.6, 9.6))
 
-    def treeWidget(self) -> "NavigationTreeWidget":
+    def treeWidget(self) -> NavigationTreeWidget:
         return self.parent()
 
     def getArrowAngle(self):

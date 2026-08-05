@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Dict
+
 from PySide6.QtCore import (
     QEvent,
     QMargins,
@@ -469,6 +469,17 @@ class TopNavigationPushButton(NavigationPushButton):
     def _canDrawIndicator(self):
         """Don't draw indicator on button - panel handles it"""
         return False
+
+    def _margins(self):
+        """compact 模式下补偿 icon 位置，使其在按钮中更居中
+
+        父类 paintEvent 的 icon x = 11.5 + pl，为侧边栏左对齐设计。
+        compact 模式（仅 icon）时加 1px 补偿，与 NavigationToolButton 一致。
+        expanded 模式保持 0，icon 左对齐为文字留空间。
+        """
+        if self.isCompacted and not self._isExpanded:
+            return QMargins(1, 0, 0, 0)
+        return QMargins(0, 0, 0, 0)
 
     def setCompacted(self, isCompacted: bool):
         """set whether the widget is compacted (global setting)"""
