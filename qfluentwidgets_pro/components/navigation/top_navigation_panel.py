@@ -481,6 +481,12 @@ class TopNavigationPushButton(NavigationPushButton):
             return QMargins(1, 0, 0, 0)
         return QMargins(0, 0, 0, 0)
 
+    def _iconXOffset(self):
+        """expanded 模式（icon+text）下 icon 向右偏移 2px，文字位置保持不变"""
+        if self._isExpanded or not self.isCompacted:
+            return 7
+        return 0
+
     def setCompacted(self, isCompacted: bool):
         """set whether the widget is compacted (global setting)"""
         # Skip if expanded - expanded items always show text
@@ -540,9 +546,9 @@ class TopNavigationItemInfoBadgeManager(InfoBadgeManager):
     # 与 NavigationPushButton.paintEvent 中保持一致的常量
     ICON_LEFT = 11.5  # 图标左边缘 x
     ICON_SIZE = 16  # 图标尺寸
-    ICON_TOP = 10  # 图标顶部 y
+    ICON_TOP = 7  # 图标顶部 y
     TEXT_LEFT_OFFSET = 44  # 文本左边缘相对于按钮左边的偏移 (含 icon + padding)
-    BADGE_OFFSET = 6  # 徽章超出文字右边缘的偏移量
+    BADGE_OFFSET = 10  # 徽章超出文字右边缘的偏移量
 
     def eventFilter(self, obj, e: QEvent):
         """target 显示时也触发一次定位，确保首次显示徽章在正确位置"""

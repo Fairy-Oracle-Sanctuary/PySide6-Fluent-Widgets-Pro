@@ -185,6 +185,10 @@ class NavigationPushButton(NavigationWidget):
     def _canDrawIndicator(self):
         return self.isSelected
 
+    def _iconXOffset(self):
+        """icon 单独的 x 轴偏移量（不影响文字位置），子类可重写以微调 icon 位置"""
+        return 0
+
     def paintEvent(self, e):
         painter = QPainter(self)
         painter.setRenderHints(
@@ -223,7 +227,7 @@ class NavigationPushButton(NavigationWidget):
             painter.setBrush(QColor(c, c, c, 6 if self.isAboutSelected else 10))
             painter.drawRoundedRect(self.rect(), 5, 5)
 
-        drawIcon(self._icon, painter, QRectF(11.5 + pl, 10, 16, 16))
+        drawIcon(self._icon, painter, QRectF(11.5 + pl + self._iconXOffset(), 10, 16, 16))
 
         # draw text
         if self.isCompacted:
