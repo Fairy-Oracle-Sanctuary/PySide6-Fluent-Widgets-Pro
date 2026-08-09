@@ -2327,21 +2327,27 @@ class LuminaPushButton(PushButton):
     * LuminaPushButton(`icon`: QIcon | FluentIcon, `text`: str, `parent`: QWidget = None)
     """
 
+    # Glow blur radius: normal (rest) and hover (expanded range)
+    _normalBlur = 25
+    _hoverBlur = 45
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Glow effect - always visible with fixed blur radius
+        # Glow effect - always visible, blur radius expands on hover
         self._glowEffect = QGraphicsDropShadowEffect(self)
         self._glowEffect.setOffset(0, 0)
-        self._glowEffect.setBlurRadius(25)
+        self._glowEffect.setBlurRadius(LuminaPushButton._normalBlur)
         self._glowColor = QColor(*themeColor().getRgb()[:3], 80)
         self._glowEffect.setColor(self._glowColor)
         self.setGraphicsEffect(self._glowEffect)
         self._customGlowColor = False
 
-        # Animation for color alpha (not blur radius to avoid layout issues)
+        # Animations for glow alpha and blur radius
         self._glowAlphaAni = QPropertyAnimation(self, b"glowAlpha", self)
         self._glowAlphaAni.setDuration(150)
+        self._glowBlurAni = QPropertyAnimation(self._glowEffect, b"blurRadius", self)
+        self._glowBlurAni.setDuration(150)
 
         # Update glow color when theme changes
         qconfig.themeChanged.connect(self._updateGlowColor)
@@ -2380,16 +2386,24 @@ class LuminaPushButton(PushButton):
         self._glowColor = QColor(*color.getRgb()[:3], alpha)
         self._glowEffect.setColor(self._glowColor)
 
+    def _animateGlow(self, alpha: int, blur: int):
+        """Animate glow alpha and blur radius to target values"""
+        self._glowAlphaAni.stop()
+        self._glowAlphaAni.setStartValue(self._glowColor.alpha())
+        self._glowAlphaAni.setEndValue(alpha)
+        self._glowAlphaAni.start()
+        self._glowBlurAni.stop()
+        self._glowBlurAni.setStartValue(self._glowEffect.blurRadius())
+        self._glowBlurAni.setEndValue(blur)
+        self._glowBlurAni.start()
+
     def enterEvent(self, e):
         super().enterEvent(e)
         # Only increase glow if enabled
         if not self.isEnabled():
             return
-        # Increase glow intensity on hover
-        self._glowAlphaAni.stop()
-        self._glowAlphaAni.setStartValue(self._glowColor.alpha())
-        self._glowAlphaAni.setEndValue(150)  # Stronger glow
-        self._glowAlphaAni.start()
+        # Expand glow range and intensity on hover
+        self._animateGlow(200, LuminaPushButton._hoverBlur)
 
     def leaveEvent(self, e):
         super().leaveEvent(e)
@@ -2397,49 +2411,34 @@ class LuminaPushButton(PushButton):
         if not self.isEnabled():
             return
         # Restore normal glow
-        self._glowAlphaAni.stop()
-        self._glowAlphaAni.setStartValue(self._glowColor.alpha())
-        self._glowAlphaAni.setEndValue(80)  # Normal glow
-        self._glowAlphaAni.start()
+        self._animateGlow(80, LuminaPushButton._normalBlur)
 
     def mousePressEvent(self, e):
         super().mousePressEvent(e)
         # Only animate if enabled
         if not self.isEnabled():
             return
-        # Restore normal glow on press
-        self._glowAlphaAni.stop()
-        self._glowAlphaAni.setStartValue(self._glowColor.alpha())
-        self._glowAlphaAni.setEndValue(80)
-        self._glowAlphaAni.start()
+        # Collapse glow on press
+        self._animateGlow(80, LuminaPushButton._normalBlur)
 
     def mouseReleaseEvent(self, e):
         super().mouseReleaseEvent(e)
         # Only animate if enabled
         if not self.isEnabled():
             return
-        # If still hovering, increase glow again
+        # If still hovering, expand glow again
         if self.isHover:
-            self._glowAlphaAni.stop()
-            self._glowAlphaAni.setStartValue(self._glowColor.alpha())
-            self._glowAlphaAni.setEndValue(150)
-            self._glowAlphaAni.start()
+            self._animateGlow(200, LuminaPushButton._hoverBlur)
 
     def setEnabled(self, enabled: bool):
         """Override to control glow effect when disabled"""
         super().setEnabled(enabled)
         if enabled:
             # Restore normal glow
-            self._glowAlphaAni.stop()
-            self._glowAlphaAni.setStartValue(self._glowColor.alpha())
-            self._glowAlphaAni.setEndValue(80)
-            self._glowAlphaAni.start()
+            self._animateGlow(80, LuminaPushButton._normalBlur)
         else:
             # Dim glow when disabled
-            self._glowAlphaAni.stop()
-            self._glowAlphaAni.setStartValue(self._glowColor.alpha())
-            self._glowAlphaAni.setEndValue(30)  # Very dim glow
-            self._glowAlphaAni.start()
+            self._animateGlow(30, LuminaPushButton._normalBlur)
 
     def setDisabled(self, disabled: bool = True):
         """Set disabled state (convenience method)"""
@@ -2455,8 +2454,8 @@ class LuminaPushButton(PushButton):
         painter.setFont(self.font())
 
         isDark = isDarkTheme()
-        rect = self.rect().adjusted(1, 1, -1, -1)
-        r = 5
+        rect = QRectF(self.rect()).adjusted(0, 0, 0, 0)
+        r = 8
 
         bgColor = QColor(45, 45, 45) if isDark else QColor(249, 249, 249)
 
