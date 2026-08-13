@@ -56,6 +56,12 @@ from .combo_box import (
     MultiSelectComboBox,
 )
 from .command_bar import CommandBar, CommandBarView, CommandButton
+
+# 以下为恢复导入的轻量级组件（纯 QtWidgets，无重型依赖）。
+# 注意：chart_widget（依赖 QtWebEngine）与 acrylic_label（依赖 numpy）刻意不导入，
+# 防止 nuitka 打包时误把重型依赖打进安装包导致体积剧增；
+# 体积控制的正解是 deploy.py 的 --nofollow-import-to，而非删除导出。
+from .cycle_list_widget import CycleListWidget
 from .drop_widget import (
     DropAnyWidget,
     DropMultiFilesWidget,
@@ -69,6 +75,7 @@ from .exclusive_filter import (
     OutlinedExclusiveLiteFilter,
     OutlinedMultiSelectionLiteFilter,
 )
+from .flip_view import FlipImageDelegate, FlipView, HorizontalFlipView, VerticalFlipView
 from .flyout import (
     Flyout,
     FlyoutAnimationManager,
@@ -76,6 +83,7 @@ from .flyout import (
     FlyoutView,
     FlyoutViewBase,
 )
+from .frameless_window import FramelessWindow
 from .icon_widget import IconWidget
 from .info_badge import (
     DotInfoBadge,
@@ -111,6 +119,13 @@ from .line_edit import (
     TextBrowser,
     TextEdit,
 )
+from .list_view import (
+    ListItemDelegate,
+    ListView,
+    ListWidget,
+    RoundListView,
+    RoundListWidget,
+)
 from .menu import (
     CheckableMenu,
     CheckableSystemTrayMenu,
@@ -125,6 +140,14 @@ from .menu import (
     ShortcutMenuItemDelegate,
     SystemTrayMenu,
 )
+from .model_combo_box import EditableModelComboBox, ModelComboBox
+from .pager import PageButton, Pager
+from .pips_pager import (
+    HorizontalPipsPager,
+    PipsPager,
+    PipsScrollButtonDisplayMode,
+    VerticalPipsPager,
+)
 from .progress_bar import (
     FilledProgressBar,
     IndeterminateProgressBar,
@@ -132,7 +155,11 @@ from .progress_bar import (
     StepProgressBar,
     StepProgressBarButton,
 )
-from .progress_ring import ProgressRing, IndeterminateProgressRing, MultiSegmentProgressRing
+from .progress_ring import (
+    IndeterminateProgressRing,
+    MultiSegmentProgressRing,
+    ProgressRing,
+)
 from .scroll_area import ScrollArea, SingleDirectionScrollArea, SmoothScrollArea
 from .scroll_bar import (
     ScrollBar,
@@ -148,5 +175,49 @@ from .slider import (
     Slider,
     ToolTipSlider,
 )
+from .spin_box import (
+    CompactDateEdit,
+    CompactDateTimeEdit,
+    CompactDoubleSpinBox,
+    CompactSpinBox,
+    CompactTimeEdit,
+    DateEdit,
+    DateTimeEdit,
+    DoubleSpinBox,
+    SpinBox,
+    TimeEdit,
+)
+from .splitter import Splitter, SplitterHandle
+from .stacked_widget import (
+    DrillInTransitionStackedWidget,
+    EntranceTransitionStackedWidget,
+    OpacityAniStackedWidget,
+    PopUpAniStackedWidget,
+    TransitionStackedWidget,
+)
+from .state_tool_tip import StateToolTip
 from .switch_button import IndicatorPosition, SwitchButton
+from .tab_view import (
+    TabBar,
+    TabCloseButtonDisplayMode,
+    TabItem,
+    TabToolButton,
+    TabWidget,
+)
+from .table_view import (
+    LineTableView,
+    LineTableWidget,
+    RoundTableView,
+    RoundTableWidget,
+    TableView,
+    TableWidget,
+)
+from .teaching_tip import (
+    ImagePosition,
+    PopupTeachingTip,
+    TeachingTip,
+    TeachingTipTailPosition,
+)
+from .toast import Toast, ToastColor, ToastManager, ToastPosition
 from .tool_tip import ToolTip, ToolTipFilter, ToolTipPosition
+from .tree_view import TreeItemDelegate, TreeView, TreeWidget
