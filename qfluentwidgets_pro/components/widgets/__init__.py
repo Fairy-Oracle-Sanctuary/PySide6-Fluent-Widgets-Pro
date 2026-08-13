@@ -120,11 +120,15 @@ from .line_edit import (
     TextEdit,
 )
 from .list_view import (
+    CategoryCardListView,
+    CategoryCardListWidget,
     ListItemDelegate,
     ListView,
     ListWidget,
     RoundListView,
     RoundListWidget,
+    TransparentRoundListView,
+    TransparentRoundListWidget,
 )
 from .menu import (
     CheckableMenu,
