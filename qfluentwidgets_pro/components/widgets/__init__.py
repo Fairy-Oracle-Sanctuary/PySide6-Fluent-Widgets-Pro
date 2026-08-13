@@ -132,6 +132,7 @@ from .progress_bar import (
     StepProgressBar,
     StepProgressBarButton,
 )
+from .progress_ring import ProgressRing, IndeterminateProgressRing, MultiSegmentProgressRing
 from .scroll_area import ScrollArea, SingleDirectionScrollArea, SmoothScrollArea
 from .scroll_bar import (
     ScrollBar,
