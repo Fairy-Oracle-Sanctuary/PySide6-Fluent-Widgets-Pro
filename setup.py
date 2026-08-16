@@ -32,11 +32,6 @@ IMAGE_DEPENDENCIES = [
     "colorthief",
 ]
 
-CHART_DEPENDENCIES = [
-    "PySide6-WebEngine",
-]
-
-
 setup(
     name="qfluentwidgets-pro",
     version=get_version(),
@@ -65,7 +60,6 @@ setup(
     ],
     extras_require={
         "image": IMAGE_DEPENDENCIES,
-        "chart": CHART_DEPENDENCIES,
-        "full": IMAGE_DEPENDENCIES + CHART_DEPENDENCIES,
+        "full": IMAGE_DEPENDENCIES,
     },
 )
