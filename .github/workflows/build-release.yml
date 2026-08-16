@@ -1,6 +1,9 @@
 name: Build and Release
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     # 03:00 Asia/Shanghai (19:00 UTC on the previous day)
     - cron: "0 19 * * *"
