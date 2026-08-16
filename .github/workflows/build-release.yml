@@ -1,0 +1,85 @@
+name: Build and Release
+
+on:
+  schedule:
+    # 03:00 Asia/Shanghai (19:00 UTC on the previous day)
+    - cron: "0 19 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-release
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+          cache: pip
+
+      - name: Install build tools
+        run: python -m pip install --upgrade pip build
+
+      - name: Read package version
+        id: package
+        shell: bash
+        run: echo "version=$(python setup.py --version)" >> "$GITHUB_OUTPUT"
+
+      - name: Build wheel
+        run: python -m build --wheel
+
+      - name: Select release tag
+        id: release
+        shell: bash
+        run: |
+          git fetch --tags --force
+
+          date_tag="$(TZ=Asia/Shanghai date +%Y%m%d)"
+          tag="$date_tag"
+          suffix=0
+
+          while git show-ref --tags --verify --quiet "refs/tags/$tag"; do
+            suffix=$((suffix + 1))
+            tag="${date_tag}.${suffix}"
+          done
+
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qfluentwidgets-pro-${{ steps.package.outputs.version }}
+          path: dist/*.whl
+          if-no-files-found: error
+
+      - name: Create and push release tag
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+          VERSION: ${{ steps.package.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Release qfluentwidgets-pro $VERSION"
+          git push origin "$TAG"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+          VERSION: ${{ steps.package.outputs.version }}
+        run: |
+          gh release create "$TAG" dist/*.whl \
+            --title "qfluentwidgets-pro $VERSION ($TAG)" \
+            --generate-notes
