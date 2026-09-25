@@ -2522,8 +2522,8 @@ class LuminaPushButton(PushButton):
             painter.drawText(textRect, Qt.AlignCenter, self.text())
 
 
-class Clip(BackgroundAnimationWidget, QWidget):
-    """Clip component with close button
+class Chip(BackgroundAnimationWidget, QWidget):
+    """Chip component with close button
 
     A PushButton-like component with a close button on the right side.
 
@@ -2534,9 +2534,9 @@ class Clip(BackgroundAnimationWidget, QWidget):
 
     Constructors
     ------------
-    * Clip(`parent`: QWidget = None)
-    * Clip(`text`: str, `parent`: QWidget = None, `icon`: QIcon | str | FluentIconBase = None)
-    * Clip(`icon`: QIcon | FluentIcon, `text`: str, `parent`: QWidget = None)
+    * Chip(`parent`: QWidget = None)
+    * Chip(`text`: str, `parent`: QWidget = None, `icon`: QIcon | str | FluentIconBase = None)
+    * Chip(`icon`: QIcon | FluentIcon, `text`: str, `parent`: QWidget = None)
     """
 
     closed = Signal()
@@ -3019,7 +3019,7 @@ class SubClipCloseButton(QPushButton):
 
 
 class SubClip(QWidget):
-    """Clip/tag component with close button"""
+    """Small removable tag used for selections."""
 
     closed = Signal(str)
 
