@@ -1,5 +1,5 @@
 from .button import (
-    Clip,
+    Chip,
     DropDownPushButton,
     DropDownToolButton,
     FilledPushButton,
@@ -53,7 +53,7 @@ from .combo_box import (
     ComboBox,
     EditableComboBox,
     FontComboBox,
-    MultiSelectComboBox,
+    MultiSelectionComboBox,
 )
 from .command_bar import CommandBar, CommandBarView, CommandButton
 
@@ -223,5 +223,6 @@ from .teaching_tip import (
     TeachingTipTailPosition,
 )
 from .toast import Toast, ToastColor, ToastManager, ToastPosition
+from .tree_combo_box import MultiSelectionTreeComboBox, TreeComboBox
 from .tool_tip import ToolTip, ToolTipFilter, ToolTipPosition
 from .tree_view import TreeItemDelegate, TreeView, TreeWidget

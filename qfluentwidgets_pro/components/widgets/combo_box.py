@@ -918,7 +918,7 @@ class CheckBoxMenuItemDelegate(QStyledItemDelegate):
         return False
 
 
-class MultiSelectComboBoxMenu(RoundMenu):
+class MultiSelectionComboBoxMenu(RoundMenu):
     """Multi-select combo box menu with check boxes"""
 
     def __init__(self, parent=None):
@@ -941,7 +941,7 @@ class MultiSelectComboBoxMenu(RoundMenu):
         return super().exec(pos, ani, aniType)
 
 
-class MultiSelectComboBox(QPushButton):
+class MultiSelectionComboBox(QPushButton):
     """Multi-select combo box with check boxes"""
 
     selectionChanged = Signal(set)
@@ -1165,7 +1165,7 @@ class MultiSelectComboBox(QPushButton):
         return self._maxVisibleItems
 
     def _createComboMenu(self):
-        return MultiSelectComboBoxMenu(self)
+        return MultiSelectionComboBoxMenu(self)
 
     def _showComboMenu(self):
         if not self.items:

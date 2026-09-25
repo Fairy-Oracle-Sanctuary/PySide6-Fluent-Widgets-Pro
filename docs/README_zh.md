@@ -41,7 +41,7 @@
 - **[兼容性]** Python 3.9+ / Windows、macOS、Linux
 
 
-## 已还原组件（50）
+## 已还原组件
 
 已还原或扩展的组件（列表将持续更新）：
 
@@ -56,13 +56,14 @@
 `LabelLineEdit` `StepProgressBar` `RoundTableWidget`
 `RoundTableView` `LineTableWidget` `LineTableView`
 `DropSingleFolderWidget` `DropMultiFoldersWidget`
-`MultiSelectComboBox` `RoundListWidget` `RoundListView`
+`MultiSelectionComboBox` `RoundListWidget` `RoundListView`
 `TransparentRoundListWidget` `TransparentRoundListView`
 `CategoryCardListWidget` `CategoryCardListView`
 `Toast` `FontComboBox` `ExclusiveLiteFilter`
 `OutlinedExclusiveLiteFilter` `MultiSelectionLiteFilter`
 `OutlinedMultiSelectionLiteFilter` `WaterfallLayout`
 `TopNavigationBar` `DropAnyWidget`
+`TreeComboBox` `MultiSelectionTreeComboBox`
 
 ## 使用方式
 

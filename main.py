@@ -21,8 +21,9 @@ from qfluentwidgets_pro import (
     InfoBadgePosition,
     LabelLineEdit,
     LineTableWidget,
-    MultiSelectComboBox,
+    MultiSelectionComboBox,
     MultiSelectionLiteFilter,
+    MultiSelectionTreeComboBox,
     OutlinedExclusiveLiteFilter,
     OutlinedMultiSelectionLiteFilter,
     OutlinedPushButton,
@@ -42,6 +43,7 @@ from qfluentwidgets_pro import (
     TopFluentWindow,
     TopNavigationBar,
     TopNavigationItemPosition,
+    TreeComboBox,
     TransparentRoundListWidget,
     WaterfallLayout,
     toggleTheme,
@@ -87,6 +89,15 @@ class MainWindow(TopFluentWindow):
             self.buttonsInterface,
             FluentIcon.ACCEPT,
             "Buttons",
+            TopNavigationItemPosition.LEFT,
+        )
+
+        self.treeComboInterface = self._createTreeComboPage()
+        self.treeComboInterface.setObjectName("treeComboInterface")
+        self.addSubInterface(
+            self.treeComboInterface,
+            FluentIcon.FOLDER,
+            "Tree Combo",
             TopNavigationItemPosition.LEFT,
         )
 
@@ -256,9 +267,9 @@ class MainWindow(TopFluentWindow):
         self.pinBox.textChanged.connect(lambda pins: print(f"PIN: {''.join(pins)}"))
         layout.addWidget(self.pinBox)
 
-        # MultiSelectComboBox example
-        layout.addWidget(BodyLabel("MultiSelectComboBox (多选下拉框):"))
-        self.multiCombo = MultiSelectComboBox()
+        # MultiSelectionComboBox example
+        layout.addWidget(BodyLabel("MultiSelectionComboBox (多选下拉框):"))
+        self.multiCombo = MultiSelectionComboBox()
         self.multiCombo.setPlaceholderText("请选择...")
         self.multiCombo.addItems(["Python", "JavaScript", "C++", "Java", "Go", "Rust"])
         self.multiCombo.selectionChanged.connect(
@@ -272,9 +283,9 @@ class MainWindow(TopFluentWindow):
         self.fontComboBox = FontComboBox()
         layout.addWidget(self.fontComboBox)
 
-        # MultiSelectComboBox with chips mode
-        layout.addWidget(BodyLabel("MultiSelectComboBox Chips Mode:"))
-        self.multiComboChips = MultiSelectComboBox()
+        # MultiSelectionComboBox with chips mode
+        layout.addWidget(BodyLabel("MultiSelectionComboBox Chips Mode:"))
+        self.multiComboChips = MultiSelectionComboBox()
         self.multiComboChips.setFixedWidth(200)
         self.multiComboChips.setChipsMode()
         self.multiComboChips.setPlaceholderText("请选择...")
@@ -426,6 +437,59 @@ class MainWindow(TopFluentWindow):
         scroll.enableTransparentBackground()
 
         return scroll
+
+    def _createTreeComboPage(self):
+        """Show hierarchical single and multiple selection with duplicate labels."""
+        from qfluentwidgets_pro import BodyLabel
+
+        page = QWidget(self)
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(36, 30, 36, 30)
+        layout.setSpacing(14)
+
+        layout.addWidget(BodyLabel("TreeComboBox — 选择一个层级节点"))
+        single = TreeComboBox(page)
+        single.setPlaceholderText("请选择项目")
+        frontend = single.addItem("前端")
+        single.addItems(["React", "Vue", "TypeScript"], frontend)
+        backend = single.addItem("后端")
+        single.addItems(["Python", "Go", "TypeScript"], backend)
+        singleResult = BodyLabel("当前选择：无")
+        single.currentTextChanged.connect(
+            lambda text: singleResult.setText(f"当前选择：{text or '无'}")
+        )
+        layout.addWidget(single)
+        layout.addWidget(singleResult)
+
+        layout.addSpacing(16)
+        layout.addWidget(BodyLabel("MultiSelectionTreeComboBox — 选择多个节点，点击标签上的 × 可移除"))
+        multiple = MultiSelectionTreeComboBox(page)
+        multiple.setPlaceholderText("请选择技能")
+        frontend = multiple.addItem("前端")
+        react = multiple.addItem("React", frontend)
+        multiple.addItem("TypeScript", frontend)
+        backend = multiple.addItem("后端")
+        python = multiple.addItem("Python", backend)
+        multiple.addItem("TypeScript", backend)
+        multiple.setSelectedIndexes([react, python])
+        multiResult = BodyLabel("已选择：" + "、".join(multiple.selectedTexts()))
+        multiple.selectedTextChanged.connect(
+            lambda texts: multiResult.setText("已选择：" + ("、".join(texts) or "无"))
+        )
+        layout.addWidget(multiple)
+        layout.addWidget(multiResult)
+
+        controls = QHBoxLayout()
+        clearButton = PushButton("清空多选")
+        clearButton.clicked.connect(multiple.clearSelection)
+        controls.addWidget(clearButton)
+        themeButton = PushButton("切换主题")
+        themeButton.clicked.connect(toggleTheme)
+        controls.addWidget(themeButton)
+        controls.addStretch()
+        layout.addLayout(controls)
+        layout.addStretch()
+        return page
 
     def _createDropPage(self):
         """Create drop files demo page"""
