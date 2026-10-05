@@ -60,9 +60,10 @@ from .combo_box import (
 from .command_bar import CommandBar, CommandBarView, CommandButton
 
 # 以下为恢复导入的轻量级组件（纯 QtWidgets，无重型依赖）。
-# 注意：chart_widget（依赖 QtWebEngine）与 acrylic_label（依赖 numpy）刻意不导入，
-# 防止 nuitka 打包时误把重型依赖打进安装包导致体积剧增；
-# 体积控制的正解是 deploy.py 的 --nofollow-import-to，而非删除导出。
+# chart_widget（QtWebEngine/QtQuick）和 code_edit（Pygments）刻意不统一导出，
+# 请从具体模块按需导入，避免 Nuitka 将未使用的重型依赖纳入导入图。
+# acrylic_label 不直接导出，但导航仍间接引用它；轻量打包还须排除
+# qfluentwidgets_pro.common.image_utils，让 Acrylic 使用已有的无模糊回退。
 from .cycle_list_widget import CycleListWidget
 from .drop_widget import (
     DropAnyWidget,
@@ -96,6 +97,7 @@ from .info_badge import (
     InfoLevel,
 )
 from .info_bar import InfoBar, InfoBarIcon, InfoBarManager, InfoBarPosition
+from .progress_info_bar import ProgressInfoBar
 from .label import (
     AvatarWidget,
     BodyLabel,
@@ -165,6 +167,7 @@ from .progress_ring import (
     IndeterminateProgressRing,
     MultiSegmentProgressRing,
     ProgressRing,
+    RadialGauge,
 )
 from .scroll_area import ScrollArea, SingleDirectionScrollArea, SmoothScrollArea
 from .scroll_bar import (
@@ -225,6 +228,9 @@ from .teaching_tip import (
     TeachingTipTailPosition,
 )
 from .toast import Toast, ToastColor, ToastManager, ToastPosition
+from .progress_toast import ProgressToast
+from .round_progress_toast import RoundProgressToast
+from .rating_widget import RatingWidget, InteractiveRatingWidget
 from .tree_combo_box import MultiSelectionTreeComboBox, TreeComboBox
 from .tool_tip import ToolTip, ToolTipFilter, ToolTipPosition
 from .tree_view import TreeItemDelegate, TreeView, TreeWidget

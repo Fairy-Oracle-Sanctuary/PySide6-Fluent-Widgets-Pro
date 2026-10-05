@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <img src="../docs/source/_static/Interface_en.png" alt="interface"/>
+  <img src="../docs/source/_static/Interface.png" alt="interface"/>
 </p>
 
 ## 项目简介
@@ -43,7 +43,7 @@
 
 ## 已还原组件
 
-已还原或扩展的组件共 61 个（列表将持续更新）：
+已还原或扩展的组件共 67 个（列表将持续更新）：
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -55,6 +55,12 @@
 `ImageComparisonSlider`
 `ImageCropper`
 `AvatarPicker`
+`CodeEdit`
+`ProgressInfoBar`
+`ProgressToast`
+`RoundProgressToast`
+`RatingWidget`
+`InteractiveRatingWidget`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
@@ -103,8 +109,12 @@ from qfluentwidgets_pro import FluentWidget
 ```python
 from PySide6.QtWidgets import QApplication, QVBoxLayout
 from qfluentwidgets_pro import (
-    FluentWidget, FluentIcon, ToolTipSlider, RangeSlider,
-    HyperlinkToolButton, IndeterminateProgressPushButton,
+    FluentWidget,
+    FluentIcon,
+    ToolTipSlider,
+    RangeSlider,
+    HyperlinkToolButton,
+    IndeterminateProgressPushButton,
 )
 
 
@@ -145,6 +155,97 @@ app.exec()
 支持路径、QImage、QPixmap；`setImages()` 更换图片，`setValue(0..100)` 设置分割百分比，
 `valueChanged` 通知变化。支持方向键及 Home/End，Magnifier 页面提供双图对比示例。
 
+`Toast.success(title, content, parent=window)` 显示顶部绿色状态条、标题、正文和可选关闭按钮。
+同时支持 `info`、`warning`、`error`；`duration=-1` 持续显示直到手动关闭。
+`ToastPosition` 提供六种位置，不同窗口分别堆叠，主页 Success 按钮展示 Lesson 4 示例。
+
+`ProgressInfoBar` 复用 InfoBar 的定位、堆叠、中性背景和关闭按钮，环的运动直接沿用
+不确定进度环。默认持续显示，关闭通知不会自动取消业务任务。主页提供演示按钮。
+
+```python
+from qfluentwidgets_pro import ProgressInfoBar
+
+bar = ProgressInfoBar.new("请勿离开", "正在发送邮件，请耐心等待...", parent=window)
+bar.setContent("正在上传附件...")
+bar.setRemainingTime("剩余 10 秒")  # 可选文本，由业务计算、格式化
+bar.setValue(65)  # 切换为确定进度，范围 0..100
+bar.setIndeterminate(True)  # 切回不确定进度环
+bar.close()  # 任务结束后关闭
+```
+
+支持 `setTitle()`、`setCustomBarColor(light, dark)`；剩余时间传空字符串可移除。
+位置使用 `InfoBarPosition`，`duration=-1` 持续显示；提供 `closedSignal` 和 `valueChanged`。
+
+`ProgressToast` 以紧凑的单行通知显示状态图标、提示信息、关闭按钮和底部进度条，带阴影。
+复用 Toast 的定位和堆叠；`info`、`warning`、`error` 默认进度为 0，`success` 为 100。
+默认持续显示，进度达到 100 不会自动切换状态、文案或关闭通知。
+
+```python
+from qfluentwidgets_pro import ProgressToast, InfoBarIcon
+
+toast = ProgressToast.warning("正在下载文件，请耐心等待...", value=77, parent=window)
+toast.setStateColor(InfoBarIcon.WARNING, "#9D5D00", "#FCE100")
+toast.setStateColor(InfoBarIcon.SUCCESS, "#0F7B0F", "#6CCB5F")
+toast.setValue(100)
+toast.setIcon(InfoBarIcon.SUCCESS)
+toast.setContent("文件下载成功")
+```
+
+两种状态颜色都可自定义，状态图标与进度条同步使用配置颜色。
+`setStateColor(状态, 浅色, 深色=None)` 分别配置状态；`setCustomBarColor(浅色, 深色=None)`
+为没有单独配置的状态提供统一颜色。不传深色则两个主题使用同一颜色。
+`setUseAni(False)` 可禁用数值过渡；支持 `ToastPosition`、`duration`、`isClosable`、
+`closed` 和 `valueChanged`。关闭通知不会自动取消任务，主页提供模拟下载和完成状态示例。
+
+`RoundProgressToast` 是胶囊形加载通知，显示不确定进度环和提示文字，不含关闭按钮或状态条。
+环的运动复用 `IndeterminateProgressRing`，颜色跟随当前主题色，隐藏时暂停。
+复用 Toast 的位置、堆叠和 `closed` 信号。
+
+```python
+from qfluentwidgets_pro import RoundProgressToast
+
+toast = RoundProgressToast.new("加载中，请稍候", parent=window)
+toast.setContent("正在处理...")
+toast.close()  # 任务结束后关闭
+```
+
+默认 `duration=-1` 持续显示，传入非负毫秒数可自动关闭；主页演示显示五秒的加载通知。
+
+`RatingWidget(4.5)` 显示数值和右侧橙色矢量星标，通过 `setValue(数值)` 更新评分，
+`valueChanged(float)` 通知变化。只展示评分，不提供点击星星打分的交互，也不限制为五分制。
+`setDecimals(0..6)` 控制显示精度（默认一位小数，省略末尾零），
+`setStarColor(浅色, 深色=None)` 可自定义星标颜色。主页提供数值输入框测试评分变化。
+
+`InteractiveRatingWidget(3)` 显示五颗橙色星星：悬停时填满前面的星星，并按鼠标精确 X
+坐标裁切当前星星，不取整、不限制半星。点击确认评分，移出恢复已确认的评分。
+`setValue(0..5)` 设置评分，`hovered(float)` 通知预览，`valueChanged(float)` 通知确认值变化，
+`displayValue()` 返回当前展示的评分。`setReadOnly(True)` 禁止修改；方向键按 0.1 调整，
+Home/End 设置为 0/5。复用 `setStarColor(浅色, 深色=None)`，主页提供悬停和点击演示。
+
+`CodeEdit` 基于原生 QPlainTextEdit，支持行号、当前行底色、缩进和 20 种语言高亮。
+使用前安装可选依赖（库的其他控件不需要此依赖）：
+
+```bash
+python -m pip install -r requirements-codeedit.txt
+```
+
+```python
+from qfluentwidgets_pro.components.widgets.code_edit import CodeEdit, CodeLanguage
+
+editor = CodeEdit(language=CodeLanguage.JSON)
+editor.setPlainText('{"enabled": true}')
+editor.setLanguage("python")  # 只切换高亮，不修改代码
+editor.setIndentSize(4)
+editor.setLineNumbersVisible(True)
+```
+
+内置 Python、C、C++、C#、Java、JavaScript、TypeScript、JSON、HTML、CSS、XML、
+YAML、TOML、INI、Bash、PowerShell、SQL、Go、Rust、Markdown。
+后台使用 Pygments 对全文进行词法分析，保留多行和内嵌语言语义；丢弃过期版本，
+仅对格式变化的行分批应用 Qt 高亮。超过 100 万字符时保留编辑、停用高亮，
+通过 `highlightingFailed` 通知限制或词法错误。首版不包含自动补全、折叠、诊断或文件保存。
+CodeEdit 展示页支持语言选择、加载示例、只读/行号开关和主题切换。
+
 `AvatarPicker` 继承 AvatarWidget，悬停显示暗色圆形遮罩和白色相机图标，
 点击选图后复用 ImageCropper 的圆形裁剪；确认更新头像并发出 `imageChanged(QImage)`，
 取消保留原头像。通过 `setRadius()` 调整大小，`cropImage(image)` 直接打开指定图片裁剪。
@@ -177,6 +278,49 @@ Buttons 页面提供 Show dialog 示例。
 运行 `main.py`，在主页点击“打开 FilledFluentWindow 窗口”，
 即可体验页面切换、搜索，以及设置页中的主题和自定义主题色切换。
 
+
+## 按需导入与 Nuitka 打包
+
+部分组件刻意不在包的 `__init__.py` 中统一导出，**不是漏实现**。统一入口中的导入可能让
+Nuitka 把未使用的可选依赖纳入编译图；只有业务使用相应功能时，才从具体模块导入。
+
+| 可选功能 | 按需导入模块 | 相关依赖 |
+| --- | --- | --- |
+| `ChartWidget` | `qfluentwidgets_pro.components.widgets.chart_widget` | QtWebEngine、QtQuickWidgets 及相关 Qt 运行库 |
+| `CodeEdit`、`CodeLanguage` | `qfluentwidgets_pro.components.widgets.code_edit` | Pygments 语言解析器 |
+| Acrylic 组件 | `qfluentwidgets_pro.components.material` 或 `qfluentwidgets_pro.components.widgets.acrylic_label` | 可选 CPU 模糊：NumPy、SciPy、Pillow、colorthief |
+| 多媒体播放组件 | `qfluentwidgets_pro.multimedia` | QtMultimedia / QtMultimediaWidgets |
+| `FramelessWebEngineView` | `qfluentwidgets_pro.qframelesswindow.webengine` | QtWebEngineWidgets |
+
+```python
+from qfluentwidgets_pro import PushButton, RadialGauge  # 轻量组件正常导出
+
+# 只导入业务实际使用的可选组件：
+from qfluentwidgets_pro.components.widgets.code_edit import CodeEdit, CodeLanguage
+from qfluentwidgets_pro.components.widgets.chart_widget import ChartWidget
+```
+
+构造函数内的延迟导入、`try/except ImportError` 只是运行时行为，不能保证 Nuitka 不打包依赖。
+Standalone 模式默认跟随导入；`--nofollow-import-to` 可以排除模块，但运行时使用被排除的
+功能可能报错，详见 [Nuitka 官方说明](https://nuitka.net/user-documentation/use-cases.html#standalone-program-distribution)。
+
+**Acrylic 的间接依赖需特别注意：** 导航仍会间接导入 Acrylic 辅助类。因此在安装了可选
+依赖的源码环境中，仅导入包根也可能加载 NumPy/SciPy/Pillow/colorthief。无需 CPU 模糊时，
+除了排除 NumPy/SciPy，还应排除 `qfluentwidgets_pro.common.image_utils`，使用已有的无模糊
+回退；导航仍可使用，只是不对图片做 CPU 模糊。这不会关闭 Windows 原生云母效果。
+
+```text
+--nofollow-import-to=qfluentwidgets_pro.common.image_utils
+--nofollow-import-to=numpy
+--nofollow-import-to=scipy
+```
+
+`deploy.py` 打包的是 `main.py` 的**完整 gallery**，其中显式导入了图表和 CodeEdit 展示页。
+它为动态解析器发现而主动包含 Pygments，不是轻量业务程序的打包模板。业务程序应使用自己的
+入口，避免引入 gallery；未使用 CodeEdit 时不要照搬 `--include-package=pygments`，使用时则
+须包含所需的动态加载解析器。最终是否纳入 Qt 插件或原生库，需要检查 Nuitka 编译报告和
+产物，不能仅凭根包没有导出就判断。`RadialGauge` 为纯 QtWidgets，已补回正常导出，属于
+意外遗漏，不是重型组件。
 
 ## 目录结构
 

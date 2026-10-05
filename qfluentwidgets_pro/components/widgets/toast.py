@@ -11,10 +11,12 @@ from PySide6.QtCore import (
     QPoint,
     QPropertyAnimation,
     QSize,
+    QRectF,
     Qt,
     QTimer,
+    Signal,
 )
-from PySide6.QtGui import QColor, QFont, QPainter
+from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath
 from PySide6.QtWidgets import (
     QFrame,
     QGraphicsDropShadowEffect,
@@ -25,6 +27,7 @@ from PySide6.QtWidgets import (
 
 from ...common.auto_wrap import TextWrap
 from ...common.font import setFont
+from ...common.config import qconfig
 from ...common.icon import FluentIcon, isDarkTheme
 from ...common.style_sheet import themeColor
 from .button import TransparentToolButton
@@ -62,6 +65,8 @@ class ToastPosition(Enum):
 class Toast(QFrame):
     """toast infoBar"""
 
+    closed = Signal()
+
     def __init__(
         self,
         title: str,
@@ -75,6 +80,8 @@ class Toast(QFrame):
         backgroundColor: QColor = None,
         useThemeColor: bool = False,
     ):
+        if parent is None:
+            raise ValueError('Toast requires a parent widget')
         super().__init__(parent)
         parent.installEventFilter(self)
         self.title: str = title
@@ -83,7 +90,8 @@ class Toast(QFrame):
         self.isCloseable: bool = isClosable
         self.orient: Qt.Orientation = orient
         self.toastColor: QColor = (
-            toastColor if isinstance(toastColor, QColor) else QColor(toastColor)
+            QColor(toastColor.value) if isinstance(toastColor, ToastColor)
+            else QColor(toastColor)
         )
         self.position: ToastPosition = position
         self.backgroundColor: QColor = backgroundColor
@@ -106,6 +114,11 @@ class Toast(QFrame):
         self.__posAni: QPropertyAnimation = QPropertyAnimation(self, b"pos")
         self.__posAni.setEasingCurve(QEasingCurve.OutQuad)
         self.__posAni.setDuration(200)
+        self._closeTimer = QTimer(self)
+        self._closeTimer.setSingleShot(True)
+        self._closeTimer.timeout.connect(self.close)
+        qconfig.themeChangedFinished.connect(self.update)
+        qconfig.themeColorChanged.connect(self.update)
 
         self._adjustText()
         self.__initWidget()
@@ -119,19 +132,19 @@ class Toast(QFrame):
         self.closeButton.setVisible(self.isCloseable)
         self.closeButton.clicked.connect(self.close)
 
-        setFont(self.titleLabel, 16, QFont.DemiBold)
+        setFont(self.titleLabel, 13, QFont.DemiBold)
         setFont(self.contentLabel)
         self.__initLayout()
 
     def __initLayout(self):
-        self.hBoxLayout.setContentsMargins(8, 8, 8, 8)
+        self.hBoxLayout.setContentsMargins(20, 18, 16, 16)
         self.hBoxLayout.setSizeConstraint(QVBoxLayout.SetMinimumSize)
         self.textLayout.setSizeConstraint(QHBoxLayout.SetMinimumSize)
         self.textLayout.setAlignment(Qt.AlignTop)
-        self.textLayout.setContentsMargins(6, 8, 0, 8)
+        self.textLayout.setContentsMargins(0, 0, 0, 0)
 
         self.hBoxLayout.setSpacing(0)
-        self.textLayout.setSpacing(5)
+        self.textLayout.setSpacing(10)
 
         self.textLayout.addWidget(self.titleLabel, 1, Qt.AlignTop)
         self.titleLabel.setVisible(bool(self.title))
@@ -188,7 +201,7 @@ class Toast(QFrame):
         backgroundColor: QColor = None,
         useThemeColor: bool = False,
     ):
-        toastInfoBar = Toast(
+        toastInfoBar = cls(
             title,
             content,
             duration,
@@ -317,7 +330,7 @@ class Toast(QFrame):
             backgroundColor,
         )
 
-    def addWidget(self, widget: QWidget, stretch=0, alignment=Qt.AlignmentFlag):
+    def addWidget(self, widget: QWidget, stretch=0, alignment=Qt.AlignLeft):
         self.widgetLayout.addSpacing(6)
         self.widgetLayout.addWidget(widget, stretch, alignment)
         self.adjustSize()
@@ -331,14 +344,16 @@ class Toast(QFrame):
         self.run()
 
         if self.duration >= 0:
-            QTimer.singleShot(self.duration, self.close)
+            self._closeTimer.start(self.duration)
 
     def closeEvent(self, event):
+        self._closeTimer.stop()
+        self.__posAni.stop()
         self.manager.remove(self)
-        self.setParent(None)
+        self.parent().removeEventFilter(self)
         self.deleteLater()
         super().closeEvent(event)
-        del self
+        self.closed.emit()
 
     def eventFilter(self, obj, event):
         if obj is self.parent() and event.type() in [
@@ -364,28 +379,31 @@ class Toast(QFrame):
         else:
             painter.setBrush(self.toastColor)
 
+        statusColor = painter.brush().color()
         w, h = self.width(), self.height()
-        painter.drawRoundedRect(0, 0, w, h - 4, 8, 8)
-
+        shape = QPainterPath()
+        shape.addRoundedRect(QRectF(0, 0, w, h), 8, 8)
+        painter.setClipPath(shape)
         painter.setBrush(
             self.backgroundColor
-            or (QColor("#323232") if isDarkTheme() else QColor("#FFFFFF"))
+            or (QColor("#323232") if isDarkTheme() else QColor("#F2F2F2"))
         )
-        painter.drawRoundedRect(0, 5, w, h - 5, 6, 6)
+        painter.drawRect(QRectF(0, 0, w, h))
+        painter.fillRect(QRectF(0, 0, w, 4), statusColor)
 
 
 class ToastManager(QObject):
     """Toast manager"""
 
-    _instance = None
+    _instances = {}
     registry = {}
 
     def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super(ToastManager, cls).__new__(cls, *args, **kwargs)
-            cls._instance.__initialized = False
-
-        return cls._instance
+        if cls not in cls._instances:
+            instance = super(ToastManager, cls).__new__(cls)
+            instance.__initialized = False
+            cls._instances[cls] = instance
+        return cls._instances[cls]
 
     def __init__(self):
         if self.__initialized:
@@ -399,8 +417,19 @@ class ToastManager(QObject):
         if infoBar in self.toastInfoBars:
             return
         self.toastInfoBars.append(infoBar)
+        infoBar.destroyed.connect(lambda *_: self._forgetDestroyed(infoBar))
+
+    def _forgetDestroyed(self, infoBar):
+        if infoBar in self.toastInfoBars:
+            self.toastInfoBars.remove(infoBar)
+
+    def _precedingBars(self, infoBar):
+        return [bar for bar in self.toastInfoBars[:self.toastInfoBars.index(infoBar)]
+                if bar.parent() is infoBar.parent()]
 
     def remove(self, infoBar: Toast):
+        if infoBar not in self.toastInfoBars:
+            return
         self.toastInfoBars.remove(infoBar)
         self._adjustPosition()
 
@@ -435,9 +464,9 @@ class TopToastManager(ToastManager):
     def slideEndPos(self, toastInfoBar):
         x = (toastInfoBar.parent().width() - toastInfoBar.width()) // 2
         y = self.margin / 2.5
-        for bar in self.toastInfoBars[: self.toastInfoBars.index(toastInfoBar)]:
+        for bar in self._precedingBars(toastInfoBar):
             y += bar.height() + self.margin
-        return QPoint(x, y + self.margin)
+        return QPoint(round(x), round(y + self.margin))
 
     def slideStartPos(self, toastInfoBar) -> QPoint:
         pos = self.slideEndPos(toastInfoBar)
@@ -449,9 +478,9 @@ class TopLeftToastManager(ToastManager):
     def slideEndPos(self, toastInfoBar):
         x = self.margin
         y = self.margin / 2.5
-        for bar in self.toastInfoBars[: self.toastInfoBars.index(toastInfoBar)]:
+        for bar in self._precedingBars(toastInfoBar):
             y += bar.height() + self.margin
-        return QPoint(x, y + self.margin)
+        return QPoint(round(x), round(y + self.margin))
 
     def slideStartPos(self, toastInfoBar: Toast) -> QPoint:
         pos = self.slideEndPos(toastInfoBar)
@@ -463,9 +492,9 @@ class TopRightToastManager(ToastManager):
     def slideEndPos(self, toastInfoBar):
         x = toastInfoBar.parent().width() - toastInfoBar.width() - self.margin
         y = self.margin / 2.5
-        for bar in self.toastInfoBars[: self.toastInfoBars.index(toastInfoBar)]:
+        for bar in self._precedingBars(toastInfoBar):
             y += bar.height() + self.margin
-        return QPoint(x, y + self.margin)
+        return QPoint(round(x), round(y + self.margin))
 
     def slideStartPos(self, toastInfoBar: Toast) -> QPoint:
         pos = self.slideEndPos(toastInfoBar)
@@ -478,7 +507,7 @@ class BottomToastManager(ToastManager):
         parent = toastInfoBar.parent()
         x = (parent.width() - toastInfoBar.width()) // 2
         y = parent.height() - self.margin
-        for bar in self.toastInfoBars[: self.toastInfoBars.index(toastInfoBar)]:
+        for bar in self._precedingBars(toastInfoBar):
             y -= bar.height() + self.margin
         return QPoint(x, y - toastInfoBar.height())
 
@@ -492,7 +521,7 @@ class BottomLeftToastManager(ToastManager):
     def slideEndPos(self, toastInfoBar):
         x = self.margin
         y = toastInfoBar.parent().height() - self.margin
-        for bar in self.toastInfoBars[: self.toastInfoBars.index(toastInfoBar)]:
+        for bar in self._precedingBars(toastInfoBar):
             y -= bar.height() + self.margin
         return QPoint(x, y - toastInfoBar.height())
 
@@ -507,7 +536,7 @@ class BottomRightToastManager(ToastManager):
         parent = toastInfoBar.parent()
         x = parent.width() - toastInfoBar.width() - self.margin
         y = parent.height() - self.margin
-        for bar in self.toastInfoBars[: self.toastInfoBars.index(toastInfoBar)]:
+        for bar in self._precedingBars(toastInfoBar):
             y -= bar.height() + self.margin
         return QPoint(x, y - toastInfoBar.height())
 

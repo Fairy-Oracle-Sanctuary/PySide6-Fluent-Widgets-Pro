@@ -39,7 +39,7 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 
 ## 🧩 Restored Components
 
-61 components have been restored or extended in this repo (the list will be updated continuously):
+67 components have been restored or extended in this repo (the list will be updated continuously):
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -51,6 +51,12 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 `ImageComparisonSlider`
 `ImageCropper`
 `AvatarPicker`
+`CodeEdit`
+`ProgressInfoBar`
+`ProgressToast`
+`RoundProgressToast`
+`RatingWidget`
+`InteractiveRatingWidget`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
@@ -144,6 +150,110 @@ Use `setImages()` to replace them and `setValue(0..100)` to set the split percen
 `valueChanged` reports changes. Arrow keys and Home/End are supported.
 The Magnifier page includes a two-image comparison example.
 
+`Toast.success(title, content, parent=window)` displays a compact notification with
+a green top accent, title/content and optional close button. `info`, `warning` and
+`error` are also available; `duration=-1` keeps the notification until closed.
+`ToastPosition` supports six placements, with independent stacks per parent window.
+The Home page's Success button shows the Lesson 4 reference example.
+
+`ProgressInfoBar` reuses InfoBar placement, stacking, neutral background and close
+button, with the existing indeterminate ring animation. It stays open by default;
+closing the notification does not cancel a task. The Home page includes an example.
+
+```python
+from qfluentwidgets_pro import ProgressInfoBar
+bar = ProgressInfoBar.new("Please wait", "Sending email...", parent=window)
+bar.setContent("Uploading attachments...")
+bar.setRemainingTime("Remaining: 10 s")  # optional caller-formatted text
+bar.setValue(65)                        # switches to determinate progress (0..100)
+bar.setIndeterminate(True)              # resumes the indeterminate ring
+bar.close()                            # close when the task finishes
+```
+
+`setTitle()` and `setCustomBarColor(light, dark)` are also available. An empty
+remaining-time string removes the suffix. `InfoBarPosition` provides placement;
+`duration=-1` keeps it open, and `closedSignal` / `valueChanged` report changes.
+
+`ProgressToast` is a compact single-message task notification with a status icon,
+close button, shadow and a bottom progress stripe. It shares Toast placement and
+stacking. `info`, `warning`, `error` start at 0; `success` starts at 100. All stay
+open by default. Progress does not automatically change status or close the toast.
+
+```python
+from qfluentwidgets_pro import ProgressToast, InfoBarIcon
+toast = ProgressToast.warning("Downloading, please wait...", value=77, parent=window)
+toast.setStateColor(InfoBarIcon.WARNING, "#9D5D00", "#FCE100")
+toast.setStateColor(InfoBarIcon.SUCCESS, "#0F7B0F", "#6CCB5F")
+toast.setValue(100)
+toast.setIcon(InfoBarIcon.SUCCESS)
+toast.setContent("File downloaded successfully")
+```
+
+State colors are customizable; the icon and stripe always share the selected
+color. `setStateColor(status, light, dark=None)` sets individual state colors;
+`setCustomBarColor(light, dark=None)` supplies a fallback for states without an
+override. Omitting `dark` uses the same color in both themes. `setUseAni(False)`
+disables value interpolation. `ToastPosition`, `duration`, `isClosable`, `closed`
+and `valueChanged` are supported. Closing does not cancel a task. The Home page
+includes a simulated download and the completed state.
+
+`RoundProgressToast` is a capsule-shaped loading notification with an
+`IndeterminateProgressRing` and message, without a close button or status stripe.
+The ring follows the current accent color in both themes and pauses while hidden.
+It shares Toast placement, stacking and the `closed` signal.
+
+```python
+from qfluentwidgets_pro import RoundProgressToast
+toast = RoundProgressToast.new("Loading, please wait", parent=window)
+toast.setContent("Processing...")
+toast.close()  # call when the task ends
+```
+
+The default `duration=-1` keeps it open; a nonnegative duration dismisses it
+automatically. The Home page demonstrates a five-second loading notification.
+
+`RatingWidget(4.5)` displays a numeric score followed by an orange vector star.
+Use `setValue(number)` to update it; `valueChanged(float)` reports changes.
+It is a display widget, not a clickable five-star selector, and is not restricted
+to a five-point scale. `setDecimals(0..6)` controls display precision (default 1,
+with trailing zeros omitted); `setStarColor(light, dark=None)` customizes the star.
+The Home page includes a score input for testing updates.
+
+`InteractiveRatingWidget(3)` displays five orange stars. Hovering fills all
+preceding stars and clips the current star at the exact pointer X coordinate,
+without whole-star or half-star rounding. Click to confirm; leaving restores
+the confirmed score. `setValue(0..5)` sets the score programmatically,
+`hovered(float)` reports previews, and `valueChanged(float)` reports confirmed
+changes. `displayValue()` returns the currently displayed score.
+`setReadOnly(True)` disables editing; arrows adjust by 0.1 and Home/End select
+0/5. `setStarColor(light, dark=None)` is shared with RatingWidget.
+The Home page demonstrates continuous hover previews and click confirmation.
+
+`CodeEdit` is a native QPlainTextEdit-based editor with line numbers, current-line
+highlight, indentation and 20 language lexers. Install its optional dependency:
+
+```bash
+python -m pip install -r requirements-codeedit.txt
+```
+
+```python
+from qfluentwidgets_pro.components.widgets.code_edit import CodeEdit, CodeLanguage
+editor = CodeEdit(language=CodeLanguage.JSON)
+editor.setPlainText('{"enabled": true}')
+editor.setLanguage("python")  # changes highlighting, not the code
+editor.setIndentSize(4)
+editor.setLineNumbersVisible(True)
+```
+
+Languages: Python, C, C++, C#, Java, JavaScript, TypeScript, JSON, HTML, CSS,
+XML, YAML, TOML, INI, Bash, PowerShell, SQL, Go, Rust and Markdown.
+Full-document Pygments lexing preserves multiline/embedded syntax and runs in
+a worker; only changed lines receive batched Qt formats. Stale revisions are
+discarded. Documents above 1,000,000 characters remain editable without highlighting;
+`highlightingFailed` reports this limit or lexer errors. This is not an IDE: completion,
+folding, diagnostics and file saving are not included. The CodeEdit demo lets you
+switch language, load examples, toggle read-only/line numbers and change themes.
+
 `AvatarPicker` extends AvatarWidget: hovering displays a dark overlay and a white
 camera icon; clicking selects an image and opens the shared circular ImageCropper.
 Confirmation updates the avatar and emits `imageChanged(QImage)`; cancellation
@@ -180,6 +290,57 @@ click a result or use the arrow keys and Enter to navigate. Escape dismisses
 the results, and clearing the query keeps the current page unchanged.
 Run `main.py` and click "打开 FilledFluentWindow 窗口" on the home page to preview
 navigation, search, theme switching, and custom accent colors.
+
+## Optional imports and Nuitka packaging
+
+Some widgets deliberately do **not** appear in the package's `__init__.py`
+exports. This is not a missing implementation: importing a unified entry point
+can put unused optional dependencies into Nuitka's compilation graph. Import
+these features from their specific modules only when your application uses them.
+
+| Optional feature | Explicit import module | Dependencies |
+| --- | --- | --- |
+| `ChartWidget` | `qfluentwidgets_pro.components.widgets.chart_widget` | QtWebEngine, QtQuickWidgets and related Qt runtime libraries |
+| `CodeEdit`, `CodeLanguage` | `qfluentwidgets_pro.components.widgets.code_edit` | Pygments lexers |
+| Acrylic widgets | `qfluentwidgets_pro.components.material` or `qfluentwidgets_pro.components.widgets.acrylic_label` | Optional CPU blur: NumPy, SciPy, Pillow, colorthief |
+| Media playback widgets | `qfluentwidgets_pro.multimedia` | QtMultimedia / QtMultimediaWidgets |
+| `FramelessWebEngineView` | `qfluentwidgets_pro.qframelesswindow.webengine` | QtWebEngineWidgets |
+
+```python
+from qfluentwidgets_pro import PushButton, RadialGauge  # lightweight exports
+# Import only the optional feature your app needs:
+from qfluentwidgets_pro.components.widgets.code_edit import CodeEdit, CodeLanguage
+from qfluentwidgets_pro.components.widgets.chart_widget import ChartWidget
+```
+
+Constructor-time imports and `try/except ImportError` are runtime behavior, not
+a guarantee that Nuitka will omit those dependencies. Standalone mode follows
+imports by default; `--nofollow-import-to` can exclude unwanted modules, but
+attempting to use an excluded feature can fail. See the
+[Nuitka standalone documentation](https://nuitka.net/user-documentation/use-cases.html#standalone-program-distribution).
+
+**Acrylic exception:** navigation still imports Acrylic helpers indirectly.
+On a source installation with its optional dependencies installed, even importing
+the package root can therefore load NumPy/SciPy/Pillow/colorthief. For a build
+without CPU Acrylic blur, exclude `qfluentwidgets_pro.common.image_utils` as well
+as NumPy/SciPy. The existing fallback preserves navigation and displays an
+unblurred image; this does not disable the native Windows Mica effect.
+
+```text
+--nofollow-import-to=qfluentwidgets_pro.common.image_utils
+--nofollow-import-to=numpy
+--nofollow-import-to=scipy
+```
+
+`deploy.py` builds the **complete gallery in `main.py`**, which explicitly imports
+charts and the CodeEdit demo. It deliberately includes Pygments for dynamic lexer
+discovery and is not a minimal business-app build template. Use your own entry
+point to avoid gallery-only imports; omit `--include-package=pygments` when not
+using CodeEdit. If you do use CodeEdit, include its dynamically loaded lexers.
+Final bundle contents must be checked in Nuitka's compilation report and output;
+removing a root export alone does not guarantee removal of Qt plugins or native
+libraries reached through other imports. `RadialGauge` is pure QtWidgets and is
+exported normally; it was an accidental omission, not a heavy dependency.
 
 ## 📁 Project Structure
 
