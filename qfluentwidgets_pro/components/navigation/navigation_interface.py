@@ -39,7 +39,7 @@ class NavigationInterface(QWidget):
             Is the navigation interface collapsible
         """
         super().__init__(parent=parent)
-        self.panel = NavigationPanel(self)
+        self.panel = self._createPanel()
         self.panel.setMenuButtonVisible(showMenuButton and collapsible)
         self.panel.setReturnButtonVisible(showReturnButton)
         self.panel.setCollapsible(collapsible)
@@ -49,6 +49,9 @@ class NavigationInterface(QWidget):
         self.resize(48, self.height())
         self.setMinimumWidth(48)
         self.setAttribute(Qt.WA_TranslucentBackground)
+
+    def _createPanel(self):
+        return NavigationPanel(self)
 
     def addItem(
         self,

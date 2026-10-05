@@ -148,6 +148,7 @@ class FluentStyleSheet(StyleSheetBase, Enum):
     SETTING_CARD = "setting_card"
     TEACHING_TIP = "teaching_tip"
     FLUENT_WINDOW = "fluent_window"
+    PAGE_SEARCH = "page_search"
     SWITCH_BUTTON = "switch_button"
     MESSAGE_DIALOG = "message_dialog"
     STATE_TOOL_TIP = "state_tool_tip"

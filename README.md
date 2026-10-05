@@ -44,12 +44,14 @@ The following components have been restored or extended in this repo (the list w
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
 `IndeterminateProgressPushButton`
+`ProgressPushButton`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
 `RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
 `TopFluentWindow` `ChartWidget` `Splitter` `PinBox`
+`FilledFluentWindow`
 `LabelLineEdit` `StepProgressBar` `RoundTableWidget`
 `RoundTableView` `LineTableWidget` `LineTableView`
 `DropSingleFolderWidget` `DropMultiFoldersWidget`
@@ -123,6 +125,20 @@ app.exec()
 Its loading animation starts automatically; use `start()` and `stop()` to control
 it, and `isSpinning()` to query its state. Clicking the button emits the usual
 `clicked` signal without changing the animation state.
+
+`ProgressPushButton` uses the primary button appearance when idle and a centered
+progress ring with a stop icon while progressing. Use `setProgressing(True)` and
+`setValue(0..100)` to control it. `setAutoProgressEnabled(True)` enables click-to-start
+(off by default). Handle `stopRequested` to cancel; completion does not automatically
+change the component state. The Buttons demo includes a simulated download.
+
+`FilledFluentWindow` provides an expanded sidebar with accent-filled selection
+and a search box. It supports the same `addSubInterface()` and `switchTo()` APIs
+as `FluentWindow`. The search box automatically searches registered page names;
+click a result or use the arrow keys and Enter to navigate. Escape dismisses
+the results, and clearing the query keeps the current page unchanged.
+Run `main.py` and click "打开 FilledFluentWindow 窗口" on the home page to preview
+navigation, search, theme switching, and custom accent colors.
 
 ## 📁 Project Structure
 
