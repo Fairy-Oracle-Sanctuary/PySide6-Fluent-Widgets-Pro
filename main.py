@@ -1,4 +1,3 @@
-from gallery.view.chart.home_interface import ChartMainWindow
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
@@ -7,6 +6,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+from gallery.view.chart.home_interface import ChartMainWindow
 from qfluentwidgets_pro import (
     CategoryCardListWidget,
     DropMultiFilesWidget,
@@ -17,10 +18,10 @@ from qfluentwidgets_pro import (
     FluentIcon,
     FluentTranslator,
     FontComboBox,
+    IndeterminateProgressPushButton,
     InfoBadge,
     InfoBadgePosition,
-    IndeterminateProgressPushButton,
-    ProgressPushButton,
+    InfoBarIcon,
     LabelLineEdit,
     LineTableWidget,
     MultiSelectionComboBox,
@@ -30,6 +31,7 @@ from qfluentwidgets_pro import (
     OutlinedMultiSelectionLiteFilter,
     OutlinedPushButton,
     PinBox,
+    ProgressPushButton,
     PushButton,
     RoundListWidget,
     RoundPushButton,
@@ -41,12 +43,14 @@ from qfluentwidgets_pro import (
     SubClip,
     SubtitleCheckBox,
     Tag,
+    TimeLineWidget,
+    FlyoutDialog,
     Toast,
     TopFluentWindow,
     TopNavigationBar,
     TopNavigationItemPosition,
-    TreeComboBox,
     TransparentRoundListWidget,
+    TreeComboBox,
     WaterfallLayout,
     toggleTheme,
 )
@@ -168,6 +172,35 @@ class MainWindow(TopFluentWindow):
             TopNavigationItemPosition.LEFT,
         )
 
+        self.timeLineInterface = self._createTimeLinePage()
+        self.timeLineInterface.setObjectName("timeLineInterface")
+        self.addSubInterface(
+            self.timeLineInterface,
+            FluentIcon.HISTORY,
+            "TimeLine",
+            TopNavigationItemPosition.LEFT,
+        )
+
+    def _createTimeLinePage(self):
+        scroll = ScrollArea()
+        scroll.setWidgetResizable(True)
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(24, 24, 24, 24)
+        timeline = TimeLineWidget(page)
+        completed = timeline.addGroup("已完成", InfoBarIcon.SUCCESS)
+        completed.addItem("<s>全军出击，誓死保卫鸽鸽！！</s>", InfoBarIcon.SUCCESS)
+        today = timeline.addGroup("今日安排", InfoBarIcon.INFORMATION)
+        today.addItem("上传我家 aiko 的 MV『シアワセ』", InfoBarIcon.WARNING)
+        today.addItem("下载我家 aiko 的『荒れた唇は恋を失くす』", InfoBarIcon.WARNING)
+        pending = timeline.addGroup("待办事项", InfoBarIcon.ERROR)
+        pending.addItem("单曲循环我家 aiko 的新歌『星の降る日に』", InfoBarIcon.ERROR)
+        layout.addWidget(timeline)
+        layout.addStretch()
+        scroll.setWidget(page)
+        scroll.enableTransparentBackground()
+        return scroll
+
     def _updateHomeBadge(self):
         """定时更新主页徽章的数字：递增到上限后切换为递减，循环往复"""
         self._badgeValue += self._badgeStep
@@ -231,22 +264,36 @@ class MainWindow(TopFluentWindow):
         self.progressButton.setAutoProgressEnabled(True)
         self.progressTimer = QTimer(self)
         self.progressTimer.setInterval(80)
+
         def advanceProgress():
             self.progressButton.setValue(self.progressButton.value() + 1)
             if self.progressButton.value() == 100:
                 self.progressButton.setProgressing(False)
+
         def progressStateChanged(active):
             if active:
                 self.progressButton.setValue(0)
                 self.progressTimer.start()
             else:
                 self.progressTimer.stop()
+
         self.progressTimer.timeout.connect(advanceProgress)
         self.progressButton.progressChanged.connect(progressStateChanged)
         self.progressButton.stopRequested.connect(
-            lambda: self.progressButton.setProgressing(False))
+            lambda: self.progressButton.setProgressing(False)
+        )
         progressLayout.addWidget(self.progressButton)
         progressLayout.addStretch()
+        self.flyoutDialogButton = PushButton("Show dialog")
+        layout.addWidget(self.flyoutDialogButton, 0, Qt.AlignLeft)
+        def showFlyoutDialog():
+            self.flyoutDialog = FlyoutDialog("Title", "This is a custom flyout dialog.")
+            self.flyoutDialog.accepted.connect(
+                lambda: self.flyoutDialogButton.setText("Confirmed — Show dialog"))
+            self.flyoutDialog.rejected.connect(
+                lambda: self.flyoutDialogButton.setText("Cancelled — Show dialog"))
+            self.flyoutDialog.showAt(self.flyoutDialogButton, self)
+        self.flyoutDialogButton.clicked.connect(showFlyoutDialog)
 
         # FilledPushButton test - 5 color schemes
         hLayout4 = QHBoxLayout()
@@ -459,7 +506,7 @@ class MainWindow(TopFluentWindow):
         layout.addWidget(self.chart_button)
         self.chart_button.clicked.connect(self._openChartWindow)
 
-        self.filled_window_button = PushButton('打开 FilledFluentWindow 窗口')
+        self.filled_window_button = PushButton("打开 FilledFluentWindow 窗口")
         layout.addWidget(self.filled_window_button)
         self.filled_window_button.clicked.connect(self._openFilledWindow)
 
@@ -494,7 +541,11 @@ class MainWindow(TopFluentWindow):
         layout.addWidget(singleResult)
 
         layout.addSpacing(16)
-        layout.addWidget(BodyLabel("MultiSelectionTreeComboBox — 选择多个节点，点击标签上的 × 可移除"))
+        layout.addWidget(
+            BodyLabel(
+                "MultiSelectionTreeComboBox — 选择多个节点，点击标签上的 × 可移除"
+            )
+        )
         multiple = MultiSelectionTreeComboBox(page)
         multiple.setPlaceholderText("请选择技能")
         frontend = multiple.addItem("前端")
@@ -573,6 +624,7 @@ class MainWindow(TopFluentWindow):
         """Create splitter demo page"""
         from PySide6.QtGui import QColor, QPainter
         from PySide6.QtWidgets import QWidget
+
         from qfluentwidgets_pro import BodyLabel, isDarkTheme, themeColor
 
         class BackgroundCard(QWidget):
@@ -830,7 +882,7 @@ class MainWindow(TopFluentWindow):
     def _openFilledWindow(self):
         from gallery.view.filled_window_demo import FilledWindowDemo
 
-        if not hasattr(self, '_filledWindow'):
+        if not hasattr(self, "_filledWindow"):
             self._filledWindow = FilledWindowDemo()
         self._filledWindow.show()
         self._filledWindow.setMicaEffectEnabled(True)

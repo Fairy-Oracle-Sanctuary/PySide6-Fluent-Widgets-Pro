@@ -39,12 +39,14 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 
 ## 🧩 Restored Components
 
-The following components have been restored or extended in this repo (the list will be updated continuously):
+57 components have been restored or extended in this repo (the list will be updated continuously):
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
 `IndeterminateProgressPushButton`
 `ProgressPushButton`
+`TimeLineWidget`
+`FlyoutDialog`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
@@ -131,6 +133,17 @@ progress ring with a stop icon while progressing. Use `setProgressing(True)` and
 `setValue(0..100)` to control it. `setAutoProgressEnabled(True)` enables click-to-start
 (off by default). Handle `stopRequested` to cancel; completion does not automatically
 change the component state. The Buttons demo includes a simulated download.
+
+`FlyoutDialog` provides custom flyout content with confirm/cancel icon buttons.
+Call `addWidget()` to add controls and `showAt(target, parent)` to display it.
+Connect `accepted` / `rejected` for the result; outside dismissal is cancellation.
+It reuses Flyout positioning, shadows and animations, and is deleted on close.
+The Buttons page includes a Show dialog example.
+
+`TimeLineWidget` displays grouped timeline cards with status icons and connector
+lines. Use `addGroup(title, InfoBarIcon.SUCCESS)` then `group.addItem(text, icon)`.
+Cards support wrapped/rich text; groups and items can be removed dynamically.
+The TimeLine demo page shows completed, scheduled and pending tasks.
 
 `FilledFluentWindow` provides an expanded sidebar with accent-filled selection
 and a search box. It supports the same `addSubInterface()` and `switchTo()` APIs
