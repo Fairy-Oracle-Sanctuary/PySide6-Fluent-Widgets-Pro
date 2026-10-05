@@ -43,7 +43,7 @@
 
 ## 已还原组件
 
-已还原或扩展的组件共 57 个（列表将持续更新）：
+已还原或扩展的组件共 61 个（列表将持续更新）：
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -51,6 +51,10 @@
 `ProgressPushButton`
 `TimeLineWidget`
 `FlyoutDialog`
+`ImageMagnifierWidget`
+`ImageComparisonSlider`
+`ImageCropper`
+`AvatarPicker`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
@@ -136,6 +140,26 @@ app.exec()
 使用 `setProgressing(True)` 切换形态、`setValue(0..100)` 更新进度。
 `setAutoProgressEnabled(True)` 开启点击进入进度态（默认关闭）；进度态点击发出
 `stopRequested`，由业务处理取消。达到 100 不会自动切换形态。Buttons 页面提供模拟下载。
+
+`ImageComparisonSlider(before, after)` 通过可拖动竖线和半透明双向箭头手柄对比两张图片。
+支持路径、QImage、QPixmap；`setImages()` 更换图片，`setValue(0..100)` 设置分割百分比，
+`valueChanged` 通知变化。支持方向键及 Home/End，Magnifier 页面提供双图对比示例。
+
+`AvatarPicker` 继承 AvatarWidget，悬停显示暗色圆形遮罩和白色相机图标，
+点击选图后复用 ImageCropper 的圆形裁剪；确认更新头像并发出 `imageChanged(QImage)`，
+取消保留原头像。通过 `setRadius()` 调整大小，`cropImage(image)` 直接打开指定图片裁剪。
+Magnifier 页面包含头像选择器示例。
+
+`ImageCropper(image, parent)` 提供四角缩放、区域拖动、旋转和水平翻转。
+确认时通过 `imageCropped` 返回 QImage，取消保留调用方原预览。
+`setCropShape(CropShape.CIRCLE)` 启用圆形裁剪，`setCropPathFactory(factory)`
+扩展自定义 QPainterPath 形状；工具栏形状按钮按官方展示保持禁用。
+展示页通过“选择图像”打开裁剪并更新预览，不提供保存/导出按钮。
+
+`ImageMagnifierWidget` 继承 ImageLabel，悬停时显示跟随鼠标的圆形放大镜，
+带主题色边框和十字标记。通过 `setMagnification(2.0)` 调整倍率、`setRadius(50)`
+调整镜片半径，`setMagnifierEnabled(False)` 关闭。支持原有图片/缩放接口，
+聚焦后可用方向键移动镜片；Magnifier 展示页提供 2×、3×、4× 切换。
 
 `FlyoutDialog` 提供自定义内容区域和底部确认/取消图标按钮。
 通过 `addWidget()` 添加控件、`showAt(target, parent)` 弹出，连接 `accepted` / `rejected`

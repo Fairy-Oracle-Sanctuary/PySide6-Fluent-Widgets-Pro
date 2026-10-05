@@ -17,7 +17,12 @@ from qfluentwidgets_pro import (
     FilledPushButton,
     FluentIcon,
     FluentTranslator,
+    FlyoutDialog,
     FontComboBox,
+    ImageComparisonSlider,
+    ImageCropper,
+    AvatarPicker,
+    ImageMagnifierWidget,
     IndeterminateProgressPushButton,
     InfoBadge,
     InfoBadgePosition,
@@ -44,7 +49,6 @@ from qfluentwidgets_pro import (
     SubtitleCheckBox,
     Tag,
     TimeLineWidget,
-    FlyoutDialog,
     Toast,
     TopFluentWindow,
     TopNavigationBar,
@@ -181,6 +185,91 @@ class MainWindow(TopFluentWindow):
             TopNavigationItemPosition.LEFT,
         )
 
+        self.imageMagnifierInterface = self._createImageMagnifierPage()
+        self.imageMagnifierInterface.setObjectName("imageMagnifierInterface")
+        self.addSubInterface(
+            self.imageMagnifierInterface,
+            FluentIcon.PHOTO,
+            "Magnifier",
+            TopNavigationItemPosition.LEFT,
+        )
+
+    def _createImageMagnifierPage(self):
+        from pathlib import Path
+
+        from qfluentwidgets_pro import BodyLabel, ComboBox
+
+        scroll = ScrollArea()
+        scroll.setWidgetResizable(True)
+
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(24, 24, 24, 24)
+        layout.addWidget(BodyLabel("悬停查看细节；聚焦后可使用方向键移动放大镜。"))
+        image = ImageMagnifierWidget(
+            str(Path(__file__).parent / "gallery/resource/images/Shoko1.jpg"), page
+        )
+        image.scaledToWidth(480)
+        zoom = ComboBox(page)
+        zoom.addItems(["2×", "3×", "4×"])
+        zoom.currentIndexChanged.connect(lambda i: image.setMagnification(i + 2))
+        layout.addWidget(zoom, 0, Qt.AlignLeft)
+        layout.addWidget(image, 0, Qt.AlignLeft)
+        layout.addWidget(BodyLabel("ImageComparisonSlider：拖动竖线对比两张图片。"))
+        from PySide6.QtGui import QImage
+
+        source = image.image
+        comparison = ImageComparisonSlider(
+            source,
+            QImage(str(Path(__file__).parent / "gallery/resource/images/Shoko2.jpg")),
+            page,
+        )
+        comparison.scaledToWidth(480)
+        layout.addWidget(comparison, 0, Qt.AlignLeft)
+        layout.addWidget(BodyLabel("头像选择器"))
+        avatar = AvatarPicker(source, page)
+        avatar.setRadius(48)
+        layout.addWidget(avatar, 0, Qt.AlignLeft)
+        from PySide6.QtWidgets import QFileDialog
+
+        from qfluentwidgets_pro import ImageLabel
+
+        layout.addWidget(BodyLabel("图片裁剪器"))
+        cropPreview = ImageLabel(source, page)
+        cropPreview.setBorderRadius(8, 8, 8, 8)
+        cropPreview.scaledToWidth(320)
+        layout.addWidget(cropPreview, 0, Qt.AlignLeft)
+        chooseImage = PushButton("选择图像", page)
+        chooseImage.setFixedWidth(320)
+
+        def chooseAndCrop():
+            path, _ = QFileDialog.getOpenFileName(
+                self, "选择图像", "", "Images (*.png *.jpg *.jpeg *.bmp *.webp)"
+            )
+            if not path:
+                return
+            editor = ImageCropper(path, self)
+
+            def updatePreview(result):
+                cropPreview.setImage(result)
+                cropPreview.scaledToWidth(320)
+
+            editor.imageCropped.connect(updatePreview)
+            editor.exec()
+            editor.deleteLater()
+
+        chooseImage.clicked.connect(chooseAndCrop)
+        layout.addWidget(chooseImage, 0, Qt.AlignLeft)
+        layout.addStretch()
+        scroll.setWidget(page)
+        # Apply after setWidget(): otherwise the content keeps its opaque palette.
+        page.setAutoFillBackground(False)
+        page.setObjectName("imageToolsContent")
+        page.setStyleSheet("QWidget#imageToolsContent { background: transparent; }")
+        scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
+        scroll.viewport().setAutoFillBackground(False)
+        return scroll
+
     def _createTimeLinePage(self):
         scroll = ScrollArea()
         scroll.setWidgetResizable(True)
@@ -286,13 +375,17 @@ class MainWindow(TopFluentWindow):
         progressLayout.addStretch()
         self.flyoutDialogButton = PushButton("Show dialog")
         layout.addWidget(self.flyoutDialogButton, 0, Qt.AlignLeft)
+
         def showFlyoutDialog():
             self.flyoutDialog = FlyoutDialog("Title", "This is a custom flyout dialog.")
             self.flyoutDialog.accepted.connect(
-                lambda: self.flyoutDialogButton.setText("Confirmed — Show dialog"))
+                lambda: self.flyoutDialogButton.setText("Confirmed — Show dialog")
+            )
             self.flyoutDialog.rejected.connect(
-                lambda: self.flyoutDialogButton.setText("Cancelled — Show dialog"))
+                lambda: self.flyoutDialogButton.setText("Cancelled — Show dialog")
+            )
             self.flyoutDialog.showAt(self.flyoutDialogButton, self)
+
         self.flyoutDialogButton.clicked.connect(showFlyoutDialog)
 
         # FilledPushButton test - 5 color schemes

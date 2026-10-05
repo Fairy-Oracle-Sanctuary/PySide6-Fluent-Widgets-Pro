@@ -230,3 +230,7 @@ from .tool_tip import ToolTip, ToolTipFilter, ToolTipPosition
 from .tree_view import TreeItemDelegate, TreeView, TreeWidget
 from .time_line import TimeLineWidget, TimeLineGroup, TimeLineItem
 from .flyout_dialog import FlyoutDialog
+from .image_magnifier import ImageMagnifierWidget
+from .image_comparison import ImageComparisonSlider
+from .image_cropper import ImageCropper, CropShape
+from .avatar_picker import AvatarPicker
