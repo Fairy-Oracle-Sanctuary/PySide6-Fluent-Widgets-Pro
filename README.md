@@ -39,7 +39,7 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 
 ## 🧩 Restored Components
 
-71 components have been restored or extended in this repo (the list will be updated continuously):
+72 components have been restored or extended in this repo (the list will be updated continuously):
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -49,6 +49,7 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 `FlyoutDialog`
 `RangeCalendarPicker` `FastRangeCalendarPicker`
 `CalendarTimePicker` `FastCalendarTimePicker`
+`AudioWaveformWidget`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -327,6 +328,68 @@ selection and emits an invalid QDateTime. `dateChanged` / `timeChanged` emit onl
 when their part changes. Both support `setFlyoutAnimationType()` and appear on
 the Buttons demo page.
 
+`AudioWaveformWidget` is a transparent, pure QtWidgets sample waveform view. It
+does not import QtMultimedia, NumPy or an audio decoder and is exported from the
+package root. Round-cap bars retain each time bucket's min/max amplitudes; silence
+becomes center dots. Played/unplayed portions have separate light/dark colors.
+Completed sample blocks and visible geometry are cached; position changes do not
+rescan PCM. No sound is played by the widget itself.
+
+```python
+from qfluentwidgets_pro import AudioWaveformWidget
+
+waveform = AudioWaveformWidget()
+waveform.setSamples(samples, sampleRate=24000)  # normalized mono numbers, -1..1
+waveform.appendSamples(chunk, sampleRate=24000)  # optional streamed TTS chunks
+player.positionChanged.connect(waveform.setPosition)  # milliseconds
+waveform.seekRequested.connect(player.setPosition)
+```
+
+`setSamples()` resets position; `appendSamples()` preserves absolute position and
+amplitude scale, fits the currently available recording, and requires a consistent
+sample rate until `clear()`. Nonfinite samples are rejected; finite out-of-range
+samples are clipped. Inputs are copied. Setters must run on the GUI thread (use
+queued signals from workers). Configure `setBarWidth()`, `setBarSpacing()`,
+`setAmplitudeScale()`, `setWaveformColor(light, dark)` and
+`setPlayedColor(light, dark)`. Mouse click/drag and Left/Right (1 second), Home/End
+request seeking; `setSeekEnabled(False)` disables interaction. `duration()` and
+`position()` use milliseconds. The Waveform page lets you select a local audio
+file, decodes its waveform incrementally, and supports actual play/pause/stop and
+seeking. It explicitly imports the optional decoder and QtMultimedia player;
+these dependencies remain absent from the widget's own import path.
+"Load test WAV" opens `gallery/resource/audio/waveform_sample.wav`: a five-second,
+24 kHz, mono, 16-bit PCM synthetic test sound, not speech. To generate another copy:
+`python examples/audio_waveform/generate_sample.py --output test.wav` (no overwrite).
+On Windows, `main.py` defaults the gallery to the native multimedia backend when
+its plugin is installed, avoiding a locally reproduced FFmpeg output-layout error.
+An explicit `QT_MEDIA_BACKEND` is respected. The library itself never selects a
+backend; format support still depends on the selected backend. The gallery build
+includes multimedia plugins and the test WAV as data.
+
+`AudioDecoder` is a separate **heavy, opt-in helper**, never exported by any
+`__init__.py`. Import its exact module only when file decoding is needed:
+
+```python
+from qfluentwidgets_pro.common.audio_decoder import AudioDecoder
+
+decoder = AudioDecoder(parent=waveform)  # keep it alive throughout decoding
+decoder.decoded.connect(waveform.setSamples)
+decoder.errorOccurred.connect(print)
+decoder.decode('speech.wav')
+# For incremental display instead: clear the widget before EACH decode, connect
+# decoder.samplesReady to waveform.appendSamples, and omit the decoded connection.
+```
+
+The helper uses Qt's [QAudioDecoder](https://doc.qt.io/qt-6/qaudiodecoder.html)
+asynchronously, copying UInt8/Int16/Int32/float PCM into normalized float arrays.
+Multichannel frames retain the strongest channel, avoiding anti-phase cancellation;
+the result is waveform data, not a playback downmix. `samplesReady(samples, rate)`
+emits chunks; `decoded(samples, rate)` emits the complete result, then `finished()`.
+It retains the recording in memory. `stop()` cancels without a completion signal;
+`decode()` cancels/replaces any previous request. Errors are reported through
+`errorOccurred`. Available file formats depend on the Qt backend/codecs, not a
+guarantee that every MP3/AAC file is supported.
+
 `FilledPushButton` and `FilledToolButton` use Fluent semantic colors for light-theme
 resting fills (neutral, success, caution and critical). Attention follows the accent
 color; the existing dark palette and translucent hover/pressed fills are preserved.
@@ -365,6 +428,7 @@ these features from their specific modules only when your application uses them.
 | `CodeEdit`, `CodeLanguage` | `qfluentwidgets_pro.components.widgets.code_edit` | Pygments lexers |
 | Acrylic widgets | `qfluentwidgets_pro.components.material` or `qfluentwidgets_pro.components.widgets.acrylic_label` | Optional CPU blur: NumPy, SciPy, Pillow, colorthief |
 | Media playback widgets | `qfluentwidgets_pro.multimedia` | QtMultimedia / QtMultimediaWidgets |
+| `AudioDecoder` (waveform file decoding only) | `qfluentwidgets_pro.common.audio_decoder` | QtMultimedia and its backend/codecs; not needed by `AudioWaveformWidget` |
 | `FramelessWebEngineView` | `qfluentwidgets_pro.qframelesswindow.webengine` | QtWebEngineWidgets |
 
 ```python
@@ -394,7 +458,8 @@ unblurred image; this does not disable the native Windows Mica effect.
 ```
 
 `deploy.py` builds the **complete gallery in `main.py`**, which explicitly imports
-charts and the CodeEdit demo. It deliberately includes Pygments for dynamic lexer
+charts, CodeEdit and audio waveform demos, including QtMultimedia for file decoding
+and playback. It deliberately includes Pygments for dynamic lexer
 discovery and is not a minimal business-app build template. Use your own entry
 point to avoid gallery-only imports; omit `--include-package=pygments` when not
 using CodeEdit. If you do use CodeEdit, include its dynamically loaded lexers.

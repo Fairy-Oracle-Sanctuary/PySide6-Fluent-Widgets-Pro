@@ -240,3 +240,4 @@ from .image_magnifier import ImageMagnifierWidget
 from .image_comparison import ImageComparisonSlider
 from .image_cropper import ImageCropper, CropShape
 from .avatar_picker import AvatarPicker
+from .audio_waveform import AudioWaveformWidget

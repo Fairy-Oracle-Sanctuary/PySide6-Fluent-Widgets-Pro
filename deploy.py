@@ -69,5 +69,8 @@ args.append("--nofollow-import-to=qfluentwidgets_pro.common.image_utils")
 # Pygments discovers lexers dynamically, so include them for this gallery build.
 # Do not copy this include into a business app that does not use CodeEdit.
 args.append("--include-package=pygments")
+# The waveform gallery explicitly uses QtMultimedia and offers a bundled WAV.
+args.append("--include-qt-plugins=multimedia")
+args.append("--include-data-files=gallery/resource/audio/waveform_sample.wav=gallery/resource/audio/waveform_sample.wav")
 os.system(" ".join(args))
 print("打包完成！")

@@ -43,7 +43,7 @@
 
 ## 已还原组件
 
-已还原或扩展的组件共 71 个（列表将持续更新）：
+已还原或扩展的组件共 72 个（列表将持续更新）：
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -53,6 +53,7 @@
 `FlyoutDialog`
 `RangeCalendarPicker` `FastRangeCalendarPicker`
 `CalendarTimePicker` `FastCalendarTimePicker`
+`AudioWaveformWidget`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -310,6 +311,62 @@ value = picker.dateTime  # QDateTime 副本；也可读写 date / time 属性
 仅日期或时间发生变化时，才发出对应的 `dateChanged` / `timeChanged`。
 两个版本均支持 `setFlyoutAnimationType()`，Buttons 展示页已加入示例。
 
+`AudioWaveformWidget` 是透明背景的纯 QtWidgets 波形组件，正常在主包导出。
+不导入 QtMultimedia、NumPy 或解码类，也不负责播放声音。用圆头细竖线展示每个
+时间区间的最小/最大振幅，静音显示为中心小点；已播放/未播放颜色分别支持浅深主题。
+缓存采样块极值和可见线条，进度变化不重新扫描 PCM。
+
+```python
+from qfluentwidgets_pro import AudioWaveformWidget
+
+waveform = AudioWaveformWidget()
+waveform.setSamples(samples, sampleRate=24000)  # 归一化单声道数值，范围 -1..1
+waveform.appendSamples(chunk, sampleRate=24000)  # 也可分块追加 TTS 数据
+player.positionChanged.connect(waveform.setPosition)  # 毫秒
+waveform.seekRequested.connect(player.setPosition)
+```
+
+`setSamples()` 重置播放位置；`appendSamples()` 保留绝对播放位置和振幅尺度，
+横向适配当前已收到的数据长度。同一流采样率必须一致，切换前调用 `clear()`。
+拒绝 NaN/Infinity，超出范围的有限数值会裁剪；输入数据会复制保存。
+所有控件接口应在 GUI 线程调用，后台生产数据时使用排队信号。
+可配置 `setBarWidth()`、`setBarSpacing()`、`setAmplitudeScale()`、
+`setWaveformColor(light, dark)` 和 `setPlayedColor(light, dark)`。
+点击/拖动、左右方向键（1 秒）、Home/End 发出跳转请求；
+`setSeekEnabled(False)` 关闭交互。`duration()` / `position()` 均以毫秒计。
+Waveform 展示页可自行选择本地音频文件，增量解码波形，并支持实际播放、暂停、停止
+及波形跳转。展示页显式导入可选解码类和 QtMultimedia 播放器，波形 Widget 自身
+的导入链仍不包含这些依赖。“加载测试 WAV”使用
+`gallery/resource/audio/waveform_sample.wav`：5 秒、24 kHz、单声道、16 位 PCM
+合成测试音，不是人声录音。如需另存一份，可运行
+`python examples/audio_waveform/generate_sample.py --output test.wav`，不会覆盖已有文件。
+Windows 下 `main.py` 在原生多媒体插件可用时默认采用 Windows 后端，避开本机复现的
+FFmpeg 输出声道布局错误；显式设置的 `QT_MEDIA_BACKEND` 会被保留。
+库本身不选择或修改后端，可用格式仍由所选后端决定。gallery 打包脚本已包含
+多媒体插件及测试 WAV 数据文件。
+
+`AudioDecoder` 单独作为**重型可选辅助类**，不在任何 `__init__.py` 导出。
+需要读取音频文件时，必须从具体模块显式导入：
+
+```python
+from qfluentwidgets_pro.common.audio_decoder import AudioDecoder
+
+decoder = AudioDecoder(parent=waveform)  # 解码期间需保留对象
+decoder.decoded.connect(waveform.setSamples)
+decoder.errorOccurred.connect(print)
+decoder.decode('speech.wav')
+# 需要增量显示时：每次 decode 前清空波形，改为连接
+# decoder.samplesReady 到 waveform.appendSamples，不再连接 decoded。
+```
+
+通过 Qt 的 [QAudioDecoder](https://doc.qt.io/qt-6/qaudiodecoder.html) 异步解码，
+将 UInt8/Int16/Int32/float PCM 复制并转换为归一化浮点数组。
+多声道每帧保留振幅最大的声道，避免反相抵消；这是波形数据，不是用于播放的单声道混音。
+`samplesReady(samples, rate)` 分块输出；完成时先发出 `decoded(samples, rate)`，
+再发出 `finished()`。解码类会在内存保留整段采样。`stop()` 取消且不发完成信号；
+再次 `decode()` 会取消并替换旧请求。错误通过 `errorOccurred` 报告。
+可解码格式取决于 Qt 后端和编解码器，不保证所有 MP3/AAC 文件均可读取。
+
 `FilledPushButton` 和 `FilledToolButton` 的浅色常态填充采用 Fluent 语义色
 （中性、成功、警告、错误）；Attention 跟随主题色。原有暗色配色和悬停/按下的
 半透明黑白背景保持不变。
@@ -344,6 +401,7 @@ Nuitka 把未使用的可选依赖纳入编译图；只有业务使用相应功�
 | `CodeEdit`、`CodeLanguage` | `qfluentwidgets_pro.components.widgets.code_edit` | Pygments 语言解析器 |
 | Acrylic 组件 | `qfluentwidgets_pro.components.material` 或 `qfluentwidgets_pro.components.widgets.acrylic_label` | 可选 CPU 模糊：NumPy、SciPy、Pillow、colorthief |
 | 多媒体播放组件 | `qfluentwidgets_pro.multimedia` | QtMultimedia / QtMultimediaWidgets |
+| `AudioDecoder`（仅文件波形解码） | `qfluentwidgets_pro.common.audio_decoder` | QtMultimedia 及其后端/编解码器；`AudioWaveformWidget` 不需要 |
 | `FramelessWebEngineView` | `qfluentwidgets_pro.qframelesswindow.webengine` | QtWebEngineWidgets |
 
 ```python
@@ -369,7 +427,8 @@ Standalone 模式默认跟随导入；`--nofollow-import-to` 可以排除模块�
 --nofollow-import-to=scipy
 ```
 
-`deploy.py` 打包的是 `main.py` 的**完整 gallery**，其中显式导入了图表和 CodeEdit 展示页。
+`deploy.py` 打包的是 `main.py` 的**完整 gallery**，其中显式导入了图表、CodeEdit 和
+音频波形展示页，包含文件解码/播放所需的 QtMultimedia。
 它为动态解析器发现而主动包含 Pygments，不是轻量业务程序的打包模板。业务程序应使用自己的
 入口，避免引入 gallery；未使用 CodeEdit 时不要照搬 `--include-package=pygments`，使用时则
 须包含所需的动态加载解析器。最终是否纳入 Qt 插件或原生库，需要检查 Nuitka 编译报告和
