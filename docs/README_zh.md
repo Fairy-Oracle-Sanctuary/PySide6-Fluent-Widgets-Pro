@@ -43,12 +43,14 @@
 
 ## 已还原组件
 
-已还原或扩展的组件（列表将持续更新）：
+已还原或扩展的组件共 57 个（列表将持续更新）：
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
 `IndeterminateProgressPushButton`
 `ProgressPushButton`
+`TimeLineWidget`
+`FlyoutDialog`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
@@ -134,6 +136,15 @@ app.exec()
 使用 `setProgressing(True)` 切换形态、`setValue(0..100)` 更新进度。
 `setAutoProgressEnabled(True)` 开启点击进入进度态（默认关闭）；进度态点击发出
 `stopRequested`，由业务处理取消。达到 100 不会自动切换形态。Buttons 页面提供模拟下载。
+
+`FlyoutDialog` 提供自定义内容区域和底部确认/取消图标按钮。
+通过 `addWidget()` 添加控件、`showAt(target, parent)` 弹出，连接 `accepted` / `rejected`
+处理结果；点击外部关闭按取消处理。复用 Flyout 的定位、阴影和动画，关闭后自动删除。
+Buttons 页面提供 Show dialog 示例。
+
+`TimeLineWidget` 提供分组标题、状态图标、连接线和圆角条目卡片。
+通过 `addGroup(title, InfoBarIcon.SUCCESS)` 创建分组，再调用 `group.addItem(text, icon)`
+添加条目；支持富文本、自动换行、动态移除分组和条目。TimeLine 展示页包含已完成、今日安排和待办事项。
 
 `FilledFluentWindow` 提供默认展开的侧边栏、主题色填充的选中项和搜索框。
 沿用 `FluentWindow` 的 `addSubInterface()` / `switchTo()` 接口，

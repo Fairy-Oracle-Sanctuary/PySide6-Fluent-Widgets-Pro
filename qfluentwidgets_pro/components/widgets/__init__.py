@@ -228,3 +228,5 @@ from .toast import Toast, ToastColor, ToastManager, ToastPosition
 from .tree_combo_box import MultiSelectionTreeComboBox, TreeComboBox
 from .tool_tip import ToolTip, ToolTipFilter, ToolTipPosition
 from .tree_view import TreeItemDelegate, TreeView, TreeWidget
+from .time_line import TimeLineWidget, TimeLineGroup, TimeLineItem
+from .flyout_dialog import FlyoutDialog
