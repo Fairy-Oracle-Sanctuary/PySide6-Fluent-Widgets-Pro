@@ -27,17 +27,24 @@ import qfluentwidgets_pro as q
 assert hasattr(q, "RadialGauge")
 assert hasattr(q, "RangeCalendarPicker") and hasattr(q, "FastRangeCalendarPicker")
 assert hasattr(q, "CalendarTimePicker") and hasattr(q, "FastCalendarTimePicker")
-for name in ("CodeEdit", "CodeLanguage", "ChartWidget", "AcrylicLabel", "MediaPlayer", "VideoWidget"):
+assert hasattr(q, "AudioWaveformWidget")
+for name in ("CodeEdit", "CodeLanguage", "ChartWidget", "AcrylicLabel", "MediaPlayer", "VideoWidget", "AudioDecoder"):
     assert not hasattr(q, name), name
 assert "qfluentwidgets_pro.components.widgets.code_edit" not in sys.modules
 assert "qfluentwidgets_pro.components.widgets.chart_widget" not in sys.modules
 assert "qfluentwidgets_pro.multimedia" not in sys.modules
+assert "qfluentwidgets_pro.common.audio_decoder" not in sys.modules
 from qfluentwidgets_pro.components.widgets.acrylic_label import isAcrylicAvailable
 assert not isAcrylicAvailable  # documented navigation fallback when blur is excluded
 from qfluentwidgets_pro.components.widgets.code_edit import CodeEdit, CodeLanguage
 assert CodeLanguage.JSON and "pygments" not in sys.modules
 from PySide6.QtWidgets import QApplication
 app = QApplication([])
+waveform = q.AudioWaveformWidget()
+waveform.setSamples([-.5, .5, 0], 24000)
+waveform.appendSamples([0], 24000)
+assert waveform.sampleCount() == 4
+assert not any(name.startswith("PySide6.QtMultimedia") for name in sys.modules)
 try:
     CodeEdit()
 except ImportError as error:
@@ -59,6 +66,8 @@ print("PASS: lightweight root import with optional dependencies excluded, explic
         assert "--nofollow-import-to=numpy" in args
         assert "--nofollow-import-to=scipy" in args
         assert "--include-package=pygments" in args  # full gallery intentionally uses it
+        assert "--include-qt-plugins=multimedia" in args
+        assert "--include-data-files=gallery/resource/audio/waveform_sample.wav=gallery/resource/audio/waveform_sample.wav" in args
     print("PASS: all three gallery build profiles exclude CPU blur; no compiler was invoked")
 
 

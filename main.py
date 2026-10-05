@@ -209,6 +209,11 @@ class MainWindow(TopFluentWindow):
         self.addSubInterface(self.codeEditInterface, FluentIcon.CODE,
                              "CodeEdit", TopNavigationItemPosition.LEFT)
 
+        from gallery.view.audio_waveform_demo import AudioWaveformDemo
+        self.audioWaveformInterface = AudioWaveformDemo(self)
+        self.addSubInterface(self.audioWaveformInterface, FluentIcon.MUSIC,
+                             "Waveform", TopNavigationItemPosition.LEFT)
+
     def _createImageMagnifierPage(self):
         from pathlib import Path
 
@@ -1100,9 +1105,19 @@ class MainWindow(TopFluentWindow):
 
 
 if __name__ == "__main__":
+    import os
     import sys
+    from pathlib import Path
 
+    from PySide6.QtCore import QLibraryInfo
     from PySide6.QtWidgets import QApplication
+
+    # Gallery-only workaround for the local Qt FFmpeg output-layout failure.
+    # Respect an explicit backend choice; never change library import behavior.
+    if sys.platform == 'win32':
+        nativePlugin = Path(QLibraryInfo.path(QLibraryInfo.PluginsPath)) / 'multimedia/windowsmediaplugin.dll'
+        if nativePlugin.is_file():
+            os.environ.setdefault('QT_MEDIA_BACKEND', 'windows')
 
     app = QApplication(sys.argv)
     translator = FluentTranslator()
