@@ -156,8 +156,8 @@ class ChartMainWindow(FluentWindow):
         desktop = QApplication.screens()[0].availableGeometry()
         w, h = desktop.width(), desktop.height()
         self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
-        self.show()
-        QApplication.processEvents()
+        # The caller shows the window after all FramelessWebEngineViews exist,
+        # then reapplies Mica. Do not expose a partially configured native host.
 
     def resizeEvent(self, e):
         super().resizeEvent(e)

@@ -19,6 +19,7 @@ from qfluentwidgets_pro import (
     FontComboBox,
     InfoBadge,
     InfoBadgePosition,
+    IndeterminateProgressPushButton,
     LabelLineEdit,
     LineTableWidget,
     MultiSelectionComboBox,
@@ -219,6 +220,12 @@ class MainWindow(TopFluentWindow):
 
         self.outlinedBtn2 = OutlinedPushButton(FluentIcon.ADD, "With Icon")
         hLayout2.addWidget(self.outlinedBtn2)
+
+        progressLayout = QHBoxLayout()
+        layout.addLayout(progressLayout)
+        self.indeterminateButton = IndeterminateProgressPushButton("Downloading...")
+        progressLayout.addWidget(self.indeterminateButton)
+        progressLayout.addStretch()
 
         # FilledPushButton test - 5 color schemes
         hLayout4 = QHBoxLayout()
@@ -788,9 +795,12 @@ class MainWindow(TopFluentWindow):
 
     def _openChartWindow(self):
         """Open chart window with mica effect enabled"""
-        chart_window = ChartMainWindow()
-        chart_window.show()
-        chart_window.setMicaEffectEnabled(True)
+        if not hasattr(self, "_chartWindow"):
+            self._chartWindow = ChartMainWindow()
+        self._chartWindow.show()
+        self._chartWindow.setMicaEffectEnabled(True)
+        self._chartWindow.raise_()
+        self._chartWindow.activateWindow()
 
 
 if __name__ == "__main__":

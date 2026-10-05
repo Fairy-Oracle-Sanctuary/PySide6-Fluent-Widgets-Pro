@@ -679,5 +679,6 @@
     <file>qss/light/tool_tip.qss</file>
     <file>qss/light/tree_view.qss</file>
     <file>js/echarts.min.js</file>
+    <file>js/chart.html</file>
   </qresource>
 </RCC>

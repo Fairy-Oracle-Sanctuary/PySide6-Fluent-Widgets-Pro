@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from typing import Union
-
 from PySide6.QtCore import (
     Property,
     QObject,
+    QParallelAnimationGroup,
     QPoint,
     QPropertyAnimation,
     QRect,
     QRectF,
+    QSequentialAnimationGroup,
     QSize,
     Qt,
     QUrl,
@@ -23,6 +23,8 @@ from PySide6.QtWidgets import (
     QPushButton,
     QRadioButton,
     QSizePolicy,
+    QStyle,
+    QStyleOptionButton,
     QToolButton,
     QWidget,
 )
@@ -68,7 +70,7 @@ class PushButton(QPushButton):
         self,
         text: str,
         parent: QWidget = None,
-        icon: Union[QIcon, str, FluentIconBase] = None,
+        icon: QIcon | str | FluentIconBase = None,
     ):
         self.__init__(parent=parent)
         self.setText(text)
@@ -85,7 +87,7 @@ class PushButton(QPushButton):
     def _postInit(self):
         pass
 
-    def setIcon(self, icon: Union[QIcon, str, FluentIconBase]):
+    def setIcon(self, icon: QIcon | str | FluentIconBase):
         if icon is None or (isinstance(icon, QIcon) and icon.isNull()):
             self.setProperty("hasIcon", False)
         else:
@@ -175,6 +177,120 @@ class PrimaryPushButton(PushButton):
         PushButton._drawIcon(self, icon, painter, rect, state)
 
 
+class IndeterminateProgressPushButton(PrimaryPushButton):
+    """Primary button with an animated, indeterminate loading arc."""
+
+    def _postInit(self):
+        super()._postInit()
+        self._spinning = False
+        self._startAngle = 0
+        self._spanAngle = 0
+
+        # Match the two-phase sweep used by IndeterminateProgressRing.
+        self.startAngleAni1 = QPropertyAnimation(self, b"startAngle", self)
+        self.startAngleAni2 = QPropertyAnimation(self, b"startAngle", self)
+        self.spanAngleAni1 = QPropertyAnimation(self, b"spanAngle", self)
+        self.spanAngleAni2 = QPropertyAnimation(self, b"spanAngle", self)
+        for animation, start, end in (
+            (self.startAngleAni1, 0, 450),
+            (self.startAngleAni2, 450, 1080),
+            (self.spanAngleAni1, 0, 180),
+            (self.spanAngleAni2, 180, 0),
+        ):
+            animation.setDuration(1000)
+            animation.setStartValue(start)
+            animation.setEndValue(end)
+
+        startGroup = QSequentialAnimationGroup(self)
+        startGroup.addAnimation(self.startAngleAni1)
+        startGroup.addAnimation(self.startAngleAni2)
+        spanGroup = QSequentialAnimationGroup(self)
+        spanGroup.addAnimation(self.spanAngleAni1)
+        spanGroup.addAnimation(self.spanAngleAni2)
+        self.aniGroup = QParallelAnimationGroup(self)
+        self.aniGroup.addAnimation(startGroup)
+        self.aniGroup.addAnimation(spanGroup)
+        self.aniGroup.setLoopCount(-1)
+        self.setMinimumWidth(150)
+        self.start()
+
+    @Property(int)
+    def startAngle(self):
+        return self._startAngle
+
+    @startAngle.setter
+    def startAngle(self, angle):
+        self._startAngle = angle
+        self.update()
+
+    @Property(int)
+    def spanAngle(self):
+        return self._spanAngle
+
+    @spanAngle.setter
+    def spanAngle(self, angle):
+        self._spanAngle = angle
+        self.update()
+
+    def start(self):
+        self._spinning = True
+        if self.isVisible():
+            self.aniGroup.start()
+        self.update()
+
+    def stop(self):
+        self._spinning = False
+        self.aniGroup.stop()
+        self._startAngle = 0
+        self._spanAngle = 0
+        self.update()
+
+    def isSpinning(self) -> bool:
+        return self._spinning
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        if self._spinning:
+            self.aniGroup.start()
+
+    def hideEvent(self, event):
+        self.aniGroup.stop()
+        super().hideEvent(event)
+
+    def paintEvent(self, event):
+        if not self._spinning:
+            super().paintEvent(event)
+            return
+
+        option = QStyleOptionButton()
+        self.initStyleOption(option)
+        option.text = ""
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        self.style().drawControl(QStyle.CE_PushButton, option, painter, self)
+
+        color = QColor(Qt.black if isDarkTheme() else Qt.white)
+        if not self.isEnabled():
+            color.setAlphaF(0.43)
+        elif self.isDown():
+            color.setAlphaF(0.63)
+        painter.setPen(QPen(color, 2, Qt.SolidLine, Qt.RoundCap))
+
+        textWidth = self.fontMetrics().horizontalAdvance(self.text())
+        groupWidth = 18 + 10 + textWidth
+        x = max(12, (self.width() - groupWidth) / 2)
+        y = (self.height() - 18) / 2
+        painter.drawArc(
+            QRectF(x + 2, y + 2, 14, 14),
+            ((-self._startAngle + 180) % 360) * 16,
+            -self._spanAngle * 16,
+        )
+        painter.setPen(color)
+        painter.drawText(
+            QRectF(x + 28, 0, textWidth + 1, self.height()), Qt.AlignCenter, self.text()
+        )
+
+
 class TransparentPushButton(PushButton):
     """Transparent push button
 
@@ -247,7 +363,7 @@ class HyperlinkButton(PushButton):
         url: str,
         text: str,
         parent: QWidget = None,
-        icon: Union[QIcon, FluentIconBase, str] = None,
+        icon: QIcon | FluentIconBase | str = None,
     ):
         self.__init__(parent)
         self.setText(text)
@@ -265,7 +381,7 @@ class HyperlinkButton(PushButton):
     def getUrl(self):
         return self._url
 
-    def setUrl(self, url: Union[str, QUrl]):
+    def setUrl(self, url: str | QUrl):
         self._url = QUrl(url)
 
     def _onClicked(self):
@@ -581,7 +697,7 @@ class ToolButton(QToolButton):
     def _postInit(self):
         pass
 
-    def setIcon(self, icon: Union[QIcon, str, FluentIconBase]):
+    def setIcon(self, icon: QIcon | str | FluentIconBase):
         self._icon = icon
         self.update()
 
@@ -1032,7 +1148,7 @@ class SplitWidgetBase(QWidget):
         self.dropButton.clicked.connect(self.showFlyout)
         self.hBoxLayout.addWidget(button)
 
-    def setDropIcon(self, icon: Union[str, QIcon, FluentIconBase]):
+    def setDropIcon(self, icon: str | QIcon | FluentIconBase):
         """set the icon of drop down button"""
         self.dropButton.setIcon(icon)
         self.dropButton.removeEventFilter(self.dropButton.arrowAni)
@@ -1095,7 +1211,7 @@ class SplitPushButton(SplitWidgetBase):
         self,
         text: str,
         parent: QWidget = None,
-        icon: Union[QIcon, str, FluentIconBase] = None,
+        icon: QIcon | str | FluentIconBase = None,
     ):
         self.__init__(parent)
         self.setText(text)
@@ -1122,7 +1238,7 @@ class SplitPushButton(SplitWidgetBase):
     def icon(self):
         return self.button.icon()
 
-    def setIcon(self, icon: Union[QIcon, FluentIconBase, str]):
+    def setIcon(self, icon: QIcon | FluentIconBase | str):
         self.button.setIcon(icon)
 
     def setIconSize(self, size: QSize):
@@ -1196,7 +1312,7 @@ class SplitToolButton(SplitWidgetBase):
     def icon(self):
         return self.button.icon()
 
-    def setIcon(self, icon: Union[QIcon, FluentIconBase, str]):
+    def setIcon(self, icon: QIcon | FluentIconBase | str):
         self.button.setIcon(icon)
 
     def setIconSize(self, size: QSize):
@@ -2110,7 +2226,7 @@ class TextPushButton(TextButtonBase, QPushButton):
         self,
         text: str,
         parent: QWidget = None,
-        icon: Union[QIcon, str, FluentIconBase] = None,
+        icon: QIcon | str | FluentIconBase = None,
     ):
         self.__init__(parent)
         self.setText(text)
@@ -2124,7 +2240,7 @@ class TextPushButton(TextButtonBase, QPushButton):
     def _(self, icon: FluentIconBase, text: str, parent: QWidget = None):
         self.__init__(text, parent, icon)
 
-    def setIcon(self, icon: Union[QIcon, str, FluentIconBase]):
+    def setIcon(self, icon: QIcon | str | FluentIconBase):
         if icon is None or (isinstance(icon, QIcon) and icon.isNull()):
             self.setProperty("hasIcon", False)
         else:
@@ -2265,7 +2381,7 @@ class TextToolButton(TextButtonBase, QToolButton):
         self.__init__(parent)
         self.setIcon(icon)
 
-    def setIcon(self, icon: Union[QIcon, str, FluentIconBase]):
+    def setIcon(self, icon: QIcon | str | FluentIconBase):
         self._icon = icon or QIcon()
         self.update()
 
@@ -2568,7 +2684,7 @@ class Chip(BackgroundAnimationWidget, QWidget):
         self,
         text: str,
         parent: QWidget = None,
-        icon: Union[QIcon, str, FluentIconBase] = None,
+        icon: QIcon | str | FluentIconBase = None,
     ):
         self.__init__(parent)
         self._text = text
@@ -2642,7 +2758,7 @@ class Chip(BackgroundAnimationWidget, QWidget):
         """Get clip text"""
         return self._text
 
-    def setIcon(self, icon: Union[QIcon, str, FluentIconBase]):
+    def setIcon(self, icon: QIcon | str | FluentIconBase):
         """Set clip icon"""
         self._icon = icon
         self.update()
@@ -2797,7 +2913,7 @@ class Tag(QWidget):
         self,
         text: str,
         parent: QWidget = None,
-        icon: Union[QIcon, str, FluentIconBase] = None,
+        icon: QIcon | str | FluentIconBase = None,
     ):
         self.__init__(parent)
         self._text = text
@@ -2820,7 +2936,7 @@ class Tag(QWidget):
         """Get tag text"""
         return self._text
 
-    def setIcon(self, icon: Union[QIcon, str, FluentIconBase]):
+    def setIcon(self, icon: QIcon | str | FluentIconBase):
         """Set tag icon"""
         self._icon = icon
         self.update()

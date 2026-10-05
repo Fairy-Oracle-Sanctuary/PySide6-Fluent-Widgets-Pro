@@ -1,38 +1,110 @@
-"""
-from __future__ import annotations
-
-ECharts chart widget for PySide6 Fluent Widgets
-"""
+"""ECharts chart widget with on-demand loading and page-entry animation."""
 
 import json
 
-from PySide6.QtCore import QFile, QSize, QTextStream, QTimer
-from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QVBoxLayout
+from PySide6.QtCore import QSize, Qt, QTimer, QUrl, Signal
+from PySide6.QtGui import QColor, QPainter
+from PySide6.QtQuickWidgets import QQuickWidget
+from PySide6.QtWidgets import QApplication, QVBoxLayout, QWidget
 
 from ...common.config import isDarkTheme, qconfig
 from ...qframelesswindow.webengine import FramelessWebEngineView
 from .card_widget import SimpleCardWidget
 
 
-class ChartWidget(SimpleCardWidget):
-    """ECharts chart widget with theme auto-switch support
+class _ChartFrameGate(QWidget):
+    """Keep Chromium's stale texture covered until a fresh blank frame arrives.
 
-    Examples
-    --------
-    Basic usage:
-
-    chart = ChartWidget()
-    chart.setOption({
-        "title": {"text": "ECharts Demo"},
-        "xAxis": {"data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]},
-        "yAxis": {},
-        "series": [{"type": "bar", "data": [120, 200, 150, 80, 70, 110, 130]}]
-    })
+    JS callbacks/rAF only acknowledge renderer work, not Qt's compositor frame.
+    A temporary solid-color frame, behind this opaque widget, fences the two
+    pipelines. The next confirmed background frame is safe to reveal. No
+    time-based reveal, page reload, or scene-graph/context destruction is used.
     """
 
-    # Class-level cache for echarts.js
-    _echarts_js_cache = None
+    ready = Signal()
+
+    def __init__(self, browser, parent):
+        super().__init__(parent)
+        self.browser = browser
+        self.pending = False
+        self.phase = None
+        self.serial = 0
+        self.background = QColor()
+        self.marker = QColor()
+        self.setAttribute(Qt.WA_OpaquePaintEvent)
+        self.timer = QTimer(self)
+        self.timer.setInterval(16)
+        self.timer.timeout.connect(self._checkFrame)
+        self.hide()
+
+    def arm(self, background):
+        self.cancel()
+        self.pending = True
+        self.background = QColor(background)
+        self.update()
+        self.setGeometry(self.browser.geometry())
+        self.show()
+        self.raise_()
+
+    def paintEvent(self, event):
+        # Parent QSS may make QWidget backgrounds transparent. The frame fence
+        # must remain opaque regardless of inherited gallery styles.
+        painter = QPainter(self)
+        painter.fillRect(self.rect(), self.background)
+
+    def prepare(self):
+        if not self.pending or self.phase is not None:
+            return
+        # The offscreen test backend does not present Chromium GPU textures.
+        # Native frame correctness is exercised separately on Windows.
+        if QApplication.platformName() == 'offscreen':
+            self._finish()
+            return
+        self.serial += 1
+        self.marker = QColor(17 + self.serial % 200, 31 + (self.serial // 200) % 190, 197)
+        self.phase = 'marker'
+        self.browser.page().runJavaScript('prepareChartFrame(%s, %s);' % (
+            json.dumps(self.marker.name()), json.dumps(self.background.name())))
+        self.timer.start()
+
+    def _checkFrame(self):
+        surface = self.browser.findChild(QQuickWidget)
+        if surface is None or not surface.isVisible():
+            return
+        frame = surface.grabFramebuffer()
+        if frame.isNull():
+            return
+        expected = self.marker if self.phase == 'marker' else self.background
+        # Check the real Qt presentation texture, not canvas pixels read in JS.
+        for y in (0, frame.height() // 2, frame.height() - 1):
+            for x in (0, frame.width() // 2, frame.width() - 1):
+                if frame.pixelColor(x, y).rgb() != expected.rgb():
+                    return
+        if self.phase == 'marker':
+            self.phase = 'background'
+            self.browser.page().runJavaScript('releaseChartFrame();')
+        else:
+            self._finish()
+
+    def _finish(self):
+        self.cancel()
+        self.ready.emit()
+
+    def cancel(self):
+        self.timer.stop()
+        self.pending = False
+        self.phase = None
+        self.hide()
+
+
+class ChartWidget(SimpleCardWidget):
+    """ECharts chart widget with automatic theme switching.
+
+    Construct this widget before showing its top-level window so the frameless
+    web view can configure the native window before Mica is applied.
+    The web page is loaded on first display. Showing the widget again replays
+    the entry animation on the existing chart; data updates reuse that chart.
+    """
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -40,32 +112,27 @@ class ChartWidget(SimpleCardWidget):
         self._js_option = ""
         self._initialized = False
         self._pending_option = False
-        self._chart_shown = False
-        self._animation_enabled = True  # Animation control for real-time updates
+        self._replay_pending = False
+        self._animation_enabled = True
+        self._page_requested = False
 
-        # Create layout
         self._layout = QVBoxLayout(self)
         self._layout.setContentsMargins(15, 15, 15, 15)
-
-        # Create web view
+        self._renderTimer = QTimer(self)
+        self._renderTimer.setSingleShot(True)
+        self._renderTimer.timeout.connect(self._doUpdateChart)
+        # WebEngine's native-window setup must happen before the host is shown.
+        # Only the ECharts document (not the native view) is created lazily.
         self._browser = FramelessWebEngineView(self)
+        self._browser.page().setBackgroundColor(self._normalBackgroundColor())
         self._layout.addWidget(self._browser)
-
-        # Connect load finished signal
         self._browser.loadFinished.connect(self._onLoadFinished)
-
-        # Connect theme change signal
+        self._frameGate = _ChartFrameGate(self._browser, self)
+        self._frameGate.ready.connect(self._doUpdateChart)
         qconfig.themeChanged.connect(self._onThemeChanged)
 
-        # Initialize chart framework
-        self._initChart()
-
     def _normalBackgroundColor(self):
-        """Sync card background with chart background"""
-        if isDarkTheme():
-            return QColor(32, 32, 32)  # #202020
-        else:
-            return QColor(243, 243, 243)  # #f3f3f3
+        return QColor(self._getTheme()[1])
 
     def _hoverBackgroundColor(self):
         return self._normalBackgroundColor()
@@ -74,233 +141,123 @@ class ChartWidget(SimpleCardWidget):
         return self._normalBackgroundColor()
 
     def setOption(self, option: dict):
-        """Set ECharts option with Python dict
-
-        Parameters
-        ----------
-        option : dict
-            ECharts option dictionary
-        """
+        """Set the complete ECharts option using a Python dictionary."""
         self._option = option
         self._js_option = ""
+        self._pending_option = True
         self._updateChart()
 
     def setOptionJS(self, js_option: str):
-        """Set ECharts option with JavaScript string
-
-        Parameters
-        ----------
-        js_option : str
-            JavaScript option string, e.g. "option = {...};"
-        """
+        """Set JavaScript that assigns an option, e.g. option = {...};"""
         self._js_option = js_option
         self._option = {}
+        self._pending_option = True
         self._updateChart()
 
     def setAnimationEnabled(self, enabled: bool):
-        """Enable or disable chart animation
-
-        Parameters
-        ----------
-        enabled : bool
-            Whether to enable animation. Disable for real-time data updates.
-        """
+        """Enable animation, or disable it for real-time data updates."""
         self._animation_enabled = enabled
+        self._updateChart()
 
     def clear(self):
-        """Clear the chart"""
+        """Clear both the visible chart and its saved option."""
         self._option = {}
         self._js_option = ""
-        self._browser.page().runJavaScript("if(window.chart) chart.clear();")
+        self._pending_option = False
+        self._replay_pending = False
+        self._renderTimer.stop()
+        if self._initialized:
+            self._browser.page().runJavaScript("clearChart();")
 
-    def resize(self):
-        """Resize the chart to fit container"""
-        self._browser.page().runJavaScript("if(window.chart) chart.resize();")
+    def resize(self, *args):
+        """Resize the widget, or fit the chart to its container with no args."""
+        if args:
+            return super().resize(*args)
+        if self._initialized:
+            self._browser.page().runJavaScript("scheduleResize();")
 
     def sizeHint(self) -> QSize:
         return QSize(400, 300)
 
-    def _onLoadFinished(self, success):
-        """Handle HTML load finished"""
-        if success:
-            self._initialized = True
-            if self.isVisible() and self._pending_option:
-                self._chart_shown = True
-                self._doUpdateChart()
-
-    def _onThemeChanged(self):
-        """Handle theme change"""
-        self._applyTheme()
-
     def _getTheme(self) -> tuple:
-        """Get current theme info
-
-        Returns
-        -------
-        tuple : (theme_name, bg_color)
-        """
-
-        if isDarkTheme():
-            return ("dark", "#202020")
-        else:
-            return (None, "#f3f3f3")
-
-    def _loadEChartsJS(self) -> str:
-        """Load echarts.min.js from Qt resource (cached)
-
-        Returns
-        -------
-        str : echarts JavaScript content
-        """
-        # Use cached content if available
-        if ChartWidget._echarts_js_cache is not None:
-            return ChartWidget._echarts_js_cache
-
-        file = QFile(":/qfluentwidgets/js/echarts.min.js")
-        if not file.open(QFile.ReadOnly | QFile.Text):
-            raise RuntimeError("Failed to load echarts.min.js from resource")
-
-        stream = QTextStream(file)
-        content = stream.readAll()
-        file.close()
-
-        # Cache for future use
-        ChartWidget._echarts_js_cache = content
-        return content
+        return ("dark", "#202020") if isDarkTheme() else (None, "#f3f3f3")
 
     def _initChart(self):
-        """Initialize chart HTML framework (only once)"""
-        theme, bg_color = self._getTheme()
-        echarts_js = self._loadEChartsJS()
-        theme_str = f"'{theme}'" if theme else "null"
+        if self._page_requested:
+            return
+        self._page_requested = True
+        # Load the library separately, avoiding a copy of its 1 MB source in
+        # each HTML data URL and allowing Chromium to cache the script.
+        self._browser.setUrl(QUrl("qrc:/qfluentwidgets/js/chart.html"))
 
-        html_content = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <script>{echarts_js}</script>
-            <style>
-                * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-                body, html {{ width: 100%; height: 100%; background-color: {bg_color}; }}
-                #container {{ width: 100%; height: 100%; }}
-            </style>
-        </head>
-        <body>
-            <div id="container"></div>
-            <script>
-                var chart = null;
-                var currentTheme = {theme_str};
-                var currentBgColor = '{bg_color}';
+    def _onLoadFinished(self, success):
+        # FramelessWebEngineView bootstraps with a blank document; it is not
+        # the chart and must never trigger calls to the ECharts bridge.
+        if not self._page_requested or self._browser.url() != QUrl("qrc:/qfluentwidgets/js/chart.html"):
+            return
+        self._initialized = success
+        if success:
+            if self._frameGate.pending:
+                self._frameGate.prepare()
+            else:
+                self._updateChart()
 
-                function initChart(theme, bgColor) {{
-                    if (chart) {{
-                        chart.dispose();
-                    }}
-                    currentTheme = theme;
-                    currentBgColor = bgColor;
-                    document.body.style.backgroundColor = bgColor;
-                    chart = echarts.init(document.getElementById('container'), theme);
-                    window.chart = chart;
-                }}
-
-                function updateChart(optionStr, bgColor) {{
-                    if (!chart) {{
-                        initChart(currentTheme, bgColor);
-                    }}
-                    var option;
-                    eval(optionStr);
-                    if (!option.backgroundColor) {{
-                        option.backgroundColor = bgColor;
-                    }}
-                    chart.setOption(option, {{ notMerge: true }});
-                }}
-
-                function applyTheme(theme, bgColor) {{
-                    currentBgColor = bgColor;
-                    document.body.style.backgroundColor = bgColor;
-                    if (chart) {{
-                        var currentOption = chart.getOption();
-                        chart.dispose();
-                        chart = echarts.init(document.getElementById('container'), theme);
-                        window.chart = chart;
-                        if (currentOption) {{
-                            currentOption.backgroundColor = bgColor;
-                            chart.setOption(currentOption, {{ notMerge: true }});
-                        }}
-                    }}
-                }}
-
-                window.onresize = function() {{ if(chart) chart.resize(); }};
-            </script>
-        </body>
-        </html>
-        """
-
-        self._browser.setHtml(html_content)
+    def _onThemeChanged(self):
+        self.update()
+        if self.isVisible():
+            self._browser.page().setBackgroundColor(self._normalBackgroundColor())
+            if self._frameGate.pending:
+                self._frameGate.arm(self._normalBackgroundColor())
+                if self._initialized:
+                    self._frameGate.prepare()
+        self._updateChart()
 
     def _updateChart(self):
-        """Update chart option via JavaScript (no page reload)"""
-        if not self._initialized:
-            self._pending_option = True
-            return
-        self._doUpdateChart()
+        if self._initialized and self.isVisible():
+            # Coalesce options/theme/show events in the current event-loop turn.
+            self._renderTimer.start(0)
 
     def _doUpdateChart(self):
-        """Actually execute the chart update"""
-        theme, bg_color = self._getTheme()
-        theme_str = f"'{theme}'" if theme else "null"
+        if not self._initialized or not self.isVisible() or self._frameGate.pending:
+            return
 
-        # Build option string
-        if self._js_option:
-            option_str = self._js_option
-        elif self._option:
-            option_str = f"option = {json.dumps(self._option, ensure_ascii=False)};"
-        else:
-            option_str = "option = {};"
+        background_color = self._normalBackgroundColor()
+        if self._browser.page().backgroundColor() != background_color:
+            self._browser.page().setBackgroundColor(background_color)
 
-        js_code = f"""
-        (function() {{
-            if (chart) {{
-                chart.dispose();
-                chart = null;
-            }}
-            initChart({theme_str}, '{bg_color}');
-            var option;
-            {option_str}
-            if (!option.backgroundColor) {{
-                option.backgroundColor = '{bg_color}';
-            }}
-            option.animation = {"true" if self._animation_enabled else "false"};
-            option.animationDuration = 1000;
-            option.animationEasing = 'cubicOut';
-            chart.setOption(option, {{ notMerge: true }});
-        }})();
-        """
-        self._browser.page().runJavaScript(js_code)
+        source = None
+        if self._pending_option:
+            source = self._js_option or (
+                "option = " + json.dumps(self._option, ensure_ascii=False) + ";"
+            )
+        theme, background = self._getTheme()
+        arguments = json.dumps(
+            [source, theme, background, self._animation_enabled, self._replay_pending],
+            ensure_ascii=False,
+        )
+        self._browser.page().runJavaScript("updateChart.apply(null, " + arguments + ");")
         self._pending_option = False
+        self._replay_pending = False
 
-    def _applyTheme(self):
-        """Apply theme change via JavaScript (no page reload)"""
-        if not self._initialized:
-            return
+    def showEvent(self, event):
+        super().showEvent(event)
+        self._layout.activate()
+        self._frameGate.arm(self._normalBackgroundColor())
+        self._replay_pending = True
+        self._initChart()
+        self._renderTimer.stop()
+        if self._initialized:
+            self._frameGate.prepare()
 
-        # Re-render chart with new theme to update all colors
-        self._doUpdateChart()
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        if hasattr(self, '_frameGate'):
+            self._layout.activate()
+            self._frameGate.setGeometry(self._browser.geometry())
 
-        # Update card background
-        self.update()
-
-    def resizeEvent(self, e):
-        super().resizeEvent(e)
-        self._browser.page().runJavaScript("if(window.chart) chart.resize();")
-
-    def showEvent(self, e):
-        super().showEvent(e)
-        if not self._initialized:
-            return
-        QTimer.singleShot(50, self._delayedRender)
-
-    def _delayedRender(self):
-        self._chart_shown = True
-        self._doUpdateChart()
+    def hideEvent(self, event):
+        self._renderTimer.stop()
+        self._frameGate.cancel()
+        if self._initialized:
+            self._browser.page().runJavaScript("hideChart();")
+        super().hideEvent(event)
