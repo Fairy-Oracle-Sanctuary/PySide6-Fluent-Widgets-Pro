@@ -61,5 +61,13 @@ else:
     ]
 
 
+# Navigation indirectly references Acrylic. Exclude its optional CPU blur backend
+# as well as numpy/scipy above; the existing non-blurred fallback remains usable.
+args.append("--nofollow-import-to=qfluentwidgets_pro.common.image_utils")
+
+# This script packages main.py, whose gallery explicitly uses CodeEdit.
+# Pygments discovers lexers dynamically, so include them for this gallery build.
+# Do not copy this include into a business app that does not use CodeEdit.
+args.append("--include-package=pygments")
 os.system(" ".join(args))
 print("打包完成！")

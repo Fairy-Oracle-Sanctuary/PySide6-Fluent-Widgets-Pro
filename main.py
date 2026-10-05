@@ -37,6 +37,12 @@ from qfluentwidgets_pro import (
     OutlinedPushButton,
     PinBox,
     ProgressPushButton,
+    ProgressInfoBar,
+    ProgressToast,
+    RoundProgressToast,
+    RatingWidget,
+    InteractiveRatingWidget,
+    DoubleSpinBox,
     PushButton,
     RoundListWidget,
     RoundPushButton,
@@ -193,6 +199,11 @@ class MainWindow(TopFluentWindow):
             "Magnifier",
             TopNavigationItemPosition.LEFT,
         )
+
+        from gallery.view.code_edit_demo import CodeEditDemo
+        self.codeEditInterface = CodeEditDemo(self)
+        self.addSubInterface(self.codeEditInterface, FluentIcon.CODE,
+                             "CodeEdit", TopNavigationItemPosition.LEFT)
 
     def _createImageMagnifierPage(self):
         from pathlib import Path
@@ -522,7 +533,8 @@ class MainWindow(TopFluentWindow):
 
         self.successToastBtn = PushButton("Success")
         self.successToastBtn.clicked.connect(
-            lambda: Toast.success("Success", "Operation completed!", parent=self)
+            lambda: Toast.success("Lesson 4", "With respect, let's advance towards a new stage of the spin.",
+                                  duration=5000, parent=self)
         )
         toastLayout.addWidget(self.successToastBtn)
 
@@ -539,6 +551,65 @@ class MainWindow(TopFluentWindow):
         toastLayout.addWidget(self.errorToastBtn)
 
         layout.addLayout(toastLayout)
+
+        layout.addWidget(BodyLabel("ProgressInfoBar:"))
+        progressInfoButton = PushButton("显示任务进度通知")
+        progressInfoButton.clicked.connect(
+            lambda: ProgressInfoBar.new(
+                "请勿离开", "正在发送邮件，请耐心等待...", parent=self
+            )
+        )
+        layout.addWidget(progressInfoButton)
+
+        layout.addWidget(BodyLabel("ProgressToast:"))
+        progressToastLayout = QHBoxLayout()
+        downloadToastButton = PushButton("模拟下载")
+        downloadToastButton.clicked.connect(self._showProgressToastDownload)
+        completeToastButton = PushButton("下载成功")
+        completeToastButton.clicked.connect(
+            lambda: ProgressToast.success("文件下载成功", parent=self)
+        )
+        progressToastLayout.addWidget(downloadToastButton)
+        progressToastLayout.addWidget(completeToastButton)
+        layout.addLayout(progressToastLayout)
+
+        layout.addWidget(BodyLabel("RoundProgressToast:"))
+        roundProgressToastButton = PushButton("显示圆角加载通知")
+        roundProgressToastButton.clicked.connect(
+            lambda: RoundProgressToast.new(duration=5000, parent=self)
+        )
+        layout.addWidget(roundProgressToastButton)
+
+        layout.addWidget(BodyLabel("评分组件（RatingWidget）:"))
+        ratingLayout = QHBoxLayout()
+        self.ratingWidget = RatingWidget(4.5)
+        ratingInput = DoubleSpinBox()
+        ratingInput.setRange(0, 10)
+        ratingInput.setDecimals(1)
+        ratingInput.setSingleStep(.1)
+        ratingInput.setValue(4.5)
+        ratingInput.valueChanged.connect(self.ratingWidget.setValue)
+        ratingLayout.addWidget(self.ratingWidget)
+        ratingLayout.addSpacing(16)
+        ratingLayout.addWidget(ratingInput)
+        ratingLayout.addStretch()
+        layout.addLayout(ratingLayout)
+
+        layout.addWidget(BodyLabel("可交互的评分组件（InteractiveRatingWidget）:"))
+        interactiveRatingLayout = QHBoxLayout()
+        interactiveRating = InteractiveRatingWidget(3)
+        ratingPreview = BodyLabel("已确认：3")
+        interactiveRating.hovered.connect(
+            lambda value: ratingPreview.setText(f"预览：{value:.3f}")
+        )
+        interactiveRating.valueChanged.connect(
+            lambda value: ratingPreview.setText(f"已确认：{value:.3f}")
+        )
+        interactiveRatingLayout.addWidget(interactiveRating)
+        interactiveRatingLayout.addSpacing(16)
+        interactiveRatingLayout.addWidget(ratingPreview)
+        interactiveRatingLayout.addStretch()
+        layout.addLayout(interactiveRatingLayout)
 
         # ExclusiveLiteFilter demo
         from qfluentwidgets_pro import BodyLabel
@@ -609,6 +680,21 @@ class MainWindow(TopFluentWindow):
         scroll.enableTransparentBackground()
 
         return scroll
+
+    def _showProgressToastDownload(self):
+        toast = ProgressToast.warning("正在下载文件，请耐心等待...", parent=self)
+        timer = QTimer(toast)
+        timer.setInterval(250)
+
+        def advance():
+            toast.setValue(toast.value() + 5)
+            if toast.value() == 100:
+                timer.stop()
+                toast.setIcon(InfoBarIcon.SUCCESS)
+                toast.setContent("文件下载成功")
+
+        timer.timeout.connect(advance)
+        timer.start()
 
     def _createTreeComboPage(self):
         """Show hierarchical single and multiple selection with duplicate labels."""

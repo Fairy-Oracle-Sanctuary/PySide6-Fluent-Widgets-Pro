@@ -1,0 +1,2 @@
+# Optional dependency, required when using CodeEdit.
+Pygments>=2.18,<3
