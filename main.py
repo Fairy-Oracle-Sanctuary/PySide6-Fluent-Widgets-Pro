@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import QDate, QDateTime, Qt, QTimer
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -18,6 +18,10 @@ from qfluentwidgets_pro import (
     FluentIcon,
     FluentTranslator,
     FlyoutDialog,
+    RangeCalendarPicker,
+    FastRangeCalendarPicker,
+    CalendarTimePicker,
+    FastCalendarTimePicker,
     FontComboBox,
     ImageComparisonSlider,
     ImageCropper,
@@ -398,6 +402,32 @@ class MainWindow(TopFluentWindow):
             self.flyoutDialog.showAt(self.flyoutDialogButton, self)
 
         self.flyoutDialogButton.clicked.connect(showFlyoutDialog)
+
+        # Standard and fast calendars share the same two-click range API.
+        rangeLayout = QHBoxLayout()
+        self.rangeCalendar = RangeCalendarPicker()
+        self.fastRangeCalendar = FastRangeCalendarPicker()
+        for picker in (self.rangeCalendar, self.fastRangeCalendar):
+            picker.setDisabledWeekDays({6, 7})
+            start = QDate.currentDate().addDays(1)
+            while start.dayOfWeek() in (6, 7):
+                start = start.addDays(1)
+            end = start.addDays(8)
+            while end.dayOfWeek() in (6, 7):
+                end = end.addDays(1)
+            picker.setDateRange(start, end)
+            rangeLayout.addWidget(picker)
+        rangeLayout.addStretch()
+        layout.addLayout(rangeLayout)
+
+        calendarTimeLayout = QHBoxLayout()
+        self.calendarTimePicker = CalendarTimePicker()
+        self.fastCalendarTimePicker = FastCalendarTimePicker()
+        for picker in (self.calendarTimePicker, self.fastCalendarTimePicker):
+            picker.setDateTime(QDateTime.currentDateTime())
+            calendarTimeLayout.addWidget(picker)
+        calendarTimeLayout.addStretch()
+        layout.addLayout(calendarTimeLayout)
 
         # FilledPushButton test - 5 color schemes
         hLayout4 = QHBoxLayout()

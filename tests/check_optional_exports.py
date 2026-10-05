@@ -25,6 +25,8 @@ class BlockOptional(MetaPathFinder):
 sys.meta_path.insert(0, BlockOptional())
 import qfluentwidgets_pro as q
 assert hasattr(q, "RadialGauge")
+assert hasattr(q, "RangeCalendarPicker") and hasattr(q, "FastRangeCalendarPicker")
+assert hasattr(q, "CalendarTimePicker") and hasattr(q, "FastCalendarTimePicker")
 for name in ("CodeEdit", "CodeLanguage", "ChartWidget", "AcrylicLabel", "MediaPlayer", "VideoWidget"):
     assert not hasattr(q, name), name
 assert "qfluentwidgets_pro.components.widgets.code_edit" not in sys.modules

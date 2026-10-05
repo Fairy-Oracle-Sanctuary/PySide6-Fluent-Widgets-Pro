@@ -39,7 +39,7 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 
 ## 🧩 Restored Components
 
-67 components have been restored or extended in this repo (the list will be updated continuously):
+71 components have been restored or extended in this repo (the list will be updated continuously):
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -47,6 +47,8 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 `ProgressPushButton`
 `TimeLineWidget`
 `FlyoutDialog`
+`RangeCalendarPicker` `FastRangeCalendarPicker`
+`CalendarTimePicker` `FastCalendarTimePicker`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -271,6 +273,59 @@ accent-colored border and crosshair. Set the zoom with `setMagnification(2.0)`,
 the lens radius with `setRadius(50)`, or disable it with `setMagnifierEnabled(False)`.
 It supports ImageLabel image/scaling APIs and keyboard arrow movement when focused.
 The Magnifier demo page includes 2×, 3× and 4× zoom.
+
+`RangeCalendarPicker` reuses CalendarPicker's scrolling calendar;
+`FastRangeCalendarPicker` reuses FastCalendarPicker's compact paged calendar and
+`setFlyoutAnimationType()`. Click a start date, hover to preview, then click an end
+date to commit. Endpoints have accent rings and the inclusive range has a neutral
+row-spanning fill. Reverse selection is sorted; same-day and cross-month/year
+ranges are supported. Dismissing with Escape or an outside click preserves the
+committed range. `setResetEnabled(True)` enables the existing reset action.
+
+```python
+from PySide6.QtCore import QDate
+from qfluentwidgets_pro import RangeCalendarPicker, FastRangeCalendarPicker
+
+picker = FastRangeCalendarPicker()
+picker.setDateRange(QDate(2024, 3, 13), QDate(2024, 3, 21))
+picker.setDateFormat('yyyy-MM-dd')
+picker.rangeChanged.connect(lambda start, end: print(start, end))
+start, end = picker.dateRange()  # also read-only startDate / endDate properties
+```
+
+Both support `reset()` (emits an invalid QDate pair when clearing a selection).
+`setDate(date)` selects a single-day range. The Buttons page shows both variants.
+By default all weekdays are selectable. Before opening a calendar, use
+`setDisabledWeekDays({6, 7})` to disable weekends (Monday=1, Sunday=7): disabled
+days are dimmed/struck out and cannot be range endpoints, but may lie inside a
+range. Changing this setting clears a committed range if an endpoint becomes
+disabled. The demo enables this option and keeps the reset action hidden.
+
+`CalendarTimePicker` combines the original scrolling calendar and the existing
+24-hour time wheels in one popup; `FastCalendarTimePicker` uses the fast paged
+calendar. A shared confirm/cancel footer commits date and time together. Selecting
+a date or scrolling a wheel only changes the draft; Cancel, Escape and outside
+clicks preserve the committed value. Enter confirms. Both are lightweight root exports.
+
+```python
+from PySide6.QtCore import QDate, QDateTime, QTime
+from qfluentwidgets_pro import CalendarTimePicker, FastCalendarTimePicker
+
+picker = FastCalendarTimePicker()
+picker.setDateTime(QDateTime(QDate(2026, 2, 10), QTime(20, 0, 0)))
+picker.setDateTimeFormat('yyyy-MM-dd HH:mm:ss')
+picker.dateTimeChanged.connect(lambda value: print(value))
+value = picker.dateTime  # QDateTime copy; date / time properties are also available
+```
+
+Seconds are visible by default. `setSecondVisible(False)` hides that wheel and
+switches the default display to minutes; confirming this mode sets seconds to 0.
+Custom formats are retained. `setDate()` / `setTime()` preserve the other part,
+and midnight is valid. Date-time timezone information is preserved during editing.
+`setResetEnabled(True)` shows the calendar reset action; `reset()` clears the
+selection and emits an invalid QDateTime. `dateChanged` / `timeChanged` emit only
+when their part changes. Both support `setFlyoutAnimationType()` and appear on
+the Buttons demo page.
 
 `FilledPushButton` and `FilledToolButton` use Fluent semantic colors for light-theme
 resting fills (neutral, success, caution and critical). Attention follows the accent
