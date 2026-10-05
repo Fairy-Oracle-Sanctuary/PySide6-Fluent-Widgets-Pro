@@ -1849,15 +1849,18 @@ class FilledButtonBase(BackgroundAnimationWidget):
         borderHover = QColor(0, 0, 0, 128) if not isDark else QColor(255, 255, 255, 150)
         borderPressed = QColor(0, 0, 0, 0) if not isDark else QColor(255, 255, 255, 30)
 
+        # Light resting fills use Fluent SystemFillSolidNeutral/Success/Caution/
+        # Critical tokens. Keep the existing dark palette and interaction fills.
+        # https://learn.microsoft.com/visualstudio/extensibility/ux-guidelines/theme-color-token-reference
         if scheme == self.INFORMATION:
-            bgNormal = QColor(255, 255, 255, 100) if isDark else QColor(0, 0, 0, 128)
-            borderNormal = QColor(255, 255, 255, 150) if isDark else QColor(0, 0, 0, 50)
+            bgNormal = QColor(255, 255, 255, 100) if isDark else QColor("#8A8A8A")
+            borderNormal = QColor(255, 255, 255, 150) if isDark else QColor("#8A8A8A")
             textColor = QColor(255, 255, 255)
 
         elif scheme == self.SUCCESS:
-            bgNormal = QColor(103, 186, 71, 128) if isDark else QColor(30, 130, 60, 254)
+            bgNormal = QColor(103, 186, 71, 128) if isDark else QColor("#0F7B0F")
             borderNormal = (
-                QColor(133, 197, 109, 254) if isDark else QColor(46, 106, 45, 254)
+                QColor(133, 197, 109, 254) if isDark else QColor("#0F7B0F").darker(115)
             )
             textColor = QColor(255, 255, 255)
 
@@ -1871,16 +1874,16 @@ class FilledButtonBase(BackgroundAnimationWidget):
             textColor = QColor(255, 255, 255)
 
         elif scheme == self.WARNING:
-            bgNormal = QColor(142, 129, 16, 254) if isDark else QColor(157, 93, 0, 254)
+            bgNormal = QColor(142, 129, 16, 254) if isDark else QColor("#9D5D00")
             borderNormal = (
-                QColor(255, 255, 51, 254) if isDark else QColor(132, 86, 0, 254)
+                QColor(255, 255, 51, 254) if isDark else QColor("#9D5D00").darker(115)
             )
             textColor = QColor(255, 255, 255)
 
         elif scheme == self.ERROR:
-            bgNormal = QColor(156, 31, 8, 128) if isDark else QColor(216, 63, 64, 254)
+            bgNormal = QColor(156, 31, 8, 128) if isDark else QColor("#C42B1C")
             borderNormal = (
-                QColor(180, 45, 52, 254) if isDark else QColor(191, 56, 65, 254)
+                QColor(180, 45, 52, 254) if isDark else QColor("#C42B1C").darker(115)
             )
             textColor = QColor(255, 255, 255)
 

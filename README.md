@@ -272,7 +272,13 @@ the lens radius with `setRadius(50)`, or disable it with `setMagnifierEnabled(Fa
 It supports ImageLabel image/scaling APIs and keyboard arrow movement when focused.
 The Magnifier demo page includes 2×, 3× and 4× zoom.
 
+`FilledPushButton` and `FilledToolButton` use Fluent semantic colors for light-theme
+resting fills (neutral, success, caution and critical). Attention follows the accent
+color; the existing dark palette and translucent hover/pressed fills are preserved.
+
 `FlyoutDialog` provides custom flyout content with confirm/cancel icon buttons.
+Its compact footer is 40 logical pixels tall with full-half-width hover targets,
+no button tooltips and a 2-pixel divider. Wrapped content is sized at the popup width.
 Call `addWidget()` to add controls and `showAt(target, parent)` to display it.
 Connect `accepted` / `rejected` for the result; outside dismissal is cancellation.
 It reuses Flyout positioning, shadows and animations, and is deleted on close.

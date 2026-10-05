@@ -262,7 +262,13 @@ Magnifier 页面包含头像选择器示例。
 调整镜片半径，`setMagnifierEnabled(False)` 关闭。支持原有图片/缩放接口，
 聚焦后可用方向键移动镜片；Magnifier 展示页提供 2×、3×、4× 切换。
 
+`FilledPushButton` 和 `FilledToolButton` 的浅色常态填充采用 Fluent 语义色
+（中性、成功、警告、错误）；Attention 跟随主题色。原有暗色配色和悬停/按下的
+半透明黑白背景保持不变。
+
 `FlyoutDialog` 提供自定义内容区域和底部确认/取消图标按钮。
+底栏高度为 40 逻辑像素，悬停区域撑满各自半边，不显示按钮提示，分割线为 2px；
+正文按实际弹窗宽度计算换行高度，避免多余留白。
 通过 `addWidget()` 添加控件、`showAt(target, parent)` 弹出，连接 `accepted` / `rejected`
 处理结果；点击外部关闭按取消处理。复用 Flyout 的定位、阴影和动画，关闭后自动删除。
 Buttons 页面提供 Show dialog 示例。
