@@ -43,6 +43,7 @@ The following components have been restored or extended in this repo (the list w
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
+`IndeterminateProgressPushButton`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
@@ -88,7 +89,10 @@ Dependencies:
 
 ```python
 from PySide6.QtWidgets import QApplication, QVBoxLayout
-from qfluentwidgets_pro import FluentWidget, FluentIcon, ToolTipSlider, RangeSlider, HyperlinkToolButton
+from qfluentwidgets_pro import (
+    FluentWidget, FluentIcon, ToolTipSlider, RangeSlider,
+    HyperlinkToolButton, IndeterminateProgressPushButton,
+)
 
 
 class Window(FluentWidget):
@@ -105,12 +109,20 @@ class Window(FluentWidget):
 
         layout.addWidget(HyperlinkToolButton(FluentIcon.LINK, "https://github.com"))
 
+        self.progressButton = IndeterminateProgressPushButton("Downloading...", self)
+        layout.addWidget(self.progressButton)
+
 
 app = QApplication([])
 w = Window()
 w.show()
 app.exec()
 ```
+
+`IndeterminateProgressPushButton` follows the current theme and accent color.
+Its loading animation starts automatically; use `start()` and `stop()` to control
+it, and `isSpinning()` to query its state. Clicking the button emits the usual
+`clicked` signal without changing the animation state.
 
 ## 📁 Project Structure
 

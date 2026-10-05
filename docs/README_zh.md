@@ -47,6 +47,7 @@
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
+`IndeterminateProgressPushButton`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
@@ -93,7 +94,10 @@ from qfluentwidgets_pro import FluentWidget
 
 ```python
 from PySide6.QtWidgets import QApplication, QVBoxLayout
-from qfluentwidgets_pro import FluentWidget, FluentIcon, ToolTipSlider, RangeSlider, HyperlinkToolButton
+from qfluentwidgets_pro import (
+    FluentWidget, FluentIcon, ToolTipSlider, RangeSlider,
+    HyperlinkToolButton, IndeterminateProgressPushButton,
+)
 
 
 class Window(FluentWidget):
@@ -110,12 +114,19 @@ class Window(FluentWidget):
 
         layout.addWidget(HyperlinkToolButton(FluentIcon.LINK, "https://github.com"))
 
+        self.progressButton = IndeterminateProgressPushButton("下载中...", self)
+        layout.addWidget(self.progressButton)
+
 
 app = QApplication([])
 w = Window()
 w.show()
 app.exec()
 ```
+
+`IndeterminateProgressPushButton` 会跟随当前主题和自定义主题色。
+加载动画默认自动播放，可通过 `start()` / `stop()` 控制，使用 `isSpinning()` 查询状态。
+点击按钮会正常发出 `clicked` 信号，不会切换动画状态。
 
 
 ## 目录结构
