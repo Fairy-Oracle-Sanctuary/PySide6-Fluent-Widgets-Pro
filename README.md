@@ -39,7 +39,7 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 
 ## 🧩 Restored Components
 
-57 components have been restored or extended in this repo (the list will be updated continuously):
+61 components have been restored or extended in this repo (the list will be updated continuously):
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -47,6 +47,10 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 `ProgressPushButton`
 `TimeLineWidget`
 `FlyoutDialog`
+`ImageMagnifierWidget`
+`ImageComparisonSlider`
+`ImageCropper`
+`AvatarPicker`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
@@ -133,6 +137,30 @@ progress ring with a stop icon while progressing. Use `setProgressing(True)` and
 `setValue(0..100)` to control it. `setAutoProgressEnabled(True)` enables click-to-start
 (off by default). Handle `stopRequested` to cancel; completion does not automatically
 change the component state. The Buttons demo includes a simulated download.
+
+`ImageComparisonSlider(before, after)` compares two images using a draggable vertical
+divider and translucent arrow grip. Inputs accept paths, QImage or QPixmap.
+Use `setImages()` to replace them and `setValue(0..100)` to set the split percentage;
+`valueChanged` reports changes. Arrow keys and Home/End are supported.
+The Magnifier page includes a two-image comparison example.
+
+`AvatarPicker` extends AvatarWidget: hovering displays a dark overlay and a white
+camera icon; clicking selects an image and opens the shared circular ImageCropper.
+Confirmation updates the avatar and emits `imageChanged(QImage)`; cancellation
+preserves it. Use `setRadius()` for size or `cropImage(image)` to skip file selection.
+The Magnifier page includes an avatar picker example.
+
+`ImageCropper(image, parent)` provides draggable crop bounds, rotation and horizontal
+flip. `imageCropped` returns a QImage on confirmation; cancellation leaves the caller's
+preview unchanged. `setCropShape(CropShape.CIRCLE)` enables a circular mask, and
+`setCropPathFactory(factory)` supports custom QPainterPath shapes. The shape toolbar
+button is disabled, matching the reference gallery. No save/export UI is included.
+
+`ImageMagnifierWidget` extends ImageLabel with a cursor-following circular lens,
+accent-colored border and crosshair. Set the zoom with `setMagnification(2.0)`,
+the lens radius with `setRadius(50)`, or disable it with `setMagnifierEnabled(False)`.
+It supports ImageLabel image/scaling APIs and keyboard arrow movement when focused.
+The Magnifier demo page includes 2×, 3× and 4× zoom.
 
 `FlyoutDialog` provides custom flyout content with confirm/cancel icon buttons.
 Call `addWidget()` to add controls and `showAt(target, parent)` to display it.
