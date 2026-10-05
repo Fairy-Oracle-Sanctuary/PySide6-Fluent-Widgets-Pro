@@ -1,5 +1,6 @@
 # coding: utf-8
 from functools import singledispatch, update_wrapper
+from inspect import isfunction, signature
 
 
 class singledispatchmethod:
@@ -21,6 +22,17 @@ class singledispatchmethod:
 
         Registers a new implementation for the given *cls* on a *generic_method*.
         """
+        if method is None and isfunction(cls):
+            # functools.get_type_hints() evaluates every annotation when the
+            # dispatch type is inferred. On Python 3.9, unrelated annotations
+            # such as "QIcon | str" cannot be evaluated with Shiboken types.
+            method = cls
+            parameters = list(signature(method).parameters.values())
+            dispatch_type = parameters[1].annotation  # first argument after self
+            if isinstance(dispatch_type, str):
+                dispatch_type = eval(dispatch_type, method.__globals__)
+            return self.dispatcher.register(dispatch_type, func=method)
+
         return self.dispatcher.register(cls, func=method)
 
     def __get__(self, obj, cls=None):

@@ -65,6 +65,7 @@ SplitDropButton:pressed {
 
 
 PrimaryPushButton,
+IndeterminateProgressPushButton,
 PrimaryToolButton,
 ToggleButton:checked,
 ToggleToolButton:checked {
@@ -75,6 +76,7 @@ ToggleToolButton:checked {
 }
 
 PrimaryPushButton:hover,
+IndeterminateProgressPushButton:hover,
 PrimaryToolButton:hover,
 ToggleButton:checked:hover,
 ToggleToolButton:checked:hover {
@@ -84,6 +86,7 @@ ToggleToolButton:checked:hover {
 }
 
 PrimaryPushButton:pressed,
+IndeterminateProgressPushButton:pressed,
 PrimaryToolButton:pressed,
 ToggleButton:checked:pressed,
 ToggleToolButton:checked:pressed {
@@ -93,6 +96,7 @@ ToggleToolButton:checked:pressed {
 }
 
 PrimaryPushButton:disabled,
+IndeterminateProgressPushButton:disabled,
 PrimaryToolButton:disabled,
 ToggleButton:checked:disabled,
 ToggleToolButton:checked:disabled {
