@@ -177,6 +177,117 @@ class PrimaryPushButton(PushButton):
         PushButton._drawIcon(self, icon, painter, rect, state)
 
 
+class ProgressPushButton(PrimaryPushButton):
+    """Primary button with a determinate ring and a stop affordance.
+
+    Click-to-start is opt-in; clicks while progressing emit stopRequested
+    without resetting the task or its progress.
+    """
+
+    progressChanged = Signal(bool)
+    valueChanged = Signal(int)
+    stopRequested = Signal()
+
+    def _postInit(self):
+        super()._postInit()
+        self._progressing = False
+        self._autoProgress = False
+        self._value = 0
+        self._displayValue = 0.0
+        self._progressAnimation = QPropertyAnimation(self, b"displayValue", self)
+        self._progressAnimation.setDuration(150)
+        self.clicked.connect(self._onProgressClick)
+
+    def setAutoProgressEnabled(self, enabled: bool):
+        """Whether an idle click enters progress mode (default: False)."""
+        self._autoProgress = bool(enabled)
+
+    def isAutoProgressEnabled(self):
+        return self._autoProgress
+
+    def setProgressing(self, progressing: bool):
+        progressing = bool(progressing)
+        if progressing == self._progressing:
+            return
+        self._progressing = progressing
+        self.update()
+        self.progressChanged.emit(progressing)
+
+    def isProgressing(self):
+        return self._progressing
+
+    def _onProgressClick(self):
+        if self._progressing:
+            self.stopRequested.emit()
+        elif self._autoProgress:
+            self.setProgressing(True)
+
+    def value(self):
+        return self._value
+
+    def setValue(self, value: int):
+        value = max(0, min(100, int(value)))
+        if value == self._value:
+            return
+        self._value = value
+        self._progressAnimation.stop()
+        self._progressAnimation.setStartValue(self._displayValue)
+        self._progressAnimation.setEndValue(float(value))
+        if self.isVisible():
+            self._progressAnimation.start()
+        else:
+            self.displayValue = float(value)
+        self.valueChanged.emit(value)
+
+    @Property(float)
+    def displayValue(self):
+        return self._displayValue
+
+    @displayValue.setter
+    def displayValue(self, value):
+        self._displayValue = value
+        self.update()
+
+    def hideEvent(self, event):
+        self._progressAnimation.stop()
+        self.displayValue = float(self._value)
+        super().hideEvent(event)
+
+    def paintEvent(self, event):
+        if not self._progressing:
+            return super().paintEvent(event)
+        option = QStyleOptionButton()
+        self.initStyleOption(option)
+        option.text = ""
+        option.icon = QIcon()
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        self.style().drawControl(QStyle.CE_PushButton, option, painter, self)
+        foreground = QColor(Qt.black if isDarkTheme() else Qt.white)
+        if not self.isEnabled():
+            painter.setOpacity(0.43)
+        elif self.isDown():
+            painter.setOpacity(0.63)
+        diameter = min(21, max(0, self.height() - 8), max(0, self.width() - 8))
+        ring = QRectF(
+            (self.width() - diameter) / 2 + 1.5,
+            (self.height() - diameter) / 2 + 1.5,
+            diameter - 3,
+            diameter - 3,
+        )
+        track = QColor(foreground)
+        track.setAlphaF(0.35)
+        painter.setPen(QPen(track, 2, Qt.SolidLine, Qt.RoundCap))
+        painter.drawEllipse(ring)
+        painter.setPen(QPen(foreground, 2, Qt.SolidLine, Qt.RoundCap))
+        painter.drawArc(ring, 90 * 16, -round(self._displayValue * 3.6 * 16))
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(foreground)
+        painter.drawRoundedRect(
+            QRectF(self.width() / 2 - 4, self.height() / 2 - 4, 8, 8), 2, 2
+        )
+
+
 class IndeterminateProgressPushButton(PrimaryPushButton):
     """Primary button with an animated, indeterminate loading arc."""
 

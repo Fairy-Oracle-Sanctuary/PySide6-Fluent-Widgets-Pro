@@ -349,11 +349,14 @@ class NavigationPanel(QFrame):
         if routeKey in self.items:
             return
 
-        w = NavigationTreeWidget(icon, text, selectable, self)
+        w = self._createNavigationItem(icon, text, selectable)
         self.insertWidget(
             index, routeKey, w, onClick, position, tooltip, parentRouteKey
         )
         return w
+
+    def _createNavigationItem(self, icon, text, selectable):
+        return NavigationTreeWidget(icon, text, selectable, self)
 
     def insertWidget(
         self,

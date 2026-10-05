@@ -540,11 +540,14 @@ class NavigationTreeWidget(NavigationTreeWidgetBase):
         self._rememberExpandState = False
         self._wasExpanded = False
 
-        self.itemWidget = NavigationTreeItem(icon, text, isSelectable, self)
+        self.itemWidget = self._createItemWidget(icon, text, isSelectable)
         self.vBoxLayout = QVBoxLayout(self)
         self.expandAni = QPropertyAnimation(self, b"geometry", self)
 
         self.__initWidget()
+
+    def _createItemWidget(self, icon, text, isSelectable):
+        return NavigationTreeItem(icon, text, isSelectable, self)
 
     def __initWidget(self):
         self.vBoxLayout.setSpacing(4)

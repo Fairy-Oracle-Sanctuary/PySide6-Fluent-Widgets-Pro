@@ -20,6 +20,7 @@ from qfluentwidgets_pro import (
     InfoBadge,
     InfoBadgePosition,
     IndeterminateProgressPushButton,
+    ProgressPushButton,
     LabelLineEdit,
     LineTableWidget,
     MultiSelectionComboBox,
@@ -225,6 +226,26 @@ class MainWindow(TopFluentWindow):
         layout.addLayout(progressLayout)
         self.indeterminateButton = IndeterminateProgressPushButton("Downloading...")
         progressLayout.addWidget(self.indeterminateButton)
+        self.progressButton = ProgressPushButton("下载文件")
+        self.progressButton.setFixedWidth(150)
+        self.progressButton.setAutoProgressEnabled(True)
+        self.progressTimer = QTimer(self)
+        self.progressTimer.setInterval(80)
+        def advanceProgress():
+            self.progressButton.setValue(self.progressButton.value() + 1)
+            if self.progressButton.value() == 100:
+                self.progressButton.setProgressing(False)
+        def progressStateChanged(active):
+            if active:
+                self.progressButton.setValue(0)
+                self.progressTimer.start()
+            else:
+                self.progressTimer.stop()
+        self.progressTimer.timeout.connect(advanceProgress)
+        self.progressButton.progressChanged.connect(progressStateChanged)
+        self.progressButton.stopRequested.connect(
+            lambda: self.progressButton.setProgressing(False))
+        progressLayout.addWidget(self.progressButton)
         progressLayout.addStretch()
 
         # FilledPushButton test - 5 color schemes
@@ -437,6 +458,10 @@ class MainWindow(TopFluentWindow):
         self.chart_button = PushButton("打开图表窗口")
         layout.addWidget(self.chart_button)
         self.chart_button.clicked.connect(self._openChartWindow)
+
+        self.filled_window_button = PushButton('打开 FilledFluentWindow 窗口')
+        layout.addWidget(self.filled_window_button)
+        self.filled_window_button.clicked.connect(self._openFilledWindow)
 
         layout.addStretch()
         scroll.setWidget(page)
@@ -801,6 +826,16 @@ class MainWindow(TopFluentWindow):
         self._chartWindow.setMicaEffectEnabled(True)
         self._chartWindow.raise_()
         self._chartWindow.activateWindow()
+
+    def _openFilledWindow(self):
+        from gallery.view.filled_window_demo import FilledWindowDemo
+
+        if not hasattr(self, '_filledWindow'):
+            self._filledWindow = FilledWindowDemo()
+        self._filledWindow.show()
+        self._filledWindow.setMicaEffectEnabled(True)
+        self._filledWindow.raise_()
+        self._filledWindow.activateWindow()
 
 
 if __name__ == "__main__":

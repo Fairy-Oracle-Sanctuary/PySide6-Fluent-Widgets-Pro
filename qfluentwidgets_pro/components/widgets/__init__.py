@@ -7,6 +7,7 @@ from .button import (
     HyperlinkButton,
     HyperlinkToolButton,
     IndeterminateProgressPushButton,
+    ProgressPushButton,
     LuminaPushButton,
     OutlinedPushButton,
     OutlinedToolButton,

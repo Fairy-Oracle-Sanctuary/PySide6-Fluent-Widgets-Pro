@@ -282,7 +282,7 @@ class FluentWindow(FluentWindowBase):
         super().__init__(parent)
         self.setTitleBar(FluentTitleBar(self))
 
-        self.navigationInterface = NavigationInterface(self, showReturnButton=True)
+        self.navigationInterface = self._createNavigationInterface()
         self.widgetLayout = QHBoxLayout()
 
         # initialize layout
@@ -295,6 +295,9 @@ class FluentWindow(FluentWindowBase):
 
         self.navigationInterface.displayModeChanged.connect(self.titleBar.raise_)
         self.titleBar.raise_()
+
+    def _createNavigationInterface(self):
+        return NavigationInterface(self, showReturnButton=True)
 
     def addSubInterface(
         self,

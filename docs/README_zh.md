@@ -48,12 +48,14 @@
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
 `IndeterminateProgressPushButton`
+`ProgressPushButton`
 `OutlinedPushButton` `OutlinedToolButton` `RoundPushButton`
 `RoundToolButton` `Chip` `Tag` `SubtitleCheckBox`
 `SubtitleRadioButton` `ToolTipSlider` `RangeSlider`
 `Pager` `FilledProgressBar` `MultiSegmentProgressRing`
 `RadialGauge` `DropMultiFilesWidget` `DropSingleFileWidget`
 `TopFluentWindow` `ChartWidget` `Splitter` `PinBox`
+`FilledFluentWindow`
 `LabelLineEdit` `StepProgressBar` `RoundTableWidget`
 `RoundTableView` `LineTableWidget` `LineTableView`
 `DropSingleFolderWidget` `DropMultiFoldersWidget`
@@ -127,6 +129,18 @@ app.exec()
 `IndeterminateProgressPushButton` 会跟随当前主题和自定义主题色。
 加载动画默认自动播放，可通过 `start()` / `stop()` 控制，使用 `isSpinning()` 查询状态。
 点击按钮会正常发出 `clicked` 信号，不会切换动画状态。
+
+`ProgressPushButton` 常态与主题色按钮一致，进度态显示居中的进度环和停止图标。
+使用 `setProgressing(True)` 切换形态、`setValue(0..100)` 更新进度。
+`setAutoProgressEnabled(True)` 开启点击进入进度态（默认关闭）；进度态点击发出
+`stopRequested`，由业务处理取消。达到 100 不会自动切换形态。Buttons 页面提供模拟下载。
+
+`FilledFluentWindow` 提供默认展开的侧边栏、主题色填充的选中项和搜索框。
+沿用 `FluentWindow` 的 `addSubInterface()` / `switchTo()` 接口，
+搜索框自动搜索已注册页面的导航名称，点击结果或使用方向键和回车跳转。
+按 Esc 关闭结果列表，清空输入不会改变当前页面；页面增删会同步更新搜索结果。
+运行 `main.py`，在主页点击“打开 FilledFluentWindow 窗口”，
+即可体验页面切换、搜索，以及设置页中的主题和自定义主题色切换。
 
 
 ## 目录结构

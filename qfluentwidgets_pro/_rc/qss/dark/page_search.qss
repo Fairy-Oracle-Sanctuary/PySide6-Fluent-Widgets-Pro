@@ -1,0 +1,15 @@
+#pageSearchPopup {
+    background: transparent;
+    border: none;
+}
+
+#pageSearchCard {
+    background: rgb(40, 42, 50);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}
+
+#pageSearchEmptyLabel {
+    color: rgb(180, 180, 180);
+    background: transparent;
+}
