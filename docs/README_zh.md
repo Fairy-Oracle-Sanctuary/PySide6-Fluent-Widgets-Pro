@@ -43,7 +43,7 @@
 
 ## 已还原组件
 
-已还原或扩展的组件共 67 个（列表将持续更新）：
+已还原或扩展的组件共 71 个（列表将持续更新）：
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -51,6 +51,8 @@
 `ProgressPushButton`
 `TimeLineWidget`
 `FlyoutDialog`
+`RangeCalendarPicker` `FastRangeCalendarPicker`
+`CalendarTimePicker` `FastCalendarTimePicker`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -261,6 +263,52 @@ Magnifier 页面包含头像选择器示例。
 带主题色边框和十字标记。通过 `setMagnification(2.0)` 调整倍率、`setRadius(50)`
 调整镜片半径，`setMagnifierEnabled(False)` 关闭。支持原有图片/缩放接口，
 聚焦后可用方向键移动镜片；Magnifier 展示页提供 2×、3×、4× 切换。
+
+`RangeCalendarPicker` 复用 CalendarPicker 的滚动日历；`FastRangeCalendarPicker`
+复用 FastCalendarPicker 的轻量分页日历，并支持 `setFlyoutAnimationType()`。
+第一次点击起点，移动鼠标预览，第二次点击终点提交。起止日期显示主题色描边，
+范围内铺设跨周行连接的中性底色。支持反向排序、同日及跨月/年范围；
+Esc 或外部点击取消未完成选择，保留已提交的范围。`setResetEnabled(True)` 显示重置按钮。
+
+```python
+from PySide6.QtCore import QDate
+from qfluentwidgets_pro import RangeCalendarPicker, FastRangeCalendarPicker
+
+picker = FastRangeCalendarPicker()
+picker.setDateRange(QDate(2024, 3, 13), QDate(2024, 3, 21))
+picker.setDateFormat('yyyy-MM-dd')
+picker.rangeChanged.connect(lambda start, end: print(start, end))
+start, end = picker.dateRange()  # 也可读取只读属性 startDate / endDate
+```
+
+`reset()` 清空已有选择时发出两个无效 QDate；`setDate(date)` 设置同日范围。
+Buttons 展示页同时提供普通版和 Fast 版示例，两者均为纯 Qt 组件并在主包导出。
+默认允许选择所有星期。在打开日历前调用 `setDisabledWeekDays({6, 7})` 可禁用周末
+（周一=1，周日=7）：禁用日期显示灰色删除线，不能作为端点，但可处于范围内部。
+修改配置后，如果现有范围端点被禁用，会清空该范围。示例开启周末禁用，并默认隐藏重置按钮。
+
+`CalendarTimePicker` 将现有滚动日历和 24 小时时间滚轮组合在一个弹层中；
+`FastCalendarTimePicker` 改用 Fast 分页日历。底部共用确认/取消按钮，日期和时间
+一起提交。点击日期或滚动时间只修改草稿；取消、Esc、点击外部均保留原值，
+Enter 确认。两者均为轻量 Qt 组件，在主包导出。
+
+```python
+from PySide6.QtCore import QDate, QDateTime, QTime
+from qfluentwidgets_pro import CalendarTimePicker, FastCalendarTimePicker
+
+picker = FastCalendarTimePicker()
+picker.setDateTime(QDateTime(QDate(2026, 2, 10), QTime(20, 0, 0)))
+picker.setDateTimeFormat('yyyy-MM-dd HH:mm:ss')
+picker.dateTimeChanged.connect(lambda value: print(value))
+value = picker.dateTime  # QDateTime 副本；也可读写 date / time 属性
+```
+
+默认显示秒。`setSecondVisible(False)` 隐藏秒列并将默认格式切换为分钟，
+此模式确认后秒为 0；自定义格式不会被覆盖。`setDate()` / `setTime()` 保留另一部分，
+支持零点时间，并在编辑时保留原 QDateTime 的时区信息。
+`setResetEnabled(True)` 显示日历重置按钮；`reset()` 清空选择并发出无效 QDateTime。
+仅日期或时间发生变化时，才发出对应的 `dateChanged` / `timeChanged`。
+两个版本均支持 `setFlyoutAnimationType()`，Buttons 展示页已加入示例。
 
 `FilledPushButton` 和 `FilledToolButton` 的浅色常态填充采用 Fluent 语义色
 （中性、成功、警告、错误）；Attention 跟随主题色。原有暗色配色和悬停/按下的
