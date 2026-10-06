@@ -120,7 +120,8 @@ class CircleColorPicker(QWidget):
         self._layout.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self._layout.addStretch()
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.setAccessibleName('Color palette')
+        self.setAccessibleName(self.tr('Color palette'))
+        self.setAccessibleDescription(self.tr('No color selected'))
         qconfig.themeChangedFinished.connect(self._refreshButtons)
         self.setColors(self.DEFAULT_COLORS if colors is None else colors)
 
@@ -211,7 +212,8 @@ class CircleColorPicker(QWidget):
         for i, button in enumerate(self._buttons):
             button.setChecked(i == index)
         self._group.setExclusive(True)
-        self.setAccessibleDescription(self.color().name(QColor.HexArgb) if index >= 0 else 'No color selected')
+        self.setAccessibleDescription(self.color().name(QColor.HexArgb) if index >= 0
+                                      else self.tr('No color selected'))
         self._refreshButtons()
 
     def _emitChanges(self, oldIndex, previous):

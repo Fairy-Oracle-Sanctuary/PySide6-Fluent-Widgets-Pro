@@ -3,7 +3,7 @@ import os
 from array import array
 from math import isfinite
 
-from PySide6.QtCore import QObject, QUrl, Signal
+from PySide6.QtCore import QCoreApplication, QObject, QUrl, Signal
 from PySide6.QtMultimedia import QAudioDecoder, QAudioFormat
 
 
@@ -57,7 +57,7 @@ class AudioDecoder(QObject):
         decoder.finished.connect(lambda: self._onFinished(decoder))
         decoder.error.connect(lambda error: self._onError(decoder, error))
         if not decoder.isSupported():
-            self._fail(decoder, 'Audio decoding is not supported by this Qt multimedia backend')
+            self._fail(decoder, self.tr('Audio decoding is not supported by this Qt multimedia backend'))
             return
         self._setRunning(True)
         decoder.setSource(url)
@@ -108,18 +108,18 @@ class AudioDecoder(QObject):
     def samplesFromBuffer(buffer):
         """Copy Qt's native-endian PCM before its QAudioBuffer goes out of scope."""
         if not buffer.isValid():
-            raise ValueError('Invalid audio buffer')
+            raise ValueError(QCoreApplication.translate('AudioDecoder', 'Invalid audio buffer'))
         format = buffer.format()
         channels, rate = format.channelCount(), format.sampleRate()
         types = {QAudioFormat.UInt8: ('B', 128.), QAudioFormat.Int16: ('h', 32768.),
                  QAudioFormat.Int32: ('i', 2147483648.), QAudioFormat.Float: ('f', 1.)}
         if channels <= 0 or rate <= 0 or format.sampleFormat() not in types:
-            raise ValueError('Unsupported PCM sample format')
+            raise ValueError(QCoreApplication.translate('AudioDecoder', 'Unsupported PCM sample format'))
         code, divisor = types[format.sampleFormat()]
         raw = array(code)
         raw.frombytes(bytes(buffer.constData())[:buffer.byteCount()])
         if len(raw) % channels:
-            raise ValueError('Incomplete PCM audio frame')
+            raise ValueError(QCoreApplication.translate('AudioDecoder', 'Incomplete PCM audio frame'))
         if code == 'B':
             normalized = ((v - 128.) / divisor for v in raw)
         else:
@@ -140,7 +140,7 @@ class AudioDecoder(QObject):
                 self._fail(decoder, str(error))
                 return
             if self._sampleRate and rate != self._sampleRate:
-                self._fail(decoder, 'Audio sample rate changed during decoding')
+                self._fail(decoder, self.tr('Audio sample rate changed during decoding'))
                 return
             self._setSampleRate(rate)
             if decoder is not self._decoder:
@@ -159,7 +159,7 @@ class AudioDecoder(QObject):
         if decoder is not self._decoder:
             return
         if not self._samples:
-            self._fail(decoder, 'Audio contains no decoded samples')
+            self._fail(decoder, self.tr('Audio contains no decoded samples'))
             return
         samples, rate = self.samples(), self._sampleRate
         self._setDuration((len(samples) * 1000 + rate - 1) // rate)
@@ -171,7 +171,7 @@ class AudioDecoder(QObject):
 
     def _onError(self, decoder, error):
         if decoder is self._decoder and error != QAudioDecoder.NoError:
-            self._fail(decoder, decoder.errorString() or 'Audio decoding failed')
+            self._fail(decoder, decoder.errorString() or self.tr('Audio decoding failed'))
 
     def _fail(self, decoder, message):
         if decoder is self._decoder:

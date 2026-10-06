@@ -302,7 +302,7 @@ class CodeEdit(PlainTextEdit):
         if len(text) > self._highlightLimit:
             self.highlighter.lines, self.highlighter.spans = [], []
             self.highlighter.rehighlight()
-            self.highlightingFailed.emit('Highlighting skipped: document exceeds 1,000,000 characters')
+            self.highlightingFailed.emit(self.tr('Highlighting skipped: document exceeds 1,000,000 characters'))
             return
         self._job = _LexJob(self._version, text, self._lexer)
         self._job.signals.finished.connect(self._lexFinished, Qt.QueuedConnection)

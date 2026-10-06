@@ -5,7 +5,7 @@ import sys
 from math import floor
 from weakref import ref
 
-from PySide6.QtCore import QEvent, QPoint, QPointF, QRect, QRectF, QSize, Qt, QTimer, Signal
+from PySide6.QtCore import QCoreApplication, QEvent, QPoint, QPointF, QRect, QRectF, QSize, Qt, QTimer, Signal
 from PySide6.QtGui import QColor, QCursor, QImage, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QApplication, QGraphicsDropShadowEffect, QSizePolicy, QWidget
 
@@ -20,8 +20,9 @@ def _excludeFromCapture(widget):
     """Exclude only our own live overlays. Load the standard-library bridge lazily."""
     if (sys.platform != 'win32' or QApplication.platformName() != 'windows'
             or sys.getwindowsversion().build < 19041):
-        raise RuntimeError('Live screen picking requires Windows 10 version 2004 or newer; '
-                           'enable screen freezing on this platform.')
+        raise RuntimeError(QCoreApplication.translate(
+            'ScreenColorPicker', 'Live screen picking requires Windows 10 version 2004 or newer; '
+            'enable screen freezing on this platform.'))
     import ctypes
     from ctypes.wintypes import BOOL, DWORD, HWND
 
@@ -30,10 +31,12 @@ def _excludeFromCapture(widget):
         affinity.argtypes = (HWND, DWORD)
         affinity.restype = BOOL
         if not affinity(HWND(int(widget.winId())), DWORD(0x11)):
-            raise RuntimeError('Cannot exclude the live picker overlay from screen capture '
-                               '(Windows error %d). Enable screen freezing instead.' % ctypes.get_last_error())
+            raise RuntimeError(QCoreApplication.translate(
+                'ScreenColorPicker', 'Cannot exclude the live picker overlay from screen capture '
+                '(Windows error %1). Enable screen freezing instead.').replace('%1', str(ctypes.get_last_error())))
     except (AttributeError, OSError) as error:
-        raise RuntimeError('Live screen capture exclusion is unavailable. Enable screen freezing instead.') from error
+        raise RuntimeError(QCoreApplication.translate(
+            'ScreenColorPicker', 'Live screen capture exclusion is unavailable. Enable screen freezing instead.')) from error
 
 
 def _captureLiveColor(screen, geometry, position):
@@ -45,7 +48,8 @@ def _captureLiveColor(screen, geometry, position):
     # just one logical pixel rather than copying every monitor at 30fps.
     image = screen.grabWindow(0, x, y, 1, 1).toImage()
     if image.isNull():
-        raise RuntimeError('Live screen capture failed. Check screen recording permissions.')
+        raise RuntimeError(QCoreApplication.translate(
+            'ScreenColorPicker', 'Live screen capture failed. Check screen recording permissions.'))
     px = min(image.width() - 1, int((local.x() - x) * image.width()))
     py = min(image.height() - 1, int((local.y() - y) * image.height()))
     return image.pixelColor(px, py)
@@ -152,7 +156,7 @@ class _PickerOverlay(QWidget):
         self.setMouseTracking(True)
         self.setFocusPolicy(Qt.StrongFocus)
         self.setCursor(Qt.ArrowCursor)
-        self.setAccessibleName('Screen color picking: click to select, Escape to cancel')
+        self.setAccessibleName(self.tr('Screen color picking: click to select, Escape to cancel'))
         # Assign each native window to its screen before positioning: mixed DPI
         # desktops cannot be represented by one giant, uniformly scaled window.
         self.winId()

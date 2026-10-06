@@ -318,8 +318,8 @@ class _ColorPickerView(FlyoutViewBase):
                 maximum = 255 if rgb or channel == 3 else (359 if channel == 0 else 100)
                 self.labels[channel].setText(('RGBA' if rgb else 'HSVA')[channel])
                 name = ('RGBA' if rgb else 'HSVA')[channel]
-                self.edits[channel].setAccessibleName(name + ' value')
-                self.sliders[channel].setAccessibleName(name + ' slider')
+                self.edits[channel].setAccessibleName(self.tr('%1 value').replace('%1', name))
+                self.sliders[channel].setAccessibleName(self.tr('%1 slider').replace('%1', name))
                 self.edits[channel].validator().setRange(0, maximum)
                 if self.edits[channel] is not exclude:
                     self.edits[channel].setText(str(values[channel]))

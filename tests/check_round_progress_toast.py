@@ -31,7 +31,9 @@ def run():
     assert ring.width() == 20 and ring.getStrokeWidth() == 3
     assert ring.aniGroup.duration() == 2000 and ring.aniGroup.loopCount() == -1
     QTest.qWait(250)
-    assert bar.width() == 180 and bar.height() == 48
+    assert bar.content == 'Loading, please wait'
+    # English/localized defaults may be wider than the compact minimum.
+    assert bar.width() >= 180 and bar.height() == 48
     assert ring.startAngle > 0 and ring.spanAngle > 0
     bar.hide()
     time = ring.aniGroup.currentTime()

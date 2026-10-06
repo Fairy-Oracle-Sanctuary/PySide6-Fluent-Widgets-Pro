@@ -18,8 +18,11 @@ class RoundProgressToast(Toast):
     supply a nonnegative duration in milliseconds for automatic dismissal.
     """
 
-    def __init__(self, content="加载中，请稍候", duration=-1,
+    def __init__(self, content=None, duration=-1,
                  position=ToastPosition.TOP_RIGHT, parent=None):
+        # Translate only the built-in default, never caller-provided content.
+        if content is None:
+            content = self.tr('Loading, please wait')
         super().__init__("", str(content), duration, False, position,
                          Qt.Horizontal, themeColor(), parent)
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -85,7 +88,7 @@ class RoundProgressToast(Toast):
         painter.drawRoundedRect(rect, radius, radius)
 
     @classmethod
-    def new(cls, content="加载中，请稍候", duration=-1,
+    def new(cls, content=None, duration=-1,
             position=ToastPosition.TOP_RIGHT, parent=None):
         bar = cls(content, duration, position, parent)
         bar.show()

@@ -562,6 +562,14 @@
         <source>Browse files</source>
         <translation>瀏覽文件</translation>
     </message>
+    <message>
+        <source>All files (*.*)</source>
+        <translation>所有文件 (*.*)</translation>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation>檔案</translation>
+    </message>
 </context>
 <context>
     <name>DropSingleFileWidget</name>
@@ -677,6 +685,403 @@
     <message>
         <source>Finish</source>
         <translation>完成</translation>
+    </message>
+</context>
+<context>
+    <name>AudioDecoder</name>
+    <message>
+        <source>Audio contains no decoded samples</source>
+        <translation>音訊不包含已解碼的樣本</translation>
+    </message>
+    <message>
+        <source>Audio decoding failed</source>
+        <translation>音訊解碼失敗</translation>
+    </message>
+    <message>
+        <source>Audio decoding is not supported by this Qt multimedia backend</source>
+        <translation>此 Qt 多媒體後端不支援音訊解碼</translation>
+    </message>
+    <message>
+        <source>Audio sample rate changed during decoding</source>
+        <translation>解碼期間音訊取樣率已變更</translation>
+    </message>
+    <message>
+        <source>Incomplete PCM audio frame</source>
+        <translation>PCM 音訊幀不完整</translation>
+    </message>
+    <message>
+        <source>Invalid audio buffer</source>
+        <translation>無效的音訊緩衝區</translation>
+    </message>
+    <message>
+        <source>Unsupported PCM sample format</source>
+        <translation>不支援的 PCM 樣本格式</translation>
+    </message>
+</context>
+<context>
+    <name>AudioWaveformWidget</name>
+    <message>
+        <source>Audio waveform</source>
+        <translation>音訊波形</translation>
+    </message>
+    <message>
+        <source>Duration: %1 ms</source>
+        <translation>時長：%1 毫秒</translation>
+    </message>
+</context>
+<context>
+    <name>AvatarPicker</name>
+    <message>
+        <source>Choose avatar</source>
+        <translation>選擇頭像</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp)</source>
+        <translation>圖片 (*.png *.jpg *.jpeg *.bmp *.webp)</translation>
+    </message>
+</context>
+<context>
+    <name>CircleColorPicker</name>
+    <message>
+        <source>Color palette</source>
+        <translation>調色板</translation>
+    </message>
+    <message>
+        <source>No color selected</source>
+        <translation>未選擇顏色</translation>
+    </message>
+</context>
+<context>
+    <name>CodeEdit</name>
+    <message>
+        <source>Highlighting skipped: document exceeds 1,000,000 characters</source>
+        <translation>已跳過醒目提示：文件超過 1,000,000 個字元</translation>
+    </message>
+</context>
+<context>
+    <name>DatePicker</name>
+    <message>
+        <source>day</source>
+        <translation>日</translation>
+    </message>
+    <message>
+        <source>month</source>
+        <translation>月</translation>
+    </message>
+    <message>
+        <source>year</source>
+        <translation>年</translation>
+    </message>
+</context>
+<context>
+    <name>DropDownColorPalette</name>
+    <message>
+        <source>Choose Color</source>
+        <translation>選擇顏色</translation>
+    </message>
+    <message>
+        <source>Color palette</source>
+        <translation>調色板</translation>
+    </message>
+</context>
+<context>
+    <name>DropDownColorPicker</name>
+    <message>
+        <source>Color picker</source>
+        <translation>顏色選擇器</translation>
+    </message>
+</context>
+<context>
+    <name>EditMenu</name>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>複製</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation>剪切</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation>粘貼</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>全選</translation>
+    </message>
+</context>
+<context>
+    <name>FlyoutDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>確認</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCropper</name>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>確認</translation>
+    </message>
+    <message>
+        <source>Crop image</source>
+        <translation>裁剪圖片</translation>
+    </message>
+    <message>
+        <source>Custom crop shape</source>
+        <translation>自訂裁剪形狀</translation>
+    </message>
+    <message>
+        <source>Flip horizontally</source>
+        <translation>水平翻轉</translation>
+    </message>
+    <message>
+        <source>Rotate clockwise</source>
+        <translation>順時針旋轉</translation>
+    </message>
+</context>
+<context>
+    <name>MonthFormatter</name>
+    <message>
+        <source>April</source>
+        <translation>四月</translation>
+    </message>
+    <message>
+        <source>August</source>
+        <translation>八月</translation>
+    </message>
+    <message>
+        <source>December</source>
+        <translation>十二月</translation>
+    </message>
+    <message>
+        <source>February</source>
+        <translation>二月</translation>
+    </message>
+    <message>
+        <source>January</source>
+        <translation>一月</translation>
+    </message>
+    <message>
+        <source>July</source>
+        <translation>七月</translation>
+    </message>
+    <message>
+        <source>June</source>
+        <translation>六月</translation>
+    </message>
+    <message>
+        <source>March</source>
+        <translation>三月</translation>
+    </message>
+    <message>
+        <source>May</source>
+        <translation>五月</translation>
+    </message>
+    <message>
+        <source>November</source>
+        <translation>十一月</translation>
+    </message>
+    <message>
+        <source>October</source>
+        <translation>十月</translation>
+    </message>
+    <message>
+        <source>September</source>
+        <translation>九月</translation>
+    </message>
+</context>
+<context>
+    <name>RatingWidget</name>
+    <message>
+        <source>Rating</source>
+        <translation>評分</translation>
+    </message>
+</context>
+<context>
+    <name>RoundProgressToast</name>
+    <message>
+        <source>Loading, please wait</source>
+        <translation>載入中，請稍候</translation>
+    </message>
+</context>
+<context>
+    <name>ScreenColorPicker</name>
+    <message>
+        <source>Another screen color picker is already active.</source>
+        <translation>另一個螢幕顏色選擇器已在運作中。</translation>
+    </message>
+    <message>
+        <source>Cannot exclude the live picker overlay from screen capture (Windows error %1). Enable screen freezing instead.</source>
+        <translation>無法從螢幕擷取中排除即時選擇器覆疊（Windows 錯誤 %1）。請改為啟用螢幕凍結。</translation>
+    </message>
+    <message>
+        <source>Live screen capture exclusion is unavailable. Enable screen freezing instead.</source>
+        <translation>即時螢幕擷取排除功能無法使用。請改為啟用螢幕凍結。</translation>
+    </message>
+    <message>
+        <source>Live screen capture failed. Check screen recording permissions.</source>
+        <translation>即時螢幕擷取失敗。請檢查螢幕錄製權限。</translation>
+    </message>
+    <message>
+        <source>Live screen picking requires Windows 10 version 2004 or newer; enable screen freezing on this platform.</source>
+        <translation>即時螢幕選色需要 Windows 10 版本 2004 或更新版本；請在此平台上啟用螢幕凍結。</translation>
+    </message>
+    <message>
+        <source>No screen is available for color picking.</source>
+        <translation>沒有可用於選色的螢幕。</translation>
+    </message>
+    <message>
+        <source>Pick a screen color</source>
+        <translation>選取螢幕顏色</translation>
+    </message>
+    <message>
+        <source>Screen capture is unavailable.</source>
+        <translation>螢幕擷取無法使用。</translation>
+    </message>
+    <message>
+        <source>Screen capture is unavailable. Check screen recording permissions.</source>
+        <translation>螢幕擷取無法使用。請檢查螢幕錄製權限。</translation>
+    </message>
+</context>
+<context>
+    <name>TopNavigationPanel</name>
+    <message>
+        <source>Back</source>
+        <translation>返回</translation>
+    </message>
+</context>
+<context>
+    <name>Ui_MessageBox</name>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>確認</translation>
+    </message>
+</context>
+<context>
+    <name>_CalendarTimePickerMixin</name>
+    <message>
+        <source>Pick a date and time</source>
+        <translation>選擇日期和時間</translation>
+    </message>
+</context>
+<context>
+    <name>_CalendarTimeView</name>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>確認</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorPickerView</name>
+    <message>
+        <source>%1 slider</source>
+        <translation>%1 滑桿</translation>
+    </message>
+    <message>
+        <source>%1 value</source>
+        <translation>%1 值</translation>
+    </message>
+    <message>
+        <source>Brightness</source>
+        <translation>亮度</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Color model</source>
+        <translation>色彩模型</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>確認</translation>
+    </message>
+    <message>
+        <source>Hexadecimal color, AARRGGBB or RRGGBB</source>
+        <translation>十六進位色彩，AARRGGBB 或 RRGGBB</translation>
+    </message>
+</context>
+<context>
+    <name>_FilledNavigationInterface</name>
+    <message>
+        <source>Search</source>
+        <translation>搜尋</translation>
+    </message>
+</context>
+<context>
+    <name>_HueSaturationPanel</name>
+    <message>
+        <source>Hue and saturation</source>
+        <translation>色相與飽和度</translation>
+    </message>
+</context>
+<context>
+    <name>_KeyCaps</name>
+    <message>
+        <source>Not set</source>
+        <translation>未設定</translation>
+    </message>
+</context>
+<context>
+    <name>_PageSearchPopup</name>
+    <message>
+        <source>No matching pages</source>
+        <translation>沒有符合的頁面</translation>
+    </message>
+</context>
+<context>
+    <name>_PaletteView</name>
+    <message>
+        <source>Automatic</source>
+        <translation>自動</translation>
+    </message>
+    <message>
+        <source>More Colors...</source>
+        <translation>更多色彩...</translation>
+    </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>標準色彩</translation>
+    </message>
+    <message>
+        <source>Theme Colors</source>
+        <translation>佈景主題色彩</translation>
+    </message>
+</context>
+<context>
+    <name>_PickerOverlay</name>
+    <message>
+        <source>Screen color picking: click to select, Escape to cancel</source>
+        <translation>螢幕色彩挑選：點擊選取，按 Escape 取消</translation>
+    </message>
+</context>
+<context>
+    <name>_RangePickerMixin</name>
+    <message>
+        <source>Pick a date range</source>
+        <translation>選擇日期範圍</translation>
     </message>
 </context>
 </TS>
