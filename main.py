@@ -59,6 +59,7 @@ from qfluentwidgets_pro import (
     SubtitleCheckBox,
     Tag,
     TimeLineWidget,
+    WaitingDialog,
     Toast,
     TopFluentWindow,
     TopNavigationBar,
@@ -66,6 +67,8 @@ from qfluentwidgets_pro import (
     TransparentRoundListWidget,
     TreeComboBox,
     WaterfallLayout,
+    CustomStyleSheet,
+    setStyleSheet,
     toggleTheme,
 )
 
@@ -296,6 +299,8 @@ class MainWindow(TopFluentWindow):
         return scroll
 
     def _createTimeLinePage(self):
+        from qfluentwidgets_pro import BodyLabel
+
         scroll = ScrollArea()
         scroll.setWidgetResizable(True)
         page = QWidget()
@@ -309,7 +314,15 @@ class MainWindow(TopFluentWindow):
         today.addItem("下载我家 aiko 的『荒れた唇は恋を失くす』", InfoBarIcon.WARNING)
         pending = timeline.addGroup("待办事项", InfoBarIcon.ERROR)
         pending.addItem("单曲循环我家 aiko 的新歌『星の降る日に』", InfoBarIcon.ERROR)
-        layout.addWidget(timeline)
+        layout.addWidget(timeline, 0, Qt.AlignLeft)
+        self.timeLineWidget = timeline
+        self.timeLineClickLabel = BodyLabel("点击任意事项卡片可测试整卡点击效果。", page)
+        self.timeLineClickLabel.setWordWrap(True)
+        layout.addWidget(self.timeLineClickLabel)
+        for group in timeline.groups:
+            for item in group.items:
+                item.clicked.connect(lambda item=item: self.timeLineClickLabel.setText(
+                    "已点击：" + item.textLabel.text()))
         layout.addStretch()
         scroll.setWidget(page)
         scroll.enableTransparentBackground()
@@ -342,6 +355,29 @@ class MainWindow(TopFluentWindow):
         layout = QVBoxLayout(page)
         layout.setContentsMargins(30, 30, 30, 30)
         layout.setSpacing(10)
+
+        from gallery.view.menu_bar_demo import MenuBarDemo
+        self.menuBarDemo = MenuBarDemo(page)
+        layout.addWidget(self.menuBarDemo)
+
+        from gallery.view.round_tab_bar_demo import RoundTabBarDemo
+        self.roundTabBarDemo = RoundTabBarDemo(page)
+        layout.addWidget(self.roundTabBarDemo)
+        from gallery.view.round_tab_widget_demo import RoundTabWidgetDemo
+        self.roundTabWidgetDemo = RoundTabWidgetDemo(page)
+        layout.addWidget(self.roundTabWidgetDemo)
+
+        # The demo owns the surrounding background; RoundTabBar stays transparent.
+        self.roundTabBarDemo.surface.setProperty('lightBackgroundColor', '#f3f4f6')
+        for name, demo in (('roundTabBarDemo', self.roundTabBarDemo),
+                           ('roundTabWidgetDemo', self.roundTabWidgetDemo)):
+            demo.setObjectName(name)
+            demo.setAttribute(Qt.WA_StyledBackground, True)
+            style = CustomStyleSheet(demo).setCustomStyleSheet(
+                f'QWidget#{name} {{ background-color: #f3f4f6; }}',
+                f'QWidget#{name} {{ background-color: transparent; }}',
+            )
+            setStyleSheet(demo, style)
 
         # RoundPushButton test
         self.roundbtn = RoundPushButton("RoundPushButton")
@@ -412,6 +448,14 @@ class MainWindow(TopFluentWindow):
             self.flyoutDialog.showAt(self.flyoutDialogButton, self)
 
         self.flyoutDialogButton.clicked.connect(showFlyoutDialog)
+
+        self.waitingDialogButton = PushButton("显示等待对话框（Esc 退出）")
+        layout.addWidget(self.waitingDialogButton, 0, Qt.AlignLeft)
+        self.waitingDialogButton.clicked.connect(self._showWaitingDialog)
+
+        from gallery.view.shortcut_picker_demo import ShortcutPickerDemo
+        self.shortcutPickerDemo = ShortcutPickerDemo(page)
+        layout.addWidget(self.shortcutPickerDemo)
 
         # Standard and fast calendars share the same two-click range API.
         rangeLayout = QHBoxLayout()
@@ -714,12 +758,29 @@ class MainWindow(TopFluentWindow):
         layout.addWidget(self.filled_window_button)
         self.filled_window_button.clicked.connect(self._openFilledWindow)
 
+        self.guideWindowButton = PushButton("打开 GuideWindow 分步向导")
+        layout.addWidget(self.guideWindowButton)
+        self.guideWindowButton.clicked.connect(self._openGuideWindow)
+
         layout.addStretch()
         scroll.setWidget(page)
 
         scroll.enableTransparentBackground()
 
         return scroll
+
+    def _showWaitingDialog(self):
+        current = getattr(self, 'waitingDialog', None)
+        if current is not None:
+            current.raise_()
+            current.activateWindow()
+            return
+        dialog = WaitingDialog("请耐心等待...", "正在准备下载任务中 ...", self)
+        self.waitingDialog = dialog
+        dialog.rejected.connect(lambda: self.waitingDialogButton.setText("已取消 — 显示等待对话框"))
+        dialog.finished.connect(lambda: setattr(self, 'waitingDialog', None))
+        dialog.finished.connect(dialog.deleteLater)
+        dialog.open()
 
     def _showProgressToastDownload(self):
         toast = ProgressToast.warning("正在下载文件，请耐心等待...", parent=self)
@@ -1107,6 +1168,17 @@ class MainWindow(TopFluentWindow):
         self._filledWindow.setMicaEffectEnabled(True)
         self._filledWindow.raise_()
         self._filledWindow.activateWindow()
+
+    def _openGuideWindow(self):
+        from gallery.view.guide_window_demo import GuideWindowDemo
+
+        if not hasattr(self, '_guideWindow'):
+            self._guideWindow = GuideWindowDemo(self)
+            self._guideWindow.finished.connect(lambda: self.guideWindowButton.setText('已完成 — 打开分步向导'))
+            self._guideWindow.cancelled.connect(lambda: self.guideWindowButton.setText('已取消 — 打开分步向导'))
+        self._guideWindow.show()
+        self._guideWindow.raise_()
+        self._guideWindow.activateWindow()
 
 
 if __name__ == "__main__":

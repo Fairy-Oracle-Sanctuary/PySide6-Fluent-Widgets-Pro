@@ -43,7 +43,7 @@
 
 ## 已还原组件
 
-已还原或扩展的组件共 76 个（列表将持续更新）：
+已还原或扩展的组件共 82 个（列表将持续更新）：
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -58,6 +58,12 @@
 `ScreenColorPicker`
 `DropDownColorPalette`
 `DropDownColorPicker`
+`ShortcutPicker`
+`WaitingDialog`
+`MenuBar`
+`GuideWindow`
+`RoundTabBar`
+`RoundTabWidget`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -228,6 +234,186 @@ toast.close()  # 任务结束后关闭
 `setValue(0..5)` 设置评分，`hovered(float)` 通知预览，`valueChanged(float)` 通知确认值变化，
 `displayValue()` 返回当前展示的评分。`setReadOnly(True)` 禁止修改；方向键按 0.1 调整，
 Home/End 设置为 0/5。复用 `setStarColor(浅色, 深色=None)`，主页提供悬停和点击演示。
+
+`RoundTabWidget` 提供与 `QTabWidget` 类似的常用页面管理接口，内部使用 `RoundTabBar`，
+选中标签与下方圆角内容框统一绘制轮廓，避免弧线接头出现缝隙或描边叠加。
+页面内容由使用者自己创建并传入。
+
+```python
+from PySide6.QtWidgets import QWidget
+from qfluentwidgets_pro import RoundTabWidget, FluentIcon
+
+tabs = RoundTabWidget(window)
+tabs.addTab(QWidget(), '歌曲')
+tabs.addTab(QWidget(), FluentIcon.FOLDER, '专辑')
+tabs.setCurrentIndex(1)
+tabs.currentChanged.connect(on_page_changed)
+tabs.tabCloseRequested.connect(tabs.removeTab)
+tabs.tabAddRequested.connect(add_page)
+```
+
+支持 `addTab(页面, 标题)` / `addTab(页面, 图标, 标题)` 与对应的 `insertTab()` 重载，
+以及 `widget()` / `indexOf()` / `currentWidget()`、切换页面、文本／图标／提示、
+启用／禁用、显示／隐藏、`clear()`、关闭按钮、拖拽和 `setTabBarAutoHide()`。
+也兼容原 `TabWidget` 的 `(页面, 标题, 图标, routeKey)` 参数顺序。
+`tabBar()` 返回内部圆角标签栏，同时保留原库的 `tabBar` 属性访问方式。
+Ctrl+Tab / Ctrl+Shift+Tab 可循环切换可见且启用的标签。添加／关闭信号只发出请求；
+`removeTab()` / `clear()` 不会销毁页面，需要释放时自行调用 `deleteLater()`。
+容器会自动同步页码、选中状态和拖拽后的页面顺序，程序切换也会通知 `currentChanged`。
+`setTabSelectedBackgroundColor(浅色, 深色)` 会同时更新内容背景。
+这是顶部圆角样式的页面容器，不是 `QTabWidget` 子类，不提供 Qt 的其他标签方位／形状
+及原生角落控件接口。组件为轻量实现，已从包根目录导出，按钮页提供完整示例。
+
+`RoundTabBar` 是已有 `TabBar` 的样式变体：上方圆角、底部两侧向外衔接的弧线，
+选中标签绘制 1px 顶部／侧边描边，不画底边，默认关闭标签阴影。底部外扩采用 5px 四分之一圆弧，
+相邻标签共享 5px 弧线区域，让标签紧贴而不压缩圆角；悬停背景延伸到标签边缘。
+标签栏高 38 逻辑像素，标签高 32px、上方圆角 8px，
+默认最大标签宽度为 200px。标签栏背景保持透明，由应用控制其所在区域的底色。
+`main.py` 为演示区域设置浅灰背景，让浅色选中标签清晰可辨，不在组件内写死背景。
+普通 `TabBar` 的外观和交互不变。
+
+```python
+from qfluentwidgets_pro import RoundTabBar, FluentIcon, TabCloseButtonDisplayMode
+
+bar = RoundTabBar(window)
+bar.addTab('songs', '歌曲', FluentIcon.MUSIC)
+bar.addTab('albums', '专辑', FluentIcon.FOLDER)
+bar.setCurrentTab('albums')
+bar.setMovable(True)
+bar.setScrollable(True)
+bar.setTabMaximumWidth(200)
+bar.setCloseButtonDisplayMode(TabCloseButtonDisplayMode.ON_HOVER)
+bar.tabCloseRequested.connect(close_page)
+bar.tabAddRequested.connect(add_page)
+bar.currentChanged.connect(switch_page)
+```
+
+添加／关闭按钮只发出请求，由应用维护页面并调用 `addTab()` / `removeTab()`。
+继承路由键、插入、数据、图标／文本、显示／隐藏、启用／禁用、拖拽排序及 `tabMoved`，
+关闭按钮支持始终显示／悬停显示／不显示。与原 `TabBar` 一致，程序调用
+`setCurrentTab()` / `setCurrentIndex()` 不发出 `currentChanged`，需同时更新自己的页面容器。
+想与下方内容无缝衔接，使用上下间距为 0 的布局，并通过
+`setTabSelectedBackgroundColor(浅色, 深色)` 让选中背景与内容背景一致。
+按钮页示例提供动态页面和可拖拽、可滚动、最大宽度、关闭按钮模式四个设置项。
+组件为轻量实现，已从包根目录导出。
+
+`GuideWindow` 直接继承项目内 `qframelesswindow.FramelessWindow`，通过 `show()` 显示为
+独立、非模态窗口，在 Windows 任务栏可见。Windows 11 默认通过原有 `windowEffect` 启用原生云母，
+`setMicaEffectEnabled(False)` 可切回纯色主题背景，不支持云母的系统自动使用纯色背景。
+只提供可拖动且仅保留关闭按钮的标题栏、
+页面容器、现有 `PipsPager` 和上一步／下一步／完成导航，里面的内容由使用者自行提供。
+默认 670×460 逻辑像素，底栏高 80px；图片、表单、校验提示及保存逻辑都不写死。
+
+```python
+from PySide6.QtWidgets import QWidget, QVBoxLayout
+from qfluentwidgets_pro import GuideWindow, LineEdit
+
+guide = GuideWindow(parent=window)  # 仅用于居中和生命周期关联，不设置系统 owner。
+page = QWidget()
+page_layout = QVBoxLayout(page)
+name_edit = LineEdit(page)
+page_layout.addWidget(name_edit)
+guide.addPage(page)
+guide.addPage(QWidget())
+guide.finished.connect(save_settings)
+guide.cancelled.connect(on_cancel)
+guide.show()  # 应用应保留 guide 的 Python 引用。
+```
+
+`addPage(page)` / `insertPage(index, page)` 返回页面索引，`removePage(page)` 隐藏并移出页面但不删除。
+通过 `count()`、`page(index)`、`currentPage()`、`currentIndex()` 和 `setCurrentIndex(index)`
+管理任意页面，`currentIndexChanged(int)` 通知步骤变化。圆点与上一步／下一步同步，末页显示“完成”。
+可覆写 `validatePage(page)`，返回 False 阻止前进或完成；`setNextEnabled(False)` 同样阻止向前点击圆点。
+返回上一步不做校验；`setCurrentIndex()` 则是应用主动切换，不经过校验。
+`setStepNavigationEnabled(False)` 禁止点击圆点和通过圆点键盘导航，适合必须逐步填写的场景。
+成功完成发出 `finished()` 并关闭；Esc 或关闭按钮发出 `cancelled()`，不会误触完成逻辑。
+重新打开保留页面和填写内容，需重新开始时调用 `setCurrentIndex(0)`；`moveToCenter()` 在父窗口／屏幕居中。
+可选 `parent` 不会设为 Qt／系统窗口父对象，避免带 owner 的窗口不显示在任务栏；
+关闭向导不会关闭参考窗口。任务栏是否合并为同一应用分组仍遵循系统设置。
+组件为轻量实现，已从包根目录导出。按钮页提供三步示例，示例页面自行构建，不保存令牌、不联网。
+
+`MenuBar` 复用现有 `RoundMenu` 提供顶部菜单导航，标题高 32 逻辑像素。
+点击标题打开，菜单打开后移到其他标题直接切换；再次点击同一标题、点击弹窗外部
+或按 Esc 关闭。Alt+助记字母（如 `&F`）或 F10 可用键盘导航，支持方向键、
+Home/End、Enter，以及分隔线、禁用项、勾选项和子菜单。
+
+```python
+from PySide6.QtGui import QAction
+from qfluentwidgets_pro import MenuBar
+
+bar = MenuBar(window)
+file_menu = bar.addMenu('文件(&F)')  # 也可传入已有的顶级 RoundMenu。
+open_action = QAction('打开文件...', window, shortcut='Ctrl+O')
+file_menu.addAction(open_action)
+file_menu.addSeparator()
+file_menu.addAction(QAction('新建文件...', window))
+bar.triggered.connect(handle_action)  # 收到触发的 QAction。
+layout.addWidget(bar)
+```
+
+菜单中的 QAction 快捷键仅在当前窗口内、菜单归属可见且启用的菜单栏时注册，
+不是系统全局快捷键；隐藏或禁用菜单标题不会触发其快捷键。
+`insertMenu(before, menu)`、`removeMenu(menu)` 和 `clear()` 管理菜单且不删除可复用菜单；
+`setActiveMenu(menu)` 打开，`setActiveMenu(None)` / `closeActiveMenu()` 关闭，
+`activeMenuChanged(menu或None)` 通知切换。也支持 QWidget 自带的 action 方法添加直接执行的标题。
+组件为轻量 Qt 实现，可从包根目录导入；演示位于按钮页顶部。
+
+`WaitingDialog` 显示居中的等待面板和窗口模态遮罩，包含跟随主题色的
+`IndeterminateProgressRing`、标题和说明，不带底部按钮，按 Esc 取消。
+标准面板为 300×132 逻辑像素，进度环为 56px；较长文字会自动换行并增加面板高度。
+
+```python
+from qfluentwidgets_pro import WaitingDialog
+
+dialog = WaitingDialog('请耐心等待...', '正在准备下载任务中 ...', parent=window)
+dialog.rejected.connect(cancel_task)  # 如需同时取消实际后台任务，由应用显式连接。
+dialog.open()  # 非阻塞显示，任务期间保留 dialog 引用。
+# 通过后台线程信号在 GUI 线程更新：
+# worker.statusChanged.connect(dialog.setContent)
+# worker.finished.connect(dialog.accept)
+```
+
+支持 `setTitle()` / `setContent()` 动态更新、`title()` / `content()` 获取文字。
+`accept()` 表示完成，`reject()` / Esc 表示取消，连接 `accepted`、`rejected` 或
+`finished(int)` 处理结果。Esc 只关闭对话框，不会自行终止任务；如需取消任务须显式连接。
+耗时工作应在后台线程进行，否则主线程被阻塞时进度环和 Esc 都无法响应。
+关闭开始即停止动画，复用同一对象再次打开会重新启动；要求传入父窗口，遮罩跟随父窗口
+移动/缩放，父窗口隐藏时关闭。默认点击遮罩不退出。轻量纯 QtWidgets，正常从主包导出，
+Buttons 示例页提供等待对话框入口。
+
+`ShortcutPicker` 复用可点击的 `CardWidget`，显示跟随主题色的独立键帽。
+整个卡片（包括键帽、间隙和铅笔图标）都可点击，打开带遮罩的快捷键捕获对话框；
+聚焦后也可按 Enter / Space 打开。悬停、按下效果复用卡片背景动画。
+按键只更新草稿，点击保存才生效；重置恢复配置的默认组合键，取消不修改原快捷键。
+
+```python
+from PySide6.QtGui import QKeySequence, QShortcut
+from qfluentwidgets_pro import ShortcutPicker
+
+picker = ShortcutPicker('Ctrl+Shift+A', parent=window)
+picker.setDefaultKeySequence('Ctrl+Shift+A')
+picker.setDialogTitle('激活快捷键')
+picker.setDialogDescription('按下组合键以更改此快捷键')
+picker.keySequenceChanged.connect(lambda seq: print(seq.toString(QKeySequence.PortableText)))
+# 组件只负责捕获；需要触发业务操作时由应用自行注册：
+shortcut = QShortcut(picker.keySequence(), window)
+picker.keySequenceChanged.connect(shortcut.setKey)
+shortcut.activated.connect(your_action)
+```
+
+`keySequence()` / `defaultKeySequence()` 返回副本；`setKeySequence()` 接受 QKeySequence、
+QKeyCombination、Qt 按键或 PortableText 字符串，仅支持一个组合键，不支持多段连续序列；
+无效输入会报错，原状态不变。`clear()` 清空，`reset()` 立即恢复默认值。
+`keySequenceChanged(QKeySequence)` 通知实际变化；每次保存都会发出
+`keySequenceSelected(QKeySequence)` 和 `editingFinished()`，包括保存未变更的值；
+取消发出 `editingCanceled()`。支持 `showEditor()` / `cancelEditing()` 和 `isEditing()`。
+
+支持 Ctrl / Alt / Shift / Meta 单键与组合、功能键和小键盘。默认 Esc 取消，
+`setEscapeCancelsCapture(False)` 后可录制 Esc，此时需点击取消按钮退出。
+Enter、Space、Tab 均作为待录制按键，不会误触保存或切换焦点。录制期间拦截应用内快捷键，
+关闭后恢复正常；不安装系统全局键盘钩子，系统保留的组合键可能无法捕获，纯修饰键能否
+注册为有效快捷键也取决于 Qt 和操作系统。轻量纯 QtWidgets，正常从主包导出。
+Buttons 示例页提供中文对话框、清空按钮及保存后触发快捷键的测试。
 
 `CircleColorPicker` 用于从自定义圆形色板中选择一个颜色。选中态为同色细外环，
 外环与色块之间保留透明间隙；组件背景透明，浅色和深色主题下均保留色板原色。
@@ -485,6 +671,12 @@ Buttons 页面提供 Show dialog 示例。
 `TimeLineWidget` 提供分组标题、状态图标、连接线和圆角条目卡片。
 通过 `addGroup(title, InfoBarIcon.SUCCESS)` 创建分组，再调用 `group.addItem(text, icon)`
 添加条目；支持富文本、自动换行、动态移除分组和条目。TimeLine 展示页包含已完成、今日安排和待办事项。
+每个 `TimeLineItem` 继承 `CardWidget`，复用背景、边框以及悬停/按下动画；
+整张事项卡片（图标、文字和留白）均可点击，连接 `item.clicked` 处理业务操作。
+聚焦后 Enter / Space 也可触发；`setClickEnabled(False)` 可关闭点击，保留展示内容。
+文字仍支持富文本和完成态删除线，但作为整卡展示，不单独响应文字链接点击。
+默认最大宽度为 370 逻辑像素，事项卡片宽 328px、单行高 50px，同组卡片间距 19px；
+长文本自动换行并增加高度，不强制裁切。可通过 `setMaximumWidth()` / `setFixedWidth()` 自定义宽度。
 
 `FilledFluentWindow` 提供默认展开的侧边栏、主题色填充的选中项和搜索框。
 沿用 `FluentWindow` 的 `addSubInterface()` / `switchTo()` 接口，

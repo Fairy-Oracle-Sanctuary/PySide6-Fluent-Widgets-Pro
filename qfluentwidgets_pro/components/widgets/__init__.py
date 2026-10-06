@@ -245,3 +245,7 @@ from .circle_color_picker import CircleColorPicker
 from .screen_color_picker import ScreenColorPicker
 from .drop_down_color_palette import DropDownColorPalette
 from .drop_down_color_picker import DropDownColorPicker
+from .shortcut_picker import ShortcutPicker
+from .menu_bar import MenuBar
+from .round_tab_bar import RoundTabBar
+from .round_tab_widget import RoundTabWidget

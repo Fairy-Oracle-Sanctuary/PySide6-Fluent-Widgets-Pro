@@ -505,7 +505,7 @@ class TabBar(SingleDirectionScrollArea):
         if index <= self.currentIndex() and self.currentIndex() >= 0:
             self._currentIndex += 1
 
-        item = TabItem(text, self.view, icon)
+        item = self._createTabItem(text, icon)
         item.setRouteKey(routeKey)
 
         # set the size of tab
@@ -535,6 +535,10 @@ class TabBar(SingleDirectionScrollArea):
             self.setCurrentIndex(0)
 
         return item
+
+    def _createTabItem(self, text, icon):
+        """Create a tab item; style-only subclasses can reuse the tab lifecycle."""
+        return TabItem(text, self.view, icon)
 
     def removeTab(self, index: int):
         if not 0 <= index < len(self.items):
@@ -918,11 +922,17 @@ class TabWidget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.tabBar = TabBar(self)
-        self.stackedWidget = QStackedWidget(self)
+        self.tabBar = self._createTabBar()
+        self.stackedWidget = self._createStackedWidget()
         self.vBoxLayout = QVBoxLayout(self)
 
         self.__initWidget()
+
+    def _createTabBar(self):
+        return TabBar(self)
+
+    def _createStackedWidget(self):
+        return QStackedWidget(self)
 
     def __initWidget(self):
         self.vBoxLayout.addWidget(self.tabBar, 0, Qt.AlignmentFlag.AlignTop)

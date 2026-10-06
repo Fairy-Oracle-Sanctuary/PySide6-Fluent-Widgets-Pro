@@ -615,4 +615,68 @@
         <translation>所有文件 (*.*)</translation>
     </message>
 </context>
+<context>
+    <name>ShortcutPicker</name>
+    <message>
+        <source>Activate shortcut</source>
+        <translation>啟用快捷鍵</translation>
+    </message>
+    <message>
+        <source>Press a key combination to change this shortcut</source>
+        <translation>按下組合鍵以更改此快捷鍵</translation>
+    </message>
+    <message>
+        <source>Edit shortcut</source>
+        <translation>編輯快捷鍵</translation>
+    </message>
+    <message>
+        <source>Shortcut</source>
+        <translation>快捷鍵</translation>
+    </message>
+    <message>
+        <source>Not set</source>
+        <translation>未設定</translation>
+    </message>
+</context>
+<context>
+    <name>_ShortcutPickerDialog</name>
+    <message>
+        <source>Save</source>
+        <translation>儲存</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation>重設</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Press a key combination</source>
+        <translation>按下組合鍵</translation>
+    </message>
+</context>
+<context>
+    <name>WaitingDialog</name>
+    <message>
+        <source>Please wait...</source>
+        <translation>請耐心等候...</translation>
+    </message>
+</context>
+<context>
+    <name>GuideWindow</name>
+    <message>
+        <source>Previous</source>
+        <translation>上一步</translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation>下一步</translation>
+    </message>
+    <message>
+        <source>Finish</source>
+        <translation>完成</translation>
+    </message>
+</context>
 </TS>
