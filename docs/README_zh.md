@@ -43,7 +43,7 @@
 
 ## 已还原组件
 
-已还原或扩展的组件共 72 个（列表将持续更新）：
+已还原或扩展的组件共 76 个（列表将持续更新）：
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -54,6 +54,10 @@
 `RangeCalendarPicker` `FastRangeCalendarPicker`
 `CalendarTimePicker` `FastCalendarTimePicker`
 `AudioWaveformWidget`
+`CircleColorPicker`
+`ScreenColorPicker`
+`DropDownColorPalette`
+`DropDownColorPicker`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -224,6 +228,106 @@ toast.close()  # 任务结束后关闭
 `setValue(0..5)` 设置评分，`hovered(float)` 通知预览，`valueChanged(float)` 通知确认值变化，
 `displayValue()` 返回当前展示的评分。`setReadOnly(True)` 禁止修改；方向键按 0.1 调整，
 Home/End 设置为 0/5。复用 `setStarColor(浅色, 深色=None)`，主页提供悬停和点击演示。
+
+`CircleColorPicker` 用于从自定义圆形色板中选择一个颜色。选中态为同色细外环，
+外环与色块之间保留透明间隙；组件背景透明，浅色和深色主题下均保留色板原色。
+它不绑定也不修改应用主题色，`colorChanged(QColor)` 只通知选中的颜色。
+
+```python
+from qfluentwidgets_pro import CircleColorPicker
+
+picker = CircleColorPicker(['#FF4343', '#FFB900', '#107C10'])
+picker.setColor('#FFB900')
+picker.colorChanged.connect(lambda color: print(color.name()))
+```
+
+`setColors(iterable)` 替换色板，`addColor()` / `addColors()` 追加颜色，`colors()` 返回副本。
+`setColor()` 选择色板里已有的颜色，`setCurrentIndex()` 按序号选择，传 `-1` 清除选中；
+`color()`、`currentIndex()`、`count()` 获取状态，未选中或空色板时返回无效 QColor。
+替换色板时尽量保留原选中颜色，否则选中第一项；允许重复颜色，不同色块之间切换
+会发出 `currentIndexChanged(int)`，颜色相同则不重复发出颜色变化信号。
+方向键和 Home/End 切换，空格/Enter 选择。Colors 示例页可编辑并应用自定义色板，
+不会把选中的颜色设置为主题色。组件为纯 QtWidgets，可在主包导出，无需重型依赖。
+
+`DropDownColorPicker` 为带确认/取消的下拉颜色编辑器，包含色相/饱和度面板、亮度条、
+RGB / HSV 切换、十六进制输入、RGBA / HSVA 数值及彩色渐变滑条。按钮 QSS、Flyout、
+输入控件和滑条动画手柄均复用现有实现，渐变只通过 Qt 绘制。
+
+```python
+from qfluentwidgets_pro import DropDownColorPicker
+
+picker = DropDownColorPicker('#0078D4', parent=window)
+picker.colorChanged.connect(lambda color: print(color.name(color.HexArgb)))
+picker.setAlphaEnabled(True)  # 默认开启透明度编辑
+```
+
+`setColor()` / `color()` 设置或读取已确认的 8 位 QColor 副本。拖动或输入只修改草稿，
+发出 `colorPreviewed(QColor)`，不会直接改变按钮已确认颜色。勾号提交，颜色实际变化
+才发出 `colorChanged(QColor)`，每次确认均发出 `colorSelected(QColor)`；叉号、Esc 或
+点击外部放弃草稿，发出 `pickingCanceled()`。`showPicker()` / `closePicker()` 控制浮层。
+十六进制支持 `#AARRGGBB` 和 `#RRGGBB`，6 位输入保留当前透明度；RGB 和透明度为
+0–255，HSV 为色相 0–359、饱和度/亮度 0–100。灰度或亮度为零时保留色相，恢复数值
+后不会意外跳到红色。无效或未完成输入不会写入无效颜色。`isAlphaEnabled()` 查询设置；
+关闭透明度编辑会取消当前草稿、隐藏 A 行，并将已确认颜色转为不透明。
+较小屏幕上编辑区可滚动，底部确认/取消始终可见。选色不绑定也不修改应用主题色。
+组件正常从主包导出，无 Pillow、NumPy、QtMultimedia 等重型依赖，Colors 示例页可体验。
+
+`DropDownColorPalette` 为复用按钮 QSS 的下拉调色盘，包含 Automatic（自动颜色）、
+6 排 × 10 列主题色、10 个标准色和 More Colors。面板复用现有 Flyout，点击外部
+或按 Esc 收起，不改变原颜色。More Colors 先收起色板，再打开现有
+[ColorDialog](https://pyqt-fluent-widgets.readthedocs.io/zh-cn/latest/autoapi/qfluentwidgets/components/dialog_box/color_dialog/index.html)，
+只在确认后提交颜色，取消保持原色。
+
+```python
+from qfluentwidgets_pro import DropDownColorPalette
+
+picker = DropDownColorPalette('#0078D4', parent=window)
+picker.colorChanged.connect(lambda color: print(color.name()))
+picker.setAutomaticColor('#000000')
+picker.setAlphaEnabled(True)  # 可选：更多颜色对话框显示透明度编辑
+```
+
+`setColor()` / `color()` 设置颜色或读取 QColor 副本；`colorChanged(QColor)` 仅通知
+实际变化，`colorSelected(QColor)` 通知每次用户确认（包含相同颜色）。`setAutomatic()`
+选择明确的自动颜色，`automaticColor()`、`isAutomatic()` 和 `automaticChanged(bool)`
+查询颜色或模式。自动颜色默认黑色，不随应用主题色或明暗主题变化。
+`showPalette()` / `closePalette()` 控制面板，`showColorDialog()` 打开更多颜色；
+`isAlphaEnabled()` 查询透明度设置，默认关闭。方向键和 Home/End 移动色块焦点，
+空格/Enter 确认。主题色只是预设色板，不绑定也不修改应用主题色；无效颜色会被拒绝，
+原状态保持不变。组件为轻量 QtWidgets，正常从主包导出，Colors 示例页可直接体验。
+
+`ScreenColorPicker` 为“当前颜色块 + 滴管”按钮。点击或调用 `startPicking()` 后，
+鼠标旁显示颜色块与十六进制值预览；左键或 Enter/空格确认，Esc 或右键取消，
+取消不改变原颜色。它只选取颜色，不绑定也不修改应用主题色。
+
+```python
+from qfluentwidgets_pro import ScreenColorPicker
+
+picker = ScreenColorPicker('#0078D4')
+picker.setFreezeScreenEnabled(False)  # Windows 实时取色；True 冻结画面
+picker.colorChanged.connect(lambda color: print(color.name()))
+```
+
+`setColor()` / `color()` 设置或读取已确认 QColor；`colorChanged(QColor)` 通知实际变化，
+`colorPicked(QColor)` 通知每次确认（包括相同颜色），`colorHovered(QColor)` 只通知预览。
+`isPicking()`、`pickingChanged(bool)`、`cancelPicking()`、`pickingCanceled()` 控制或监听取色状态。
+按钮继承 PushButton，常态/悬停/按下/禁用的背景和边框全部复用按钮 QSS，高度为标准 32px。
+`setFreezeScreenEnabled(True/False)` 设置冻结/实时取色，`isFreezeScreenEnabled()` 查询，
+默认开启冻结。取色中改变设置会取消当前会话，保留已确认颜色，下次开始使用新模式。
+冻结模式在浮层显示前一次性截图；实时模式使用透明浮层，不显示旧截图，以约 30Hz
+重新采样鼠标下方的像素，鼠标不移动也会更新，确认时再次采样当前颜色。
+实时浮层及预览卡片通过 Windows 窗口显示亲和性排除在截图外，避免污染采样；
+要求 Windows 10 2004 及以上与原生 Qt Windows 后端。不支持的平台或排除失败会提示错误，
+不会偷偷改为冻结或返回浮层颜色；仅开始实时取色时才加载标准库 ctypes，不引入重型依赖。
+Windows 排除截图机制见
+[SetWindowDisplayAffinity 文档](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowdisplayaffinity)。
+各屏幕独立处理，坐标按截图尺寸映射，支持负坐标副屏和不同 DPI。
+截图不写入文件，结束立即释放。隐藏/禁用控件、应用失去激活或屏幕布局变化会取消；
+同一时间只能有一个取色会话。截图不可用时发出 `errorOccurred(str)`，保留原颜色。
+系统屏幕录制权限及平台限制仍然适用，受保护内容可能为空，Wayland 下 Qt 截图可能不可用。
+Colors 示例页提供冻结勾选项与错误提示。组件使用 QtGui/QtWidgets，正常从主包导出，
+不引入 Pillow、NumPy 或 QtMultimedia。截图与高 DPI 说明见
+[QScreen::grabWindow 文档](https://doc.qt.io/qt-6/qscreen.html#grabWindow)。
 
 `CodeEdit` 基于原生 QPlainTextEdit，支持行号、当前行底色、缩进和 20 种语言高亮。
 使用前安装可选依赖（库的其他控件不需要此依赖）：

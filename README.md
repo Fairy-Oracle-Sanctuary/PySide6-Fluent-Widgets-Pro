@@ -39,7 +39,7 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 
 ## 🧩 Restored Components
 
-72 components have been restored or extended in this repo (the list will be updated continuously):
+76 components have been restored or extended in this repo (the list will be updated continuously):
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -50,6 +50,10 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 `RangeCalendarPicker` `FastRangeCalendarPicker`
 `CalendarTimePicker` `FastCalendarTimePicker`
 `AudioWaveformWidget`
+`CircleColorPicker`
+`ScreenColorPicker`
+`DropDownColorPalette`
+`DropDownColorPicker`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -231,6 +235,133 @@ changes. `displayValue()` returns the currently displayed score.
 `setReadOnly(True)` disables editing; arrows adjust by 0.1 and Home/End select
 0/5. `setStarColor(light, dark=None)` is shared with RatingWidget.
 The Home page demonstrates continuous hover previews and click confirmation.
+
+`CircleColorPicker` selects a color from a customizable row of circular swatches.
+The selected swatch has a thin, same-color outline separated by a transparent gap.
+It does **not** modify or bind to the application accent color; `colorChanged(QColor)`
+only reports the selected color. The background stays transparent in both themes.
+
+```python
+from qfluentwidgets_pro import CircleColorPicker
+
+picker = CircleColorPicker(['#FF4343', '#FFB900', '#107C10'])
+picker.setColor('#FFB900')
+picker.colorChanged.connect(lambda color: print(color.name()))
+```
+
+`setColors(iterable)` replaces the palette, `addColor()` / `addColors()` append,
+and `colors()` returns copies. `setColor()` requires an existing palette color;
+`setCurrentIndex()` selects by position, with `-1` clearing the selection.
+`color()`, `currentIndex()` and `count()` expose the state. Empty palettes return
+an invalid QColor. Replacement preserves the selected color if present, otherwise
+selects the first swatch. Duplicate colors are allowed; `currentIndexChanged(int)`
+reports a different swatch even when its color equals the previous one.
+Only actual color/index changes emit signals. Arrows and Home/End navigate;
+Space/Enter select. The Colors demo allows editing the palette without changing
+the application accent. This pure QtWidgets component is exported from the root
+package and needs no optional heavy dependencies.
+
+`DropDownColorPicker` provides a compact, confirmable color editor: a hue/saturation
+square, brightness slider, RGB/HSV selector, hexadecimal input and RGBA/HSVA fields
+with color-gradient sliders. It reuses the existing dropdown button QSS, Flyout,
+Fluent inputs and animated slider handles. Gradient rendering is pure Qt.
+
+```python
+from qfluentwidgets_pro import DropDownColorPicker
+
+picker = DropDownColorPicker('#0078D4', parent=window)
+picker.colorChanged.connect(lambda color: print(color.name(color.HexArgb)))
+picker.setAlphaEnabled(True)  # enabled by default
+```
+
+`setColor()` / `color()` set or return a copy of the committed 8-bit QColor.
+Dragging or typing edits a draft and emits `colorPreviewed(QColor)`, without changing
+the button's committed color. The checkmark confirms, emitting `colorChanged(QColor)`
+only for actual changes and `colorSelected(QColor)` for every confirmation.
+The cross, Escape or an outside click discards the draft and emits `pickingCanceled()`.
+`showPicker()` / `closePicker()` control the flyout. Hex accepts `#AARRGGBB` or
+six-digit `#RRGGBB` (which preserves draft alpha). RGB channels and alpha use 0–255;
+HSV uses hue 0–359 and saturation/value 0–100. Hue is retained through grayscale
+and zero brightness so restoring saturation/value does not unexpectedly become red.
+Invalid or incomplete edits cannot introduce an invalid color. `isAlphaEnabled()`
+reads the setting; disabling alpha closes any active draft, hides the alpha row and
+normalizes the committed color to opaque. The footer remains visible on smaller
+screens while the editor body scrolls. Selecting colors never changes the app accent.
+This lightweight root export is demonstrated on the Colors page and needs no
+Pillow, NumPy, QtMultimedia or other optional heavy modules.
+
+`DropDownColorPalette` is a standard-QSS dropdown button with Automatic, 60 theme
+swatches (six rows of ten), ten standard colors, and More Colors. The panel uses
+the existing Flyout; clicking outside or pressing Escape closes without changing
+the color. More Colors closes the palette and opens the existing
+[ColorDialog](https://pyqt-fluent-widgets.readthedocs.io/zh-cn/latest/autoapi/qfluentwidgets/components/dialog_box/color_dialog/index.html).
+Only accepting that dialog commits its color; canceling keeps the original.
+
+```python
+from qfluentwidgets_pro import DropDownColorPalette
+
+picker = DropDownColorPalette('#0078D4', parent=window)
+picker.colorChanged.connect(lambda color: print(color.name()))
+picker.setAutomaticColor('#000000')
+picker.setAlphaEnabled(True)  # optional alpha controls in More Colors
+```
+
+`setColor()` / `color()` accept and return QColor-compatible values / copies.
+`colorChanged(QColor)` reports actual changes, while `colorSelected(QColor)` reports
+every user confirmation, including an unchanged color. `setAutomatic()` selects
+the explicit automatic color; `automaticColor()`, `isAutomatic()` and
+`automaticChanged(bool)` expose that mode. Automatic defaults to black and does
+not depend on the application accent or light/dark theme. `showPalette()` /
+`closePalette()` and `showColorDialog()` control the popups; `isAlphaEnabled()`
+reads the optional dialog alpha setting (off by default). Arrows and Home/End move
+keyboard focus through the swatches; Space/Enter confirms. Theme Colors are palette
+presets, **not** a binding to the application's accent. Invalid colors are rejected
+without changing state. The lightweight component is exported from the root
+package and demonstrated on the Colors page.
+
+`ScreenColorPicker` is a compact color swatch / eyedropper button. Click it or
+call `startPicking()` to preview screen colors in a floating swatch + hexadecimal
+card; left-click or Enter/Space confirms, Escape or right-click cancels without
+changing the committed color. It never binds to or modifies the application accent.
+
+```python
+from qfluentwidgets_pro import ScreenColorPicker
+
+picker = ScreenColorPicker('#0078D4')
+picker.setFreezeScreenEnabled(False)  # Windows live capture; True freezes the view
+picker.colorChanged.connect(lambda color: print(color.name()))
+```
+
+Use `setColor()` / `color()` for the committed QColor. `colorChanged(QColor)`
+reports actual changes, `colorPicked(QColor)` reports every confirmation, and
+`colorHovered(QColor)` reports previews only. `isPicking()`, `pickingChanged(bool)`,
+`cancelPicking()` and `pickingCanceled()` expose the session lifecycle.
+The button inherits PushButton and its QSS for normal/hover/pressed/disabled
+backgrounds and borders, with a standard 32px height.
+`setFreezeScreenEnabled(True/False)` chooses frozen/live capture;
+`isFreezeScreenEnabled()` reads the setting. Freezing defaults to True.
+Changing mode during a session cancels that session without changing the color.
+Frozen mode captures screens once into memory before overlays appear. Live mode
+uses transparent overlays and samples the current pixel at about 30Hz, including
+when the pointer stays still; confirming samples again rather than using a stale
+preview. Live overlays and their cards are excluded from capture using Windows
+display affinity, not redrawn screenshots. Live mode requires Windows 10 version
+2004 or newer with the native Qt Windows backend. On unsupported platforms or if
+capture exclusion fails it reports an error; it never silently freezes or returns
+an overlay-contaminated color. The Windows bridge is standard-library ctypes,
+loaded only when starting live mode. See Microsoft's
+[SetWindowDisplayAffinity documentation](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowdisplayaffinity).
+Each screen has its own overlay and logical-to-physical pixel mapping, including
+negative monitor origins and mixed DPI. Screenshots are released at session end
+and are never written to files. Disabling/hiding the picker, deactivating the app,
+or changing the monitor layout cancels picking. Only one picker session can run
+at a time. Capture failure emits `errorOccurred(str)` and leaves the color intact.
+OS screen recording permissions and platform capture restrictions still apply;
+protected content may be blank and Qt grabWindow may be unavailable on Wayland.
+The Colors demo includes screen picking, a freeze checkbox and error messages. The component is
+exported from the root package, using QtGui/QtWidgets only (no Pillow, NumPy or
+QtMultimedia). Qt's capture and high-DPI behavior are documented in
+[QScreen::grabWindow](https://doc.qt.io/qt-6/qscreen.html#grabWindow).
 
 `CodeEdit` is a native QPlainTextEdit-based editor with line numbers, current-line
 highlight, indentation and 20 language lexers. Install its optional dependency:

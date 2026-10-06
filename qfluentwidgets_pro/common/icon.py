@@ -578,6 +578,7 @@ class FluentIcon(FluentIconBase, Enum):
     HISTORY = "History"
     SETTING = "Setting"
     PALETTE = "Palette"
+    EYEDROPPER = "Eyedropper"
     MESSAGE = "Message"
     FIT_PAGE = "FitPage"
     ZOOM_OUT = "ZoomOut"
