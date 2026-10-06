@@ -32,6 +32,12 @@ assert hasattr(q, "CircleColorPicker")
 assert hasattr(q, "ScreenColorPicker")
 assert hasattr(q, "DropDownColorPalette")
 assert hasattr(q, "DropDownColorPicker")
+assert hasattr(q, "ShortcutPicker")
+assert hasattr(q, "WaitingDialog")
+assert hasattr(q, "MenuBar")
+assert hasattr(q, "GuideWindow")
+assert hasattr(q, "RoundTabBar")
+assert hasattr(q, "RoundTabWidget")
 for name in ("CodeEdit", "CodeLanguage", "ChartWidget", "AcrylicLabel", "MediaPlayer", "VideoWidget", "AudioDecoder"):
     assert not hasattr(q, name), name
 assert "qfluentwidgets_pro.components.widgets.code_edit" not in sys.modules
@@ -45,6 +51,24 @@ assert CodeLanguage.JSON and "pygments" not in sys.modules
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QColor
 app = QApplication([])
+from PySide6.QtWidgets import QWidget
+waitingOwner = QWidget()
+menuBar = q.MenuBar(waitingOwner)
+assert menuBar.addMenu('File').title() == 'File'
+guideWindow = q.GuideWindow()
+assert guideWindow.addPage(QWidget()) == 0 and guideWindow.currentIndex() == 0
+roundTabBar = q.RoundTabBar()
+roundTabBar.addTab('lightweight', 'Tab')
+assert roundTabBar.currentTab().routeKey() == 'lightweight'
+roundTabWidget = q.RoundTabWidget()
+assert roundTabWidget.addTab(QWidget(), 'Page') == 0
+assert isinstance(roundTabWidget.tabBar(), q.RoundTabBar)
+waitingDialog = q.WaitingDialog('Please wait...', 'Preparing task...', waitingOwner)
+assert waitingDialog.title() == 'Please wait...'
+assert waitingDialog.content() == 'Preparing task...'
+shortcutPicker = q.ShortcutPicker()
+shortcutPicker.setKeySequence("Alt+F8")
+assert shortcutPicker.keySequence().toString() == "Alt+F8"
 colorPicker = q.CircleColorPicker(["red", "blue"])
 colorPicker.setColor("blue")
 assert colorPicker.currentIndex() == 1

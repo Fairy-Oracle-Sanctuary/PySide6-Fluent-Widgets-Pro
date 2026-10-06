@@ -39,7 +39,7 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 
 ## 🧩 Restored Components
 
-76 components have been restored or extended in this repo (the list will be updated continuously):
+82 components have been restored or extended in this repo (the list will be updated continuously):
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -54,6 +54,12 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 `ScreenColorPicker`
 `DropDownColorPalette`
 `DropDownColorPicker`
+`ShortcutPicker`
+`WaitingDialog`
+`MenuBar`
+`GuideWindow`
+`RoundTabBar`
+`RoundTabWidget`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -235,6 +241,213 @@ changes. `displayValue()` returns the currently displayed score.
 `setReadOnly(True)` disables editing; arrows adjust by 0.1 and Home/End select
 0/5. `setStarColor(light, dark=None)` is shared with RatingWidget.
 The Home page demonstrates continuous hover previews and click confirmation.
+
+`RoundTabWidget` provides the familiar page-management API of `QTabWidget`, with
+an internal `RoundTabBar` and a rounded content frame joined to the selected tab.
+The selected tab and content frame are painted as a single silhouette to avoid
+gaps or overlapping border pixels at their curved joints. The pages themselves
+are ordinary widgets supplied by the application.
+
+```python
+from PySide6.QtWidgets import QWidget
+from qfluentwidgets_pro import RoundTabWidget, FluentIcon
+
+tabs = RoundTabWidget(window)
+tabs.addTab(QWidget(), 'Songs')
+tabs.addTab(QWidget(), FluentIcon.FOLDER, 'Albums')
+tabs.setCurrentIndex(1)
+tabs.currentChanged.connect(on_page_changed)
+tabs.tabCloseRequested.connect(tabs.removeTab)
+tabs.tabAddRequested.connect(add_page)
+```
+
+Supports `addTab(page, label)` / `addTab(page, icon, label)` and corresponding
+`insertTab()` overloads, `widget()` / `indexOf()` / `currentWidget()`, selection,
+text/icons/tooltips, enabled/visible states, `clear()`, closable/movable tabs and
+`setTabBarAutoHide()`. The existing Fluent `(page, label, icon, routeKey)` form
+also works. `tabBar()` returns the internal RoundTabBar; attribute-style `tabBar`
+remains compatible with this repository's TabWidget. Ctrl+Tab / Ctrl+Shift+Tab
+cycle through visible, enabled tabs. Add/close signals are requests only;
+`removeTab()` and `clear()` do not delete pages (call `deleteLater()` yourself if
+desired). Unlike using a standalone bar, the container synchronizes page order
+and selection automatically, including drag reordering and programmatic changes.
+`setTabSelectedBackgroundColor(light, dark)` also updates the content background.
+This is a top-tab style variant, not a QTabWidget subclass; Qt's alternate tab
+positions/shapes and native corner-widget APIs are not provided. It is lightweight,
+exported at the package root, and demonstrated on the Buttons page.
+
+`RoundTabBar` is a style variant of the existing `TabBar`: upper rounded corners,
+outward-curving bottom corners, a 1px top/side outline with an open bottom, and no
+shadow by default. Lower wings are 5px quarter-circle arcs; adjacent tabs share
+these wings with 5px overlap, preserving the curve while keeping tabs close.
+hover backgrounds extend to their item edges instead of leaving wide side gaps. The bar
+is 38 logical pixels high, with 32px tabs, 8px upper corners and a default maximum
+tab width of 200px. The bar background is transparent; the surrounding surface
+is controlled by the application. In main.py, a light gray demo background makes
+the selected tab distinguishable without giving the component a fixed background.
+The ordinary TabBar's appearance and behavior are unchanged.
+
+```python
+from qfluentwidgets_pro import RoundTabBar, FluentIcon, TabCloseButtonDisplayMode
+
+bar = RoundTabBar(window)
+bar.addTab('songs', 'Songs', FluentIcon.MUSIC)
+bar.addTab('albums', 'Albums', FluentIcon.FOLDER)
+bar.setCurrentTab('albums')
+bar.setMovable(True)
+bar.setScrollable(True)
+bar.setTabMaximumWidth(200)
+bar.setCloseButtonDisplayMode(TabCloseButtonDisplayMode.ON_HOVER)
+bar.tabCloseRequested.connect(close_page)
+bar.tabAddRequested.connect(add_page)
+bar.currentChanged.connect(switch_page)
+```
+
+Add/close buttons emit requests; the application manages pages and calls
+`addTab()` / `removeTab()` as appropriate. Inherited route-key, insertion, data,
+icon/text, visibility, enabled-state, drag/`tabMoved` and close-mode APIs remain
+available. As with TabBar, programmatic `setCurrentTab()` / `setCurrentIndex()`
+updates selection without emitting `currentChanged`; synchronize your page container
+explicitly when changing it from application code. For a seamless content edge,
+place the bar above the content in a zero-spacing layout and match the content
+color with `setTabSelectedBackgroundColor(light, dark)`. The Buttons page demo
+includes dynamic pages and movable/scrollable/max-width/close-mode controls.
+This lightweight widget is exported at the package root.
+
+`GuideWindow` directly inherits the bundled `qframelesswindow.FramelessWindow`.
+It is an independent, modeless wizard shown with `show()` and visible in the Windows
+taskbar. Windows 11 enables native Mica by default using the inherited `windowEffect`;
+`setMicaEffectEnabled(False)` selects a solid themed fallback (also used on unsupported systems).
+It supplies only
+the close-only draggable title bar, page container, existing `PipsPager`, and
+Previous/Next/Finish footer; each page is an ordinary QWidget supplied by the caller.
+The default size is 670x460 logical pixels with an 80px footer, matching the reference.
+Page contents, data collection, images, validation messages and persistence are not built in.
+
+```python
+from PySide6.QtWidgets import QWidget, QVBoxLayout
+from qfluentwidgets_pro import GuideWindow, LineEdit
+
+guide = GuideWindow(parent=window)  # Center/lifetime reference only, not a native owner.
+page = QWidget()
+page_layout = QVBoxLayout(page)
+name_edit = LineEdit(page)
+page_layout.addWidget(name_edit)
+guide.addPage(page)
+guide.addPage(QWidget())
+guide.finished.connect(save_settings)
+guide.cancelled.connect(on_cancel)
+guide.show()  # Keep a Python reference to the guide.
+```
+
+`addPage(page)` / `insertPage(index, page)` return the page index. `removePage(page)`
+hides and detaches the page without deleting it. `count()`, `page(index)`,
+`currentPage()`, `currentIndex()` and `setCurrentIndex(index)` manage custom pages;
+`currentIndexChanged(int)` reports navigation. Pips, Previous/Next, and the last-page
+Finish button stay synchronized. Override `validatePage(page)` to return False
+when forward navigation or finish should be refused; `setNextEnabled(False)` also
+blocks forward pip jumps. Backward navigation remains available, while
+`setCurrentIndex()` is an unconditional application-controlled change.
+Use `setStepNavigationEnabled(False)` to disable clickable/keyboard pip navigation.
+`finished()` is emitted on successful completion; Esc or the close button emits
+`cancelled()` instead. Reopening preserves page state; use `setCurrentIndex(0)`
+to restart navigation. `moveToCenter()` centers on the owner/screen.
+The optional `parent` is not installed as a Qt/native parent, so it does not hide
+the guide from the taskbar; closing the guide does not close the referenced window.
+Windows taskbar grouping still follows the application's normal grouping settings.
+This lightweight window is root-exported; the Buttons page demo supplies its own
+three pages and does not save credentials or contact any service.
+
+`MenuBar` provides compact top-level navigation using existing `RoundMenu` popups.
+Titles are 32 logical pixels high; an open menu switches when hovering over another
+title. Click the same title or outside the popup, or press Esc, to close it. Alt+the
+mnemonic letter (e.g. `&F`) or F10 enables keyboard navigation; arrows, Home/End and
+Enter work with separators, disabled items, checkable actions and submenus.
+
+```python
+from PySide6.QtGui import QAction
+from qfluentwidgets_pro import MenuBar
+
+bar = MenuBar(window)
+file_menu = bar.addMenu('File (&F)')  # Also accepts an existing top-level RoundMenu.
+open_action = QAction('Open file...', window, shortcut='Ctrl+O')
+file_menu.addAction(open_action)
+file_menu.addSeparator()
+file_menu.addAction(QAction('New file...', window))
+bar.triggered.connect(handle_action)  # Receives the triggered QAction.
+layout.addWidget(bar)
+```
+
+Menu action shortcuts are registered while their menu belongs to a visible,
+enabled bar in the active window (not system-wide). Disabled/hidden menu headers
+do not activate their shortcuts. `insertMenu(before, menu)`, `removeMenu(menu)` and
+`clear()` manage navigation without deleting reusable menus. `setActiveMenu(menu)`
+opens a menu, `setActiveMenu(None)` / `closeActiveMenu()` closes it, and
+`activeMenuChanged(menu_or_none)` reports changes. Native QWidget action methods
+also support direct command headers. This lightweight widget is exported at the
+package root and is demonstrated at the top of the Buttons page.
+
+`WaitingDialog` shows a compact, centered waiting panel with a window-modal mask,
+an accent-colored `IndeterminateProgressRing`, title and description. The reference
+panel is 300x132 logical pixels with a 56px ring; text wraps and increases its height
+when needed. It has no footer buttons: press Esc to cancel, or complete it with `accept()`.
+
+```python
+from qfluentwidgets_pro import WaitingDialog
+
+dialog = WaitingDialog('Please wait...', 'Preparing the download...', parent=window)
+dialog.rejected.connect(cancel_task)  # If the worker itself should be canceled.
+dialog.open()  # Non-blocking; keep the dialog alive while your worker runs.
+# Update from the GUI thread via worker signals:
+# worker.statusChanged.connect(dialog.setContent)
+# worker.finished.connect(dialog.accept)
+```
+
+`setTitle()` / `setContent()` update the text; `title()` / `content()` return it.
+Use `accepted`, `rejected` or `finished(int)` for the result. Esc does not itself
+terminate a worker: connect cancellation explicitly. Run long tasks outside the
+GUI thread to keep the ring and Esc responsive. The ring stops when closing starts
+and resumes when a retained dialog is opened again. A parent window is required;
+the mask follows its resize/move and closes when it hides. Outside clicks do not
+cancel by default. This lightweight component is exported from the root package;
+the Buttons page includes an Esc-cancelable example.
+
+`ShortcutPicker` uses a clickable `CardWidget` with separate accent-colored key caps.
+Click anywhere (including key caps, gaps and the pencil icon) to open its masked
+capture dialog; Enter / Space also open it when focused. Save commits the draft, Reset restores
+the configured default in the draft, and Cancel leaves the current shortcut unchanged.
+
+```python
+from PySide6.QtGui import QKeySequence, QShortcut
+from qfluentwidgets_pro import ShortcutPicker
+
+picker = ShortcutPicker('Ctrl+Shift+A', parent=window)
+picker.setDefaultKeySequence('Ctrl+Shift+A')
+picker.setDialogTitle('Activate shortcut')
+picker.keySequenceChanged.connect(lambda seq: print(seq.toString(QKeySequence.PortableText)))
+# Register it explicitly if your application needs an action:
+shortcut = QShortcut(picker.keySequence(), window)
+picker.keySequenceChanged.connect(shortcut.setKey)
+shortcut.activated.connect(your_action)
+```
+
+`keySequence()` and `defaultKeySequence()` return copies. `setKeySequence()` accepts
+a QKeySequence, QKeyCombination, Qt key or PortableText string; only one combination
+is supported (multi-stroke and invalid inputs raise errors without changing state).
+`clear()` unsets the shortcut and `reset()` restores the default immediately.
+`keySequenceChanged(QKeySequence)` reports changes; `keySequenceSelected(QKeySequence)`
+and `editingFinished()` fire on every Save, including an unchanged value;
+`editingCanceled()` reports cancellation. `showEditor()` / `cancelEditing()` control
+the editor, and `setDialogDescription()` changes its instruction.
+
+Modifier-only keys (including Meta), function keys and numpad keys are supported.
+Escape cancels by default; `setEscapeCancelsCapture(False)` lets it be recorded,
+with cancellation through the button. Enter, Space and Tab are captured, not treated
+as dialog button commands. Capturing suppresses application shortcuts until the
+editor closes, but does not install global keyboard hooks or intercept OS-reserved
+combinations. Registering modifier-only shortcuts is subject to Qt/OS limitations.
+This pure QtWidgets component is exported from the root package; the Buttons page
+includes a localized editor and an explicitly registered test shortcut.
 
 `CircleColorPicker` selects a color from a customizable row of circular swatches.
 The selected swatch has a thin, same-color outline separated by a transparent gap.
@@ -536,6 +749,13 @@ The Buttons page includes a Show dialog example.
 `TimeLineWidget` displays grouped timeline cards with status icons and connector
 lines. Use `addGroup(title, InfoBarIcon.SUCCESS)` then `group.addItem(text, icon)`.
 Cards support wrapped/rich text; groups and items can be removed dynamically.
+Each `TimeLineItem` inherits `CardWidget`, reusing its background, borders and
+hover/pressed animation. The entire item (icon, text and padding) is clickable:
+connect `item.clicked` to your action. Enter / Space activate a focused card;
+`setClickEnabled(False)` disables activation without removing its contents.
+The default maximum width is 370 logical pixels (328px cards); single-line items
+are 50px high and adjacent items have a 19px gap. Wrapped text grows vertically.
+Use `setMaximumWidth()` / `setFixedWidth()` to customize the timeline width.
 The TimeLine demo page shows completed, scheduled and pending tasks.
 
 `FilledFluentWindow` provides an expanded sidebar with accent-filled selection
