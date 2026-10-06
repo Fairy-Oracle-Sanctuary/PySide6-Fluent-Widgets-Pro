@@ -1055,4 +1055,39 @@
         <translation>Save</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Jump to latest</translation></message>
+    <message><source>Write a message...</source><translation>Write a message...</translation></message>
+    <message><source>Message input</source><translation>Message input</translation></message>
+    <message><source>Stop</source><translation>Stop</translation></message>
+    <message><source>Send</source><translation>Send</translation></message>
+    <message><source>Typing...</source><translation>Typing...</translation></message>
+    <message><source>Copy message</source><translation>Copy message</translation></message>
+    <message><source>Retry</source><translation>Retry</translation></message>
+    <message><source>Like</source><translation>Like</translation></message>
+    <message><source>Dislike</source><translation>Dislike</translation></message>
+    <message><source>Read aloud</source><translation>Read aloud</translation></message>
+    <message><source>Share</source><translation>Share</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter to send, Shift+Enter for a new line</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter to send, Enter for a new line</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Plain text</translation></message>
+    <message><source>Copy code</source><translation>Copy code</translation></message>
+    <message><source>Copied</source><translation>Copied</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Could not render formula: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Loading</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Close</translation></message>
+</context>
 </TS>

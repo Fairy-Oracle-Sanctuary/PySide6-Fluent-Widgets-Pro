@@ -1055,4 +1055,39 @@
         <translation>Нигоҳ доштан</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Гузаштан ба охирин</translation></message>
+    <message><source>Write a message...</source><translation>Паём нависед...</translation></message>
+    <message><source>Message input</source><translation>Вуруди паём</translation></message>
+    <message><source>Stop</source><translation>Қатъ</translation></message>
+    <message><source>Send</source><translation>Фиристодан</translation></message>
+    <message><source>Typing...</source><translation>Навишта истодааст...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter барои фиристодан, Shift+Enter барои сатри нав</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter барои фиристодан, Enter барои сатри нав</translation></message>
+    <message><source>Copy message</source><translation>Нусхабардории паём</translation></message>
+    <message><source>Retry</source><translation>Аз нав кӯшиш кунед</translation></message>
+    <message><source>Like</source><translation>Писандидан</translation></message>
+    <message><source>Dislike</source><translation>Написандидан</translation></message>
+    <message><source>Read aloud</source><translation>Бо овоз хондан</translation></message>
+    <message><source>Share</source><translation>Мубодила</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Матни оддӣ</translation></message>
+    <message><source>Copy code</source><translation>Нусхабардории код</translation></message>
+    <message><source>Copied</source><translation>Нусхабардорӣ шуд</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Формуларо нишон додан муяссар нашуд: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Боргирӣ</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Пӯшидан</translation></message>
+</context>
 </TS>

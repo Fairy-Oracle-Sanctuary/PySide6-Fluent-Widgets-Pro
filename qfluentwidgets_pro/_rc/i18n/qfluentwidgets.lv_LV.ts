@@ -1055,4 +1055,39 @@
         <translation>Saglabāt</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Pāriet uz jaunāko</translation></message>
+    <message><source>Write a message...</source><translation>Rakstīt ziņojumu...</translation></message>
+    <message><source>Message input</source><translation>Ziņojuma ievade</translation></message>
+    <message><source>Stop</source><translation>Apturēt</translation></message>
+    <message><source>Send</source><translation>Sūtīt</translation></message>
+    <message><source>Typing...</source><translation>Raksta...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter, lai nosūtītu, Shift+Enter jaunai rindai</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter, lai nosūtītu, Enter jaunai rindai</translation></message>
+    <message><source>Copy message</source><translation>Kopēt ziņojumu</translation></message>
+    <message><source>Retry</source><translation>Mēģināt vēlreiz</translation></message>
+    <message><source>Like</source><translation>Patīk</translation></message>
+    <message><source>Dislike</source><translation>Nepatīk</translation></message>
+    <message><source>Read aloud</source><translation>Lasīt skaļi</translation></message>
+    <message><source>Share</source><translation>Kopīgot</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Vienkāršs teksts</translation></message>
+    <message><source>Copy code</source><translation>Kopēt kodu</translation></message>
+    <message><source>Copied</source><translation>Nokopēts</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Nevarēja atveidot formulu: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Ielāde</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Aizvērt</translation></message>
+</context>
 </TS>

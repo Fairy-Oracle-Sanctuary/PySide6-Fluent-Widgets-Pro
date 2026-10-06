@@ -1,0 +1,4 @@
+# Optional native rich chat: code highlighting and MathText formula rendering.
+Pygments>=2.17,<3
+matplotlib>=3.7,<3.10; python_version < "3.10"
+matplotlib>=3.7; python_version >= "3.10"

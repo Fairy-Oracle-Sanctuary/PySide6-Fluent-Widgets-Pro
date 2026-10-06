@@ -39,7 +39,7 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 
 ## 🧩 Restored Components
 
-82 components have been restored or extended in this repo (the list will be updated continuously):
+91 components have been restored or extended in this repo (the list will be updated continuously):
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -60,6 +60,12 @@ Only a subset has been restored so far. The goal is to provide a drop-in, develo
 `GuideWindow`
 `RoundTabBar`
 `RoundTabWidget`
+`ChatWidget`
+`SkeletonWidget` `ArticleSkeleton` `CirclePersonalInfoSkeleton` `RectanglePersonalInfoSkeleton`
+`Watermark`
+`Drawer`
+`DashboardCardWidget`
+`ToolBox`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -777,6 +783,7 @@ these features from their specific modules only when your application uses them.
 | --- | --- | --- |
 | `ChartWidget` | `qfluentwidgets_pro.components.widgets.chart_widget` | QtWebEngine, QtQuickWidgets and related Qt runtime libraries |
 | `CodeEdit`, `CodeLanguage` | `qfluentwidgets_pro.components.widgets.code_edit` | Pygments lexers |
+| `ChatWidget`, `ChatMessage` | `qfluentwidgets_pro.components.widgets.chat_widget` | Optional Pygments / Matplotlib formulas; no WebEngine |
 | Acrylic widgets | `qfluentwidgets_pro.components.material` or `qfluentwidgets_pro.components.widgets.acrylic_label` | Optional CPU blur: NumPy, SciPy, Pillow, colorthief |
 | Media playback widgets | `qfluentwidgets_pro.multimedia` | QtMultimedia / QtMultimediaWidgets |
 | `AudioDecoder` (waveform file decoding only) | `qfluentwidgets_pro.common.audio_decoder` | QtMultimedia and its backend/codecs; not needed by `AudioWaveformWidget` |
@@ -809,9 +816,10 @@ unblurred image; this does not disable the native Windows Mica effect.
 ```
 
 `deploy.py` builds the **complete gallery in `main.py`**, which explicitly imports
-charts, CodeEdit and audio waveform demos, including QtMultimedia for file decoding
-and playback. It deliberately includes Pygments for dynamic lexer
-discovery and is not a minimal business-app build template. Use your own entry
+charts, CodeEdit, audio waveform and native chat demos, including QtMultimedia
+for playback and Matplotlib/NumPy for offline chat formulas. CPU Acrylic blur
+remains excluded independently. It deliberately includes Pygments for dynamic
+lexer discovery and is not a minimal business-app build template. Use your own entry
 point to avoid gallery-only imports; omit `--include-package=pygments` when not
 using CodeEdit. If you do use CodeEdit, include its dynamically loaded lexers.
 Final bundle contents must be checked in Nuitka's compilation report and output;
@@ -827,6 +835,222 @@ exported normally; it was an accidental omission, not a heavy dependency.
   - Demo / playground
 - `docs/`
   - Documentation assets
+
+## Exclusive toolbox
+
+`ToolBox` stacks native rounded tool panels. The entire header is clickable;
+opening a panel closes the previous one, preserving its controls and values.
+Only the arrow area gains a small rounded hover background, not the entire header.
+
+```python
+from qfluentwidgets_pro import ToolBox
+
+tools = ToolBox(self)
+tools.addItem(blendPage, "Blend")  # arbitrary QWidget; first item opens
+tools.addItem(huePage, "Hue")
+tools.addItem(sharpenPage, "Sharpen")
+tools.setCurrentIndex(1)
+tools.currentChanged.connect(self.onToolChanged)
+```
+
+Clicking the active header or `setCurrentIndex(-1)` collapses all panels.
+Expansion/collapse animate over 200 ms each. When switching pages, the old page
+finishes collapsing before the new one opens, so two bodies never appear at once.
+Rapid clicks replace the pending destination; reopening a closing page reverses
+from its current height. `setAnimationDuration(0)` disables/settles animations.
+`currentChanged` reports the requested selection when the transition starts;
+the selected page may still be waiting for the old page to close.
+`addItem(widget, text, icon=None)` / `insertItem(index, widget, text, icon=None)`
+support optional icons. `count()`, `widget()`, `indexOf()`, `currentWidget()`,
+`itemText()` / `setItemText()`, `itemIcon()` / `setItemIcon()` and
+`setItemEnabled()` manage pages. `removeItem(index)` returns a hidden, detached
+page without deleting it. Disabling/removing the active page selects another
+enabled page, or collapses all when none remain. `currentChanged(int)` reports
+the current index (`-1` means all collapsed). Header buttons support Space/Enter;
+`itemHeader()` exposes them for tooltips. Place the toolbox in a `ScrollArea`
+when content can exceed the available height. The **ToolBox** demo has blend,
+hue and sharpen panels with independent, persistent controls.
+
+## Dashboard feature card
+
+`DashboardCardWidget` inherits `SimpleCardWidget`, retaining its rounded border,
+theme-aware default fill and native painting. The header contains an optional
+icon, a title and a text-free switch. Add descriptive text or your own widgets:
+
+```python
+from qfluentwidgets_pro import DashboardCardWidget, FluentIcon, PushButton
+
+card = DashboardCardWidget(FluentIcon.GLOBE, "Hosts editor", parent=self)
+card.setCardBackgroundColor("#edf7fa", "#282e30")  # light / dark
+card.addWidget(PushButton("Open editor", card))
+card.checkedChanged.connect(self.onFeatureToggled)
+card.setChecked(True)
+```
+
+`setTitle()`, `setContent()` and `setIcon()` update caller-provided values.
+`setIcon(None)` / `setSwitchVisible(False)` hide the optional header controls.
+`addWidget()` / `addLayout()` append arbitrary content via `viewLayout`.
+`resetCardBackgroundColor()` restores the inherited translucent background;
+with one color, `setCardBackgroundColor()` uses it for both themes. `setChecked()`
+and user toggles emit `checkedChanged(bool)` only when the state changes.
+Switching does not disable custom content or implement business logic.
+The **DashboardCard** demo includes text, custom-button and default-fill cards.
+
+## Four-direction drawer
+
+`Drawer` slides custom QWidget content over a parent content area, with a native
+edge shadow, header and close button. It is not a separate window:
+
+```python
+from qfluentwidgets_pro import Drawer, DrawerPosition, BodyLabel
+
+self.drawer = Drawer("Notifications", self.contentWidget)
+self.drawer.addWidget(BodyLabel("No notifications", self.drawer.contentWidget))
+self.drawer.setDrawerSize(320)  # width for left/right, height for top/bottom
+self.drawer.open(DrawerPosition.RIGHT)  # LEFT / RIGHT / TOP / BOTTOM
+# self.drawer.close()  # animated; hide() is immediate
+```
+
+Do not add the overlay to the parent's layout. `viewLayout` accepts your own
+widgets/layouts and content is retained after closing. Parent resize updates the
+panel geometry, even mid-animation. Default dismissal is via close button, Esc
+or left-clicking the mask; `setEscClosable()` / `setClosableOnMaskClicked()` can
+disable either path. Outside clicks are consumed, Tab stays inside the panel,
+and closing restores the previous focus. Parent hide dismisses without reopening
+on the next show. `opened`/`closed` fire after the transition completes;
+`isOpen()` becomes false when closing starts. `setAnimationDuration(0)` disables
+animation, `setMaskColor()` customizes the shade, and `shadowEffect` exposes the
+native shadow settings. The **Drawer** demo covers all four directions.
+
+## Text watermark overlay
+
+`Watermark` attaches to a target QWidget, repeats rotated plain text and follows
+the target's size. Do not add it to the target's layout:
+
+```python
+from qfluentwidgets_pro import Watermark, getFont
+
+self.watermark = Watermark("Internal · Alice · ID 1001", self.contentWidget)
+self.watermark.setAngle(-15)  # negative = counterclockwise, positive = clockwise
+self.watermark.setOpacity(0.1)  # 0..1
+self.watermark.setSpacing(60, 30)  # horizontal/vertical gaps, logical pixels
+self.watermark.setFont(getFont(18))
+# Optional custom light/dark colors (defaults: black/white).
+self.watermark.setColor("#444444", "#dddddd")
+self.watermark.hide()  # show() restores it
+```
+
+Input, clicks and scrolling pass through to underlying controls. New or raised
+target children are tracked to keep the watermark on top. Use
+`setTargetWidget(otherWidget)` to retarget, or `setTargetWidget(None)` to detach
+and hide. For stationary watermarks over scrollable content, target the scroll
+area's `viewport()`. Text may contain newlines and is never translated or parsed
+as HTML. The native tiled pixmap is cached and regenerated for font, color,
+rotation, text, spacing or device-pixel-ratio changes. Only the target surface is
+covered; this is not a tamper-proof security feature and does not modify or
+automatically watermark exported images/PDFs. The **Watermark** demo includes
+real controls underneath the overlay and live appearance settings.
+
+## Loading skeletons
+
+`ArticleSkeleton`, `CirclePersonalInfoSkeleton` and `RectanglePersonalInfoSkeleton`
+provide the article and avatar/text layouts. `SkeletonWidget` accepts custom
+shapes or an overridden `skeletonPath()`, with no heavy dependencies:
+
+```python
+from PySide6.QtCore import QRectF
+from qfluentwidgets_pro import SkeletonWidget, CirclePersonalInfoSkeleton
+
+profile = CirclePersonalInfoSkeleton(parent)
+custom = SkeletonWidget(parent)
+custom.addEllipse(QRectF(0, 0, 100, 100))
+custom.addRect(QRectF(.25, .1, .7, .3), relative=True)
+custom.addRect(QRectF(.25, .6, .7, .3), relative=True)
+custom.setAnimationDuration(1500)  # milliseconds per sweep
+custom.setAnimationEnabled(False)  # static placeholders
+```
+
+The brighter native sweep leans 30 degrees clockwise from vertical and moves
+left to right, clipped to the shapes; gaps remain
+transparent and all shapes in a widget share one animation. Hidden widgets pause
+and resume on show. `setColors(baseLight, baseDark, highlightLight, highlightDark)`
+customizes both themes; neutral defaults are independent of the accent color.
+Use normal Qt layouts/geometry to size the canvas. Remove or hide the skeleton
+when real content is ready; it does not fetch data or automatically replace it.
+The **Skeleton** demo page includes all four layouts and an animation toggle;
+its custom layout keeps a 20-pixel avatar/text gap as the window widens.
+
+## Native ChatWidget
+
+`ChatWidget` is a QQ-style, **native QtWidgets** conversation view and composer,
+not a WebView. Incoming messages have left-hand avatars/names/bubbles; outgoing
+messages are right-aligned. Markdown uses QTextDocument with raw HTML disabled.
+Fenced code has a copy button and reuses CodeEdit's asynchronous highlighting.
+Unknown languages or missing Pygments fall back to readable plain code.
+
+```python
+from qfluentwidgets_pro.components.widgets.chat_widget import ChatWidget
+
+chat = ChatWidget(parent)
+chat.addToolButton(FluentIcon.PHOTO, "Attach image", choose_image, side="left")
+chat.addToolButton(FluentIcon.HISTORY, "Latest", chat.scrollToBottom, side="right")
+chat.sendRequested.connect(on_send)  # caller adds/sends the message
+chat.addMessage("Hello", role="user", name="Me", avatar="me.png")
+reply = chat.addMessage("", name="Assistant", streaming=True)
+chat.appendText(reply, "**Hello!**")
+chat.finishMessage(reply)
+```
+
+`addToolWidget()` accepts arbitrary widgets on either side. `addImageMessage()`
+accepts local images/QImage/QPixmap, while `addWidgetMessage()` embeds a custom
+file/voice/task card. Streams are coalesced every 40 ms and reuse unchanged
+content blocks. History follows the bottom only while the user is near it;
+scrolling up pauses following and shows a compact down-arrow RoundToolButton
+(tooltip: **Jump to latest**), with an opaque circular backing so messages cannot
+show through its translucent surface. Hover over the thin divider to highlight
+it and drag vertically to resize history/composer; neither area can collapse.
+The editor expands with the composer. `chat.splitter.setSizes([460, 184])` can
+set initial heights; `setComposerVisible()` preserves the split when toggled.
+`setBusy(True)` shows
+a Stop button that emits `stopRequested`; the caller owns backend cancellation.
+Enter sends; Shift+Enter inserts a newline. `setSendOnEnter(False)` selects
+Ctrl+Enter sending. IME composition is not submitted by Enter.
+
+Per-message action bars are opt-in and apply to existing and future rows:
+
+```python
+chat.setMessageToolBarEnabled(True)
+chat.messageActionTriggered.connect(on_message_action)  # (actionId, messageId)
+chat.addMessageAction("inspect", FluentIcon.INFO, "Inspect", inspect_message,
+                      roles="assistant", kinds="text")  # callback(messageId)
+```
+
+Assistant text gets Copy / Retry / Like / Dislike / Read aloud / Share buttons;
+user text and images get Copy / Share, and custom widget cards get Share. Only
+Copy performs a local action (original text or image to the clipboard). Other
+buttons emit an event, without implementing model retries, speech or sharing.
+Use `removeMessageAction()` / `clearMessageActions()` to customize defaults;
+`messageActionButton(messageId, actionId)` exposes each row's button for host
+enabled/checkable states. Labels passed by callers are not translated. Hiding
+bars removes their layout space and keeps short bubbles compact; narrow bars
+wrap rather than overflow. The demo includes a message-toolbar checkbox.
+
+Install `pip install -r requirements-chat.txt` for code highlighting and offline
+MathText formulas (`$...$`, `$$...$$`, `\(...\)`, `\[...\]`). Formula support is a
+LaTeX **subset**, not an external TeX engine; unsupported expressions remain
+visible and emit `renderWarning`. It imports Matplotlib only when a complete
+formula is encountered. `setMathEnabled(False)` disables it, and
+`setFormulaRenderer(callable)` accepts a provider `(expression, color, pointSize)`
+returning a QImage. No WebEngine/JavaScript, network client, automatic link opening
+or implicit local/network Markdown-image loading is involved.
+
+All update APIs run on the GUI thread; connect worker chunk signals to
+`appendText(str, str)` using a queued connection. Message ids are stable;
+`message()`/`messages()` return immutable snapshots. `clear()` retains drafts and
+tools. This first version uses one widget row per message (no large-history
+virtualization), and does not implement persistence, upload/recording, full LaTeX,
+tool execution or an AI adapter. The `Chat` page in `main.py` demonstrates local
+simulated streaming and custom tools.
 
 ## Translation and resource builds
 

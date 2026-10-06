@@ -1055,4 +1055,39 @@
         <translation>Saqlash</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Eng so'nggisiga o'tish</translation></message>
+    <message><source>Write a message...</source><translation>Xabar yozing...</translation></message>
+    <message><source>Message input</source><translation>Xabar kiritish</translation></message>
+    <message><source>Stop</source><translation>To'xtatish</translation></message>
+    <message><source>Send</source><translation>Yuborish</translation></message>
+    <message><source>Typing...</source><translation>Yozmoqda...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Yuborish uchun Enter, yangi qator uchun Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Yuborish uchun Ctrl+Enter, yangi qator uchun Enter</translation></message>
+    <message><source>Copy message</source><translation>Xabarni nusxalash</translation></message>
+    <message><source>Retry</source><translation>Qayta urinish</translation></message>
+    <message><source>Like</source><translation>Yoqdi</translation></message>
+    <message><source>Dislike</source><translation>Yoqmadi</translation></message>
+    <message><source>Read aloud</source><translation>Ovoz chiqarib o‘qish</translation></message>
+    <message><source>Share</source><translation>Ulashish</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Oddiy matn</translation></message>
+    <message><source>Copy code</source><translation>Kodni nusxalash</translation></message>
+    <message><source>Copied</source><translation>Nusxalandi</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Formulani ko'rsatib bo'lmadi: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Yuklanmoqda</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Yopish</translation></message>
+</context>
 </TS>

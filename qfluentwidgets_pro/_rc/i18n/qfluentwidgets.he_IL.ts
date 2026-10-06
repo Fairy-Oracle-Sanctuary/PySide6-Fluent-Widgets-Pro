@@ -1055,4 +1055,39 @@
         <translation>שמור</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>קפוץ לאחרון</translation></message>
+    <message><source>Write a message...</source><translation>כתוב הודעה...</translation></message>
+    <message><source>Message input</source><translation>שדה קלט הודעה</translation></message>
+    <message><source>Stop</source><translation>עצור</translation></message>
+    <message><source>Send</source><translation>שלח</translation></message>
+    <message><source>Typing...</source><translation>מקליד...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter לשליחה, Shift+Enter לשורה חדשה</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter לשליחה, Enter לשורה חדשה</translation></message>
+    <message><source>Copy message</source><translation>העתק הודעה</translation></message>
+    <message><source>Retry</source><translation>נסה שוב</translation></message>
+    <message><source>Like</source><translation>אהבתי</translation></message>
+    <message><source>Dislike</source><translation>לא אהבתי</translation></message>
+    <message><source>Read aloud</source><translation>הקרא בקול</translation></message>
+    <message><source>Share</source><translation>שתף</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>טקסט רגיל</translation></message>
+    <message><source>Copy code</source><translation>העתק קוד</translation></message>
+    <message><source>Copied</source><translation>הועתק</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>לא ניתן להציג נוסחה: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>טוען</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>סגור</translation></message>
+</context>
 </TS>

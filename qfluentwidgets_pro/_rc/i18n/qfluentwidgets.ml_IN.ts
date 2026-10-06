@@ -1055,4 +1055,39 @@
         <translation>സേവ് ചെയ്യുക</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>ഏറ്റവും പുതിയതിലേക്ക് പോകുക</translation></message>
+    <message><source>Write a message...</source><translation>ഒരു സന്ദേശം എഴുതുക...</translation></message>
+    <message><source>Message input</source><translation>സന്ദേശ ഇൻപുട്ട്</translation></message>
+    <message><source>Stop</source><translation>നിർത്തുക</translation></message>
+    <message><source>Send</source><translation>അയയ്ക്കുക</translation></message>
+    <message><source>Typing...</source><translation>ടൈപ്പ് ചെയ്യുന്നു...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>അയയ്ക്കാൻ Enter, പുതിയ വരിക്ക് Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>അയയ്ക്കാൻ Ctrl+Enter, പുതിയ വരിക്ക് Enter</translation></message>
+    <message><source>Copy message</source><translation>സന്ദേശം പകർത്തുക</translation></message>
+    <message><source>Retry</source><translation>വീണ്ടും ശ്രമിക്കുക</translation></message>
+    <message><source>Like</source><translation>ഇഷ്ടം</translation></message>
+    <message><source>Dislike</source><translation>ഇഷ്ടക്കേട്</translation></message>
+    <message><source>Read aloud</source><translation>ഉറക്കെ വായിക്കുക</translation></message>
+    <message><source>Share</source><translation>പങ്കിടുക</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>സാധാരണ ടെക്സ്റ്റ്</translation></message>
+    <message><source>Copy code</source><translation>കോഡ് പകർത്തുക</translation></message>
+    <message><source>Copied</source><translation>പകർത്തി</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>ഫോർമുല റെൻഡർ ചെയ്യാനായില്ല: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>ലോഡ് ചെയ്യുന്നു</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>അടയ്ക്കുക</translation></message>
+</context>
 </TS>

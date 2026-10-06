@@ -1055,4 +1055,39 @@
         <translation>Gem</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Gå til nyeste</translation></message>
+    <message><source>Write a message...</source><translation>Skriv en besked...</translation></message>
+    <message><source>Message input</source><translation>Beskedinput</translation></message>
+    <message><source>Stop</source><translation>Stop</translation></message>
+    <message><source>Send</source><translation>Send</translation></message>
+    <message><source>Typing...</source><translation>Skriver...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter for at sende, Shift+Enter for en ny linje</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter for at sende, Enter for en ny linje</translation></message>
+    <message><source>Copy message</source><translation>Kopiér besked</translation></message>
+    <message><source>Retry</source><translation>Prøv igen</translation></message>
+    <message><source>Like</source><translation>Synes godt om</translation></message>
+    <message><source>Dislike</source><translation>Synes ikke godt om</translation></message>
+    <message><source>Read aloud</source><translation>Læs højt</translation></message>
+    <message><source>Share</source><translation>Del</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Ren tekst</translation></message>
+    <message><source>Copy code</source><translation>Kopiér kode</translation></message>
+    <message><source>Copied</source><translation>Kopieret</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Kunne ikke gengive formel: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Indlæser</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Luk</translation></message>
+</context>
 </TS>

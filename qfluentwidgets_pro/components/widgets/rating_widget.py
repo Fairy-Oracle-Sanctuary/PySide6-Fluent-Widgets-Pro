@@ -263,6 +263,3 @@ class InteractiveRatingWidget(RatingWidget):
         painter.setBrush(Qt.NoBrush)
         for path in paths:
             painter.drawPath(path)
-        if self.hasFocus():
-            painter.setPen(QPen(color, 1, Qt.DotLine))
-            painter.drawRoundedRect(QRectF(self.rect()).adjusted(.5, .5, -.5, -.5), 3, 3)

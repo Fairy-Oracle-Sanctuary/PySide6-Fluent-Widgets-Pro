@@ -1055,4 +1055,39 @@
         <translation>Αποθήκευση</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Μετάβαση στο τελευταίο</translation></message>
+    <message><source>Write a message...</source><translation>Γράψτε ένα μήνυμα...</translation></message>
+    <message><source>Message input</source><translation>Εισαγωγή μηνύματος</translation></message>
+    <message><source>Stop</source><translation>Διακοπή</translation></message>
+    <message><source>Send</source><translation>Αποστολή</translation></message>
+    <message><source>Typing...</source><translation>Πληκτρολόγηση...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter για αποστολή, Shift+Enter για νέα γραμμή</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter για αποστολή, Enter για νέα γραμμή</translation></message>
+    <message><source>Copy message</source><translation>Αντιγραφή μηνύματος</translation></message>
+    <message><source>Retry</source><translation>Επανάληψη</translation></message>
+    <message><source>Like</source><translation>Μου αρέσει</translation></message>
+    <message><source>Dislike</source><translation>Δεν μου αρέσει</translation></message>
+    <message><source>Read aloud</source><translation>Ανάγνωση με φωνή</translation></message>
+    <message><source>Share</source><translation>Κοινοποίηση</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Απλό κείμενο</translation></message>
+    <message><source>Copy code</source><translation>Αντιγραφή κώδικα</translation></message>
+    <message><source>Copied</source><translation>Αντιγράφηκε</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Δεν ήταν δυνατή η απόδοση του τύπου: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Φόρτωση</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Κλείσιμο</translation></message>
+</context>
 </TS>

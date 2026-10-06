@@ -1055,4 +1055,39 @@
         <translation>저장</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>최신으로 이동</translation></message>
+    <message><source>Write a message...</source><translation>메시지를 입력하세요...</translation></message>
+    <message><source>Message input</source><translation>메시지 입력</translation></message>
+    <message><source>Stop</source><translation>중지</translation></message>
+    <message><source>Send</source><translation>보내기</translation></message>
+    <message><source>Typing...</source><translation>입력 중...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter로 보내기, Shift+Enter로 줄 바꿈</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter로 보내기, Enter로 줄 바꿈</translation></message>
+    <message><source>Copy message</source><translation>메시지 복사</translation></message>
+    <message><source>Retry</source><translation>다시 시도</translation></message>
+    <message><source>Like</source><translation>좋아요</translation></message>
+    <message><source>Dislike</source><translation>싫어요</translation></message>
+    <message><source>Read aloud</source><translation>소리 내어 읽기</translation></message>
+    <message><source>Share</source><translation>공유</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>일반 텍스트</translation></message>
+    <message><source>Copy code</source><translation>코드 복사</translation></message>
+    <message><source>Copied</source><translation>복사됨</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>수식을 렌더링할 수 없습니다: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>로딩 중</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>닫기</translation></message>
+</context>
 </TS>

@@ -1055,4 +1055,39 @@
         <translation>Simpan</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Lompat ke terkini</translation></message>
+    <message><source>Write a message...</source><translation>Tulis mesej...</translation></message>
+    <message><source>Message input</source><translation>Input mesej</translation></message>
+    <message><source>Stop</source><translation>Hentikan</translation></message>
+    <message><source>Send</source><translation>Hantar</translation></message>
+    <message><source>Typing...</source><translation>Sedang menaip...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter untuk hantar, Shift+Enter untuk baris baharu</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter untuk hantar, Enter untuk baris baharu</translation></message>
+    <message><source>Copy message</source><translation>Salin mesej</translation></message>
+    <message><source>Retry</source><translation>Cuba semula</translation></message>
+    <message><source>Like</source><translation>Suka</translation></message>
+    <message><source>Dislike</source><translation>Tidak suka</translation></message>
+    <message><source>Read aloud</source><translation>Baca dengan kuat</translation></message>
+    <message><source>Share</source><translation>Kongsi</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Teks biasa</translation></message>
+    <message><source>Copy code</source><translation>Salin kod</translation></message>
+    <message><source>Copied</source><translation>Disalin</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Tidak dapat memaparkan formula: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Memuatkan</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Tutup</translation></message>
+</context>
 </TS>

@@ -1055,4 +1055,39 @@
         <translation>ಉಳಿಸಿ</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>ಇತ್ತೀಚಿನವರೆಗೆ ಹೋಗಿ</translation></message>
+    <message><source>Write a message...</source><translation>ಸಂದೇಶ ಬರೆಯಿರಿ...</translation></message>
+    <message><source>Message input</source><translation>ಸಂದೇಶ ಇನ್ಪುಟ್</translation></message>
+    <message><source>Stop</source><translation>ನಿಲ್ಲಿಸಿ</translation></message>
+    <message><source>Send</source><translation>ಕಳುಹಿಸಿ</translation></message>
+    <message><source>Typing...</source><translation>ಟೈಪ್ ಮಾಡುತ್ತಿದೆ...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>ಕಳುಹಿಸಲು Enter ಒತ್ತಿರಿ, ಹೊಸ ಸಾಲಿಗೆ Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>ಕಳುಹಿಸಲು Ctrl+Enter ಒತ್ತಿರಿ, ಹೊಸ ಸಾಲಿಗೆ Enter</translation></message>
+    <message><source>Copy message</source><translation>ಸಂದೇಶವನ್ನು ನಕಲಿಸಿ</translation></message>
+    <message><source>Retry</source><translation>ಮರುಪ್ರಯತ್ನಿಸಿ</translation></message>
+    <message><source>Like</source><translation>ಇಷ್ಟ</translation></message>
+    <message><source>Dislike</source><translation>ಇಷ್ಟವಿಲ್ಲ</translation></message>
+    <message><source>Read aloud</source><translation>ಗಟ್ಟಿಯಾಗಿ ಓದಿ</translation></message>
+    <message><source>Share</source><translation>ಹಂಚಿಕೊಳ್ಳಿ</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>ಸರಳ ಪಠ್ಯ</translation></message>
+    <message><source>Copy code</source><translation>ಕೋಡ್ ನಕಲಿಸಿ</translation></message>
+    <message><source>Copied</source><translation>ನಕಲಿಸಲಾಗಿದೆ</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>ಸೂತ್ರವನ್ನು ರೆಂಡರ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>ಲೋಡ್ ಆಗುತ್ತಿದೆ</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>ಮುಚ್ಚಿ</translation></message>
+</context>
 </TS>

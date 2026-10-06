@@ -43,7 +43,7 @@
 
 ## 已还原组件
 
-已还原或扩展的组件共 82 个（列表将持续更新）：
+已还原或扩展的组件共 91 个（列表将持续更新）：
 
 `HyperlinkToolButton` `FilledPushButton` `FilledToolButton`
 `TextPushButton` `TextToolButton` `LuminaPushButton`
@@ -64,6 +64,12 @@
 `GuideWindow`
 `RoundTabBar`
 `RoundTabWidget`
+`ChatWidget`
+`SkeletonWidget` `ArticleSkeleton` `CirclePersonalInfoSkeleton` `RectanglePersonalInfoSkeleton`
+`Watermark`
+`Drawer`
+`DashboardCardWidget`
+`ToolBox`
 `ImageMagnifierWidget`
 `ImageComparisonSlider`
 `ImageCropper`
@@ -695,6 +701,7 @@ Nuitka 把未使用的可选依赖纳入编译图；只有业务使用相应功�
 | --- | --- | --- |
 | `ChartWidget` | `qfluentwidgets_pro.components.widgets.chart_widget` | QtWebEngine、QtQuickWidgets 及相关 Qt 运行库 |
 | `CodeEdit`、`CodeLanguage` | `qfluentwidgets_pro.components.widgets.code_edit` | Pygments 语言解析器 |
+| `ChatWidget`、`ChatMessage` | `qfluentwidgets_pro.components.widgets.chat_widget` | 可选 Pygments / Matplotlib 公式；不使用 WebEngine |
 | Acrylic 组件 | `qfluentwidgets_pro.components.material` 或 `qfluentwidgets_pro.components.widgets.acrylic_label` | 可选 CPU 模糊：NumPy、SciPy、Pillow、colorthief |
 | 多媒体播放组件 | `qfluentwidgets_pro.multimedia` | QtMultimedia / QtMultimediaWidgets |
 | `AudioDecoder`（仅文件波形解码） | `qfluentwidgets_pro.common.audio_decoder` | QtMultimedia 及其后端/编解码器；`AudioWaveformWidget` 不需要 |
@@ -724,7 +731,8 @@ Standalone 模式默认跟随导入；`--nofollow-import-to` 可以排除模块�
 ```
 
 `deploy.py` 打包的是 `main.py` 的**完整 gallery**，其中显式导入了图表、CodeEdit 和
-音频波形展示页，包含文件解码/播放所需的 QtMultimedia。
+音频波形及原生 Chat 展示页，包含文件解码/播放所需的 QtMultimedia，以及公式所需的
+Matplotlib / NumPy。完整 gallery 不再排除 NumPy，CPU Acrylic 模糊仍独立排除。
 它为动态解析器发现而主动包含 Pygments，不是轻量业务程序的打包模板。业务程序应使用自己的
 入口，避免引入 gallery；未使用 CodeEdit 时不要照搬 `--include-package=pygments`，使用时则
 须包含所需的动态加载解析器。最终是否纳入 Qt 插件或原生库，需要检查 Nuitka 编译报告和
@@ -740,6 +748,193 @@ Standalone 模式默认跟随导入；`--nofollow-import-to` 可以排除模块�
 - `docs/`
   - 文档资源
 
+
+## 互斥工具箱
+
+`ToolBox` 将自定义 QWidget 堆叠成圆角折叠面板，整个标题栏可点击。
+展开新项时先收起旧项，每次最多展开一项；收起不会删除控件或清空原值。
+悬停仅给右侧箭头添加小块圆角背景，不改变整个标题栏，也不绘制鼠标点击后的整圈边框。
+
+```python
+from qfluentwidgets_pro import ToolBox
+
+tools = ToolBox(self)
+tools.addItem(blendPage, "混合")  # 任意 QWidget；第一项默认展开
+tools.addItem(huePage, "色度")
+tools.addItem(sharpenPage, "锐化")
+tools.setCurrentIndex(1)
+tools.currentChanged.connect(self.onToolChanged)
+```
+
+点击当前标题或 `setCurrentIndex(-1)` 可全部收起。
+展开、收起默认各有 200 ms 高度动画；切换时旧项收起结束后再展开新项，避免两项同时
+露出。快速点击会更新待展开项，重新打开正在收起的项会从当前高度平滑反向播放。
+`setAnimationDuration(0)` 可禁用动画并立即完成当前切换。
+`currentChanged` 在切换开始时报告目标索引，此时目标页面可能仍在等待旧项收起。
+`addItem(widget, text, icon=None)`、`insertItem(index, widget, text, icon=None)`
+支持可选图标。可通过 `count()`、`widget()`、`indexOf()`、`currentWidget()` 查询，
+通过 `setItemText()`、`setItemIcon()`、`setItemEnabled()` 更新标题、图标和可用状态。
+`removeItem(index)` 返回已隐藏并脱离父控件的页面，不删除它。禁用或移除当前项时
+自动选择其他可用项，没有可用项则全部收起。`currentChanged(int)` 报告当前索引，
+`-1` 表示全部收起。标题支持 Space / Enter，`itemHeader()` 可用于设置提示。
+内容较多时将工具箱放进 `ScrollArea`。演示程序新增 **ToolBox** 页面，包含混合、
+色度、锐化三项以及各自保留状态的自定义控件。
+
+## 仪表盘卡片
+
+`DashboardCardWidget` 直接继承 `SimpleCardWidget`，复用其圆角、描边、默认主题
+背景和原生绘制。上方是可选图标、标题和不带文字的开关，下方可放说明或自定义内容：
+
+```python
+from qfluentwidgets_pro import DashboardCardWidget, FluentIcon, PushButton
+
+card = DashboardCardWidget(FluentIcon.GLOBE, "Hosts 文件编辑器", parent=self)
+card.setCardBackgroundColor("#edf7fa", "#282e30")  # 亮色 / 暗色背景
+card.addWidget(PushButton("打开文件编辑器", card))
+card.checkedChanged.connect(self.onFeatureToggled)
+card.setChecked(True)
+```
+
+通过 `setTitle()`、`setContent()`、`setIcon()` 更新内容；`setIcon(None)` 和
+`setSwitchVisible(False)` 可隐藏图标或开关。`addWidget()` / `addLayout()` 将自定义
+内容放入 `viewLayout`。`resetCardBackgroundColor()` 恢复父类的半透明背景；只传一个
+背景色时，亮暗主题使用同一颜色。`setChecked()` 和用户操作都仅在状态改变时发出
+`checkedChanged(bool)`。开关不自动禁用自定义内容，也不内置业务逻辑。
+演示程序新增 **DashboardCard** 页面，包含文字、自定义按钮和默认背景三种示例。
+
+## 四向抽屉组件
+
+`Drawer` 在父内容区域内滑入自定义 QWidget，带原生边缘阴影、标题和关闭按钮，
+不是独立窗口，不要把抽屉本身加入父控件的布局：
+
+```python
+from qfluentwidgets_pro import Drawer, DrawerPosition, BodyLabel
+
+self.drawer = Drawer("通知", self.contentWidget)
+self.drawer.addWidget(BodyLabel("没有更多通知", self.drawer.contentWidget))
+self.drawer.setDrawerSize(320)  # 左右是宽度，上下是高度，单位逻辑像素
+self.drawer.open(DrawerPosition.RIGHT)  # LEFT / RIGHT / TOP / BOTTOM
+# self.drawer.close()  # 动画关闭；hide() 立即隐藏
+```
+
+`viewLayout` 可直接加入自定义布局，关闭后保留内部内容。窗口缩放时自动贴边，
+动画中也会更新几何位置。默认可点关闭按钮、按 Esc、左键点击遮罩关闭，
+`setEscClosable()` / `setClosableOnMaskClicked()` 可分别关闭后两种方式。
+遮罩点击不穿透，Tab 焦点限制在抽屉内部，关闭后恢复此前焦点。父区域隐藏时自动
+关闭，重新显示父区域不会意外弹出。`opened` / `closed` 在过渡完成后发送，
+`isOpen()` 从开始关闭时即为 False。`setAnimationDuration(0)` 关闭动画，
+`setMaskColor()` 配置遮罩颜色，`shadowEffect` 可调整原生阴影。
+演示程序新增 **Drawer** 页面，可直接测试四个方向。
+
+## 文本水印覆盖层
+
+`Watermark` 可覆盖任意 QWidget，在内容上平铺旋转后的半透明文字，并自动跟随
+目标大小。不需要、也不要把水印加入目标的布局：
+
+```python
+from qfluentwidgets_pro import Watermark, getFont
+
+self.watermark = Watermark("内部资料 · 张三 · 工号 1001", self.contentWidget)
+self.watermark.setAngle(-15)  # 负数逆时针，正数顺时针
+self.watermark.setOpacity(0.1)  # 0 到 1
+self.watermark.setSpacing(60, 30)  # 横向、纵向空隙，单位逻辑像素
+self.watermark.setFont(getFont(18))
+self.watermark.setColor("#444444", "#dddddd")  # 可选：亮色/暗色主题颜色
+self.watermark.hide()  # show() 可重新显示
+```
+
+水印不拦截鼠标、滚轮和键盘焦点，下面的输入框与按钮仍能正常操作。新增或手动
+置顶的子控件不会持续遮住水印。`setTargetWidget(otherWidget)` 可更换目标，
+`setTargetWidget(None)` 可解除绑定并隐藏。覆盖滚动区域时建议绑定 `viewport()`，
+这样水印不跟随内容滚动。文字支持换行，按调用方原文绘制，不翻译、不解释 HTML。
+组件使用缓存的原生高 DPI 文字贴片平铺，无重型依赖。它是视觉标识，不是防篡改或
+防复制措施，也不会自动修改导出的图片 / PDF。演示程序新增 **Watermark** 页面，
+可实时修改样式，并通过被覆盖的输入框、按钮验证事件穿透。
+
+## 扫光骨架组件
+
+`ArticleSkeleton`、`CirclePersonalInfoSkeleton`、`RectanglePersonalInfoSkeleton`
+提供文章、圆形头像和方形头像预设。`SkeletonWidget` 支持自定义占位形状：
+
+```python
+from PySide6.QtCore import QRectF
+from qfluentwidgets_pro import SkeletonWidget, CirclePersonalInfoSkeleton
+
+profile = CirclePersonalInfoSkeleton(parent)
+custom = SkeletonWidget(parent)
+custom.addEllipse(QRectF(0, 0, 100, 100))
+custom.addRect(QRectF(.25, .1, .7, .3), relative=True)
+custom.addRect(QRectF(.25, .6, .7, .3), relative=True)
+custom.setAnimationDuration(1500)  # 扫光周期，单位毫秒
+custom.setAnimationEnabled(False)  # 关闭扫光，保留静态占位
+```
+
+原生 QPainter 绘制顺时针倾斜 30°、从左向右移动的明亮扫光，裁剪在占位形状内部，
+不覆盖透明空隙；同一骨架
+内所有形状共用一个动画。组件隐藏时暂停，显示时恢复。`relative=True` 使用当前
+控件宽高的比例坐标，默认使用逻辑像素；也可重写 `skeletonPath()` 做响应式布局。
+`setColors(baseLight, baseDark, highlightLight, highlightDark)` 可配置亮暗主题的
+填充和高光颜色，默认中性色不绑定主题色。加载结束由调用方隐藏/移除骨架并显示
+真实内容，不内置数据加载逻辑。演示程序新增 **Skeleton** 页面和扫光开关，
+自定义示例的头像/文字间距固定为 20 个逻辑像素，不随窗口变宽而扩大。
+
+## 原生 ChatWidget
+
+`ChatWidget` 使用 QQ 式布局：上方为可滚动的头像、昵称与左右消息气泡，下方为
+左右自定义工具栏、输入区和发送按钮。全部由 QtWidgets / QTextDocument 原生
+绘制，不使用 WebView，也不内置模型接口、上传或录音行为。
+
+```python
+from qfluentwidgets_pro.components.widgets.chat_widget import ChatWidget
+
+chat = ChatWidget(parent)
+chat.addToolButton(FluentIcon.PHOTO, "选择图片", choose_image, side="left")
+chat.addToolButton(FluentIcon.HISTORY, "最新消息", chat.scrollToBottom, side="right")
+chat.sendRequested.connect(on_send)  # 只通知调用方，不自动添加或请求网络
+chat.addMessage("你好", role="user", name="我", avatar="me.png")
+reply = chat.addMessage("", name="助手", streaming=True)
+chat.appendText(reply, "**你好！**")
+chat.finishMessage(reply)
+```
+
+- `addToolWidget()`：左右均可放任意控件、带菜单的按钮等。
+- `addImageMessage()`：显式添加本地图片 / QImage / QPixmap；`addWidgetMessage()`：
+  放入应用自己的文件、语音、任务卡片。
+- 流式更新按 40 ms 合并，只更新变化的文本 / 代码块。滚动到上方读历史时不会
+  强制拉回底部；可点击“最新消息”恢复跟随。
+- `setBusy(True)` 显示停止按钮，`stopRequested` 由应用接入自己的取消逻辑。
+- “跳转到最新”使用 RoundToolButton + 向下箭头，额外绘制不透明圆形底层，避免
+  半透明按钮透出下方消息；文字只保留为提示和无障碍名称。
+- 消息区与输入区保留细分割线，悬停变色并显示上下拖动光标，可拖动调整两个区域
+  的高度，编辑框随输入区伸展，两区均有最小高度限制。使用原生 Qt 拖动机制，
+  不依赖组件库的分割组件。`chat.splitter.setSizes([460, 184])` 可设置初始高度，
+  `setComposerVisible()` 隐藏后重新显示会恢复此前的高度分配。
+- `setMessageToolBarEnabled(True)` 开启每条消息下的工具栏，默认关闭，对已有和
+  后续消息都生效。助手文本默认提供复制、重试、点赞、点踩、朗读、分享；用户文本
+  和图片为复制、分享，自定义卡片为分享。复制会将原文或原图放入剪贴板，其余按钮
+  只发出 `messageActionTriggered(actionId, messageId)`，不隐式执行模型或网络操作。
+  演示页有“消息工具栏”复选框，可直接开关。
+  `addMessageAction(id, icon, toolTip, callback, roles=None, kinds=None)` 可添加自定义
+  按钮，回调收到消息 ID；可按角色及消息类型筛选。`removeMessageAction()` /
+  `clearMessageActions()` 可移除默认项，`messageActionButton(messageId, actionId)`
+  可取得单条消息的按钮设置启用或选中状态。关闭工具栏不留空白，短气泡不被撑宽，
+  窄窗口会自动换行。
+- 默认 Enter 发送、Shift+Enter 换行；`setSendOnEnter(False)` 切换 Ctrl+Enter
+  发送。输入法组词期间 Enter 不提交消息。
+- Markdown 支持列表、表格、行内代码等，禁用原始 HTML；链接只发送点击信号，
+  Markdown 中的远程 / 本地图片不会隐式读取或下载。
+- 安装 `pip install -r requirements-chat.txt` 开启 Pygments 代码高亮和离线
+  MathText 公式。代码块有复制按钮；未知语言或未安装 Pygments 时保留纯代码。
+  公式支持 `$...$`、`$$...$$`、`\(...\)`、`\[...\]`，是常用 LaTeX 子集而非完整
+  TeX，不支持的表达式保留原文并发出 `renderWarning`。公式依赖仅在出现完整公式时
+  加载；可用 `setMathEnabled(False)` 关闭，或通过 `setFormulaRenderer()` 传入
+  `(expression, color, pointSize) -> QImage` 的替代渲染器。
+
+该组件按需从具体模块导入，不进统一导出入口。所有更新 API 在 GUI 线程调用；
+工作线程可以用队列连接将 `(messageId, delta)` 信号接入 `appendText()`。
+`message()` / `messages()` 返回不可变快照；`clear()` 不清空草稿与工具栏。
+初版每条消息使用独立 QWidget，尚未做超大历史虚拟化、持久化及模型适配。
+`main.py` 的 Chat 页提供图片、多人昵称和本地模拟流式演示。
 
 ## 国际化和资源编译
 

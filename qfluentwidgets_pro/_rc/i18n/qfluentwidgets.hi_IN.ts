@@ -1055,4 +1055,39 @@
         <translation>सहेजें</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>नवीनतम पर जाएं</translation></message>
+    <message><source>Write a message...</source><translation>संदेश लिखें...</translation></message>
+    <message><source>Message input</source><translation>संदेश इनपुट</translation></message>
+    <message><source>Stop</source><translation>रोकें</translation></message>
+    <message><source>Send</source><translation>भेजें</translation></message>
+    <message><source>Typing...</source><translation>टाइप कर रहे हैं...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>भेजने के लिए Enter दबाएं, नई पंक्ति के लिए Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>भेजने के लिए Ctrl+Enter दबाएं, नई पंक्ति के लिए Enter</translation></message>
+    <message><source>Copy message</source><translation>संदेश कॉपी करें</translation></message>
+    <message><source>Retry</source><translation>पुनः प्रयास करें</translation></message>
+    <message><source>Like</source><translation>पसंद</translation></message>
+    <message><source>Dislike</source><translation>नापसंद</translation></message>
+    <message><source>Read aloud</source><translation>ज़ोर से पढ़ें</translation></message>
+    <message><source>Share</source><translation>साझा करें</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>सादा टेक्स्ट</translation></message>
+    <message><source>Copy code</source><translation>कोड कॉपी करें</translation></message>
+    <message><source>Copied</source><translation>कॉपी किया गया</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>सूत्र प्रस्तुत नहीं किया जा सका: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>लोड हो रहा है</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>बंद करें</translation></message>
+</context>
 </TS>

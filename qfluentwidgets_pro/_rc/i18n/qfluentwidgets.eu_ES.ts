@@ -1055,4 +1055,39 @@
         <translation>Gorde</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Joan azkenekora</translation></message>
+    <message><source>Write a message...</source><translation>Idatzi mezu bat...</translation></message>
+    <message><source>Message input</source><translation>Mezu-sarrera</translation></message>
+    <message><source>Stop</source><translation>Gelditu</translation></message>
+    <message><source>Send</source><translation>Bidali</translation></message>
+    <message><source>Typing...</source><translation>Idazten...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Sakatu Enter bidaltzeko, Shift+Enter lerro berrirako</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Sakatu Ctrl+Enter bidaltzeko, Enter lerro berrirako</translation></message>
+    <message><source>Copy message</source><translation>Kopiatu mezua</translation></message>
+    <message><source>Retry</source><translation>Saiatu berriro</translation></message>
+    <message><source>Like</source><translation>Gustatu</translation></message>
+    <message><source>Dislike</source><translation>Ez gustatu</translation></message>
+    <message><source>Read aloud</source><translation>Irakurri ozenki</translation></message>
+    <message><source>Share</source><translation>Partekatu</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Testu arrunta</translation></message>
+    <message><source>Copy code</source><translation>Kopiatu kodea</translation></message>
+    <message><source>Copied</source><translation>Kopiatuta</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Ezin izan da formula errendatu: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Kargatzen</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Itxi</translation></message>
+</context>
 </TS>

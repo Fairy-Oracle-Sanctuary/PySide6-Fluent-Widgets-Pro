@@ -38,10 +38,18 @@ assert hasattr(q, "MenuBar")
 assert hasattr(q, "GuideWindow")
 assert hasattr(q, "RoundTabBar")
 assert hasattr(q, "RoundTabWidget")
-for name in ("CodeEdit", "CodeLanguage", "ChartWidget", "AcrylicLabel", "MediaPlayer", "VideoWidget", "AudioDecoder"):
+assert hasattr(q, "SkeletonWidget") and hasattr(q, "ArticleSkeleton")
+assert hasattr(q, "Watermark")
+assert hasattr(q, "Drawer") and hasattr(q, "DrawerPosition")
+assert hasattr(q, "DashboardCardWidget")
+assert hasattr(q, "ToolBox")
+assert hasattr(q, "CirclePersonalInfoSkeleton") and hasattr(q, "RectanglePersonalInfoSkeleton")
+for name in ("CodeEdit", "CodeLanguage", "ChartWidget", "ChatWidget", "AcrylicLabel", "MediaPlayer", "VideoWidget", "AudioDecoder"):
     assert not hasattr(q, name), name
 assert "qfluentwidgets_pro.components.widgets.code_edit" not in sys.modules
 assert "qfluentwidgets_pro.components.widgets.chart_widget" not in sys.modules
+assert "qfluentwidgets_pro.components.widgets.chat_widget" not in sys.modules
+assert "qfluentwidgets_pro.common.chat_math" not in sys.modules
 assert "qfluentwidgets_pro.multimedia" not in sys.modules
 assert "qfluentwidgets_pro.common.audio_decoder" not in sys.modules
 from qfluentwidgets_pro.components.widgets.acrylic_label import isAcrylicAvailable
@@ -104,9 +112,10 @@ print("PASS: lightweight root import with optional dependencies excluded, explic
             runpy.run_path(str(ROOT / "deploy.py"))
         args = command.call_args.args[0]
         assert "--nofollow-import-to=qfluentwidgets_pro.common.image_utils" in args
-        assert "--nofollow-import-to=numpy" in args
+        assert "--nofollow-import-to=numpy" not in args  # full chat gallery uses MathText
         assert "--nofollow-import-to=scipy" in args
         assert "--include-package=pygments" in args  # full gallery intentionally uses it
+        assert "--include-package=matplotlib" in args  # full gallery includes formulas
         assert "--include-qt-plugins=multimedia" in args
         assert "--include-data-files=gallery/resource/audio/waveform_sample.wav=gallery/resource/audio/waveform_sample.wav" in args
     print("PASS: all three gallery build profiles exclude CPU blur; no compiler was invoked")

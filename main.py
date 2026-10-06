@@ -222,6 +222,36 @@ class MainWindow(TopFluentWindow):
         self.addSubInterface(self.colorPickerInterface, FluentIcon.PALETTE,
                             "Colors", TopNavigationItemPosition.LEFT)
 
+        from gallery.view.chat_widget_demo import ChatWidgetDemo
+        self.chatInterface = ChatWidgetDemo(self)
+        self.addSubInterface(self.chatInterface, FluentIcon.CHAT,
+                             "Chat", TopNavigationItemPosition.LEFT)
+
+        from gallery.view.skeleton_demo import SkeletonDemo
+        self.skeletonInterface = SkeletonDemo(self)
+        self.addSubInterface(self.skeletonInterface, FluentIcon.LAYOUT,
+                             "Skeleton", TopNavigationItemPosition.LEFT)
+
+        from gallery.view.watermark_demo import WatermarkDemo
+        self.watermarkInterface = WatermarkDemo(self)
+        self.addSubInterface(self.watermarkInterface, FluentIcon.FONT,
+                             "Watermark", TopNavigationItemPosition.LEFT)
+
+        from gallery.view.drawer_demo import DrawerDemo
+        self.drawerInterface = DrawerDemo(self)
+        self.addSubInterface(self.drawerInterface, FluentIcon.MENU,
+                             "Drawer", TopNavigationItemPosition.LEFT)
+
+        from gallery.view.dashboard_card_demo import DashboardCardDemo
+        self.dashboardCardInterface = DashboardCardDemo(self)
+        self.addSubInterface(self.dashboardCardInterface, FluentIcon.LAYOUT,
+                             "DashboardCard", TopNavigationItemPosition.LEFT)
+
+        from gallery.view.tool_box_demo import ToolBoxDemo
+        self.toolBoxInterface = ToolBoxDemo(self)
+        self.addSubInterface(self.toolBoxInterface, FluentIcon.MENU,
+                             "ToolBox", TopNavigationItemPosition.LEFT)
+
     def _createImageMagnifierPage(self):
         from pathlib import Path
 

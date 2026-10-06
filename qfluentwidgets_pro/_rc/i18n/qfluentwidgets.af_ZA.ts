@@ -1055,4 +1055,39 @@
         <translation>Stoor</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Spring na nuutste</translation></message>
+    <message><source>Write a message...</source><translation>Skryf 'n boodskap...</translation></message>
+    <message><source>Message input</source><translation>Boodskapinvoer</translation></message>
+    <message><source>Stop</source><translation>Stop</translation></message>
+    <message><source>Send</source><translation>Stuur</translation></message>
+    <message><source>Typing...</source><translation>Tik...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Druk Enter om te stuur, Shift+Enter vir 'n nuwe lyn</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Druk Ctrl+Enter om te stuur, Enter vir 'n nuwe lyn</translation></message>
+    <message><source>Copy message</source><translation>Kopieer boodskap</translation></message>
+    <message><source>Retry</source><translation>Probeer weer</translation></message>
+    <message><source>Like</source><translation>Hou van</translation></message>
+    <message><source>Dislike</source><translation>Hou nie van nie</translation></message>
+    <message><source>Read aloud</source><translation>Lees hardop</translation></message>
+    <message><source>Share</source><translation>Deel</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Gewone teks</translation></message>
+    <message><source>Copy code</source><translation>Kopieer kode</translation></message>
+    <message><source>Copied</source><translation>Gekopieer</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Kon nie formule weergee nie: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Laai tans</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Maak toe</translation></message>
+</context>
 </TS>

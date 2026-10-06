@@ -1055,4 +1055,39 @@
         <translation>Salvesta</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Hüppa uusima juurde</translation></message>
+    <message><source>Write a message...</source><translation>Kirjuta sõnum...</translation></message>
+    <message><source>Message input</source><translation>Sõnumi sisestus</translation></message>
+    <message><source>Stop</source><translation>Peata</translation></message>
+    <message><source>Send</source><translation>Saada</translation></message>
+    <message><source>Typing...</source><translation>Kirjutab...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Vajuta Enter saatmiseks, Shift+Enter uue rea jaoks</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Vajuta Ctrl+Enter saatmiseks, Enter uue rea jaoks</translation></message>
+    <message><source>Copy message</source><translation>Kopeeri sõnum</translation></message>
+    <message><source>Retry</source><translation>Proovi uuesti</translation></message>
+    <message><source>Like</source><translation>Meeldib</translation></message>
+    <message><source>Dislike</source><translation>Ei meeldi</translation></message>
+    <message><source>Read aloud</source><translation>Loe ette</translation></message>
+    <message><source>Share</source><translation>Jaga</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Lihttekst</translation></message>
+    <message><source>Copy code</source><translation>Kopeeri kood</translation></message>
+    <message><source>Copied</source><translation>Kopeeritud</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Valemi kuvamine ebaõnnestus: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Laadimine</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Sulge</translation></message>
+</context>
 </TS>

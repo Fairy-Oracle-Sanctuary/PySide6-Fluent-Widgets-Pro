@@ -1055,4 +1055,39 @@
         <translation>સાચવો</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>નવીનતમ પર જાઓ</translation></message>
+    <message><source>Write a message...</source><translation>સંદેશ લખો...</translation></message>
+    <message><source>Message input</source><translation>સંદેશ ઇનપુટ</translation></message>
+    <message><source>Stop</source><translation>બંધ કરો</translation></message>
+    <message><source>Send</source><translation>મોકલો</translation></message>
+    <message><source>Typing...</source><translation>ટાઇપ કરી રહ્યું છે...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>મોકલવા માટે Enter દબાવો, નવી લાઇન માટે Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>મોકલવા માટે Ctrl+Enter દબાવો, નવી લાઇન માટે Enter</translation></message>
+    <message><source>Copy message</source><translation>સંદેશ કૉપિ કરો</translation></message>
+    <message><source>Retry</source><translation>ફરી પ્રયાસ કરો</translation></message>
+    <message><source>Like</source><translation>ગમ્યું</translation></message>
+    <message><source>Dislike</source><translation>નાપસંદ</translation></message>
+    <message><source>Read aloud</source><translation>મોટેથી વાંચો</translation></message>
+    <message><source>Share</source><translation>શેર કરો</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>સાદું લખાણ</translation></message>
+    <message><source>Copy code</source><translation>કોડ કૉપી કરો</translation></message>
+    <message><source>Copied</source><translation>કૉપી થયું</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>સૂત્ર રેન્ડર કરી શકાયું નહીં: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>લોડ થઈ રહ્યું છે</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>બંધ કરો</translation></message>
+</context>
 </TS>

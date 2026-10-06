@@ -1055,4 +1055,39 @@
         <translation>সংরক্ষণ</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>সর্বশেষে যান</translation></message>
+    <message><source>Write a message...</source><translation>একটি বার্তা লিখুন...</translation></message>
+    <message><source>Message input</source><translation>বার্তা ইনপুট</translation></message>
+    <message><source>Stop</source><translation>থামুন</translation></message>
+    <message><source>Send</source><translation>পাঠান</translation></message>
+    <message><source>Typing...</source><translation>টাইপ করছেন...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>পাঠাতে Enter, নতুন লাইনের জন্য Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>পাঠাতে Ctrl+Enter, নতুন লাইনের জন্য Enter</translation></message>
+    <message><source>Copy message</source><translation>বার্তা কপি করুন</translation></message>
+    <message><source>Retry</source><translation>আবার চেষ্টা করুন</translation></message>
+    <message><source>Like</source><translation>পছন্দ</translation></message>
+    <message><source>Dislike</source><translation>অপছন্দ</translation></message>
+    <message><source>Read aloud</source><translation>জোরে পড়ুন</translation></message>
+    <message><source>Share</source><translation>শেয়ার করুন</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>সাধারণ টেক্সট</translation></message>
+    <message><source>Copy code</source><translation>কোড কপি করুন</translation></message>
+    <message><source>Copied</source><translation>কপি করা হয়েছে</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>সূত্র রেন্ডার করা যায়নি: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>লোড হচ্ছে</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>বন্ধ করুন</translation></message>
+</context>
 </TS>

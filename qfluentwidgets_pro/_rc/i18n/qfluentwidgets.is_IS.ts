@@ -1055,4 +1055,39 @@
         <translation>Vista</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Stökkva á nýjasta</translation></message>
+    <message><source>Write a message...</source><translation>Skrifa skilaboð...</translation></message>
+    <message><source>Message input</source><translation>Skilaboðainntak</translation></message>
+    <message><source>Stop</source><translation>Stöðva</translation></message>
+    <message><source>Send</source><translation>Senda</translation></message>
+    <message><source>Typing...</source><translation>Skrifar...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter til að senda, Shift+Enter fyrir nýja línu</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter til að senda, Enter fyrir nýja línu</translation></message>
+    <message><source>Copy message</source><translation>Afrita skilaboð</translation></message>
+    <message><source>Retry</source><translation>Reyna aftur</translation></message>
+    <message><source>Like</source><translation>Líka við</translation></message>
+    <message><source>Dislike</source><translation>Líka ekki við</translation></message>
+    <message><source>Read aloud</source><translation>Lesa upphátt</translation></message>
+    <message><source>Share</source><translation>Deila</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Hreinn texti</translation></message>
+    <message><source>Copy code</source><translation>Afrita kóða</translation></message>
+    <message><source>Copied</source><translation>Afritað</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Gat ekki birt formúlu: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Hleður</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Loka</translation></message>
+</context>
 </TS>

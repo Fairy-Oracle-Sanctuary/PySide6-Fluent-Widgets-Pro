@@ -1084,4 +1084,39 @@
         <translation>選擇日期範圍</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>跳至最新</translation></message>
+    <message><source>Write a message...</source><translation>輸入訊息...</translation></message>
+    <message><source>Message input</source><translation>訊息輸入</translation></message>
+    <message><source>Stop</source><translation>停止</translation></message>
+    <message><source>Send</source><translation>傳送</translation></message>
+    <message><source>Typing...</source><translation>輸入中...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>按 Enter 傳送，Shift+Enter 換行</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>按 Ctrl+Enter 傳送，Enter 換行</translation></message>
+    <message><source>Copy message</source><translation>複製訊息</translation></message>
+    <message><source>Retry</source><translation>重試</translation></message>
+    <message><source>Like</source><translation>讚</translation></message>
+    <message><source>Dislike</source><translation>倒讚</translation></message>
+    <message><source>Read aloud</source><translation>朗讀</translation></message>
+    <message><source>Share</source><translation>分享</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>純文字</translation></message>
+    <message><source>Copy code</source><translation>複製程式碼</translation></message>
+    <message><source>Copied</source><translation>已複製</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>無法呈現公式：%1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>載入中</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>關閉</translation></message>
+</context>
 </TS>

@@ -1055,4 +1055,39 @@
         <translation>Shrani</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Skoči na najnovejše</translation></message>
+    <message><source>Write a message...</source><translation>Napiši sporočilo ...</translation></message>
+    <message><source>Message input</source><translation>Vnos sporočila</translation></message>
+    <message><source>Stop</source><translation>Ustavi</translation></message>
+    <message><source>Send</source><translation>Pošlji</translation></message>
+    <message><source>Typing...</source><translation>Tipkanje ...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter za pošiljanje, Shift+Enter za novo vrstico</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter za pošiljanje, Enter za novo vrstico</translation></message>
+    <message><source>Copy message</source><translation>Kopiraj sporočilo</translation></message>
+    <message><source>Retry</source><translation>Poskusi znova</translation></message>
+    <message><source>Like</source><translation>Všeč mi je</translation></message>
+    <message><source>Dislike</source><translation>Ni mi všeč</translation></message>
+    <message><source>Read aloud</source><translation>Preberi na glas</translation></message>
+    <message><source>Share</source><translation>Deli</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Golo besedilo</translation></message>
+    <message><source>Copy code</source><translation>Kopiraj kodo</translation></message>
+    <message><source>Copied</source><translation>Kopirano</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Formule ni bilo mogoče upodobiti: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Nalaganje</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Zapri</translation></message>
+</context>
 </TS>
