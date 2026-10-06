@@ -28,6 +28,10 @@ assert hasattr(q, "RadialGauge")
 assert hasattr(q, "RangeCalendarPicker") and hasattr(q, "FastRangeCalendarPicker")
 assert hasattr(q, "CalendarTimePicker") and hasattr(q, "FastCalendarTimePicker")
 assert hasattr(q, "AudioWaveformWidget")
+assert hasattr(q, "CircleColorPicker")
+assert hasattr(q, "ScreenColorPicker")
+assert hasattr(q, "DropDownColorPalette")
+assert hasattr(q, "DropDownColorPicker")
 for name in ("CodeEdit", "CodeLanguage", "ChartWidget", "AcrylicLabel", "MediaPlayer", "VideoWidget", "AudioDecoder"):
     assert not hasattr(q, name), name
 assert "qfluentwidgets_pro.components.widgets.code_edit" not in sys.modules
@@ -39,7 +43,20 @@ assert not isAcrylicAvailable  # documented navigation fallback when blur is exc
 from qfluentwidgets_pro.components.widgets.code_edit import CodeEdit, CodeLanguage
 assert CodeLanguage.JSON and "pygments" not in sys.modules
 from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QColor
 app = QApplication([])
+colorPicker = q.CircleColorPicker(["red", "blue"])
+colorPicker.setColor("blue")
+assert colorPicker.currentIndex() == 1
+screenPicker = q.ScreenColorPicker("red")
+screenPicker.setColor("blue")
+assert screenPicker.color().name() == "#0000ff" and not screenPicker.isPicking()
+dropDownPalette = q.DropDownColorPalette("red")
+dropDownPalette.setColor("blue")
+assert dropDownPalette.color().name() == "#0000ff"
+dropDownPicker = q.DropDownColorPicker("red")
+dropDownPicker.setColor("#800000ff")
+assert dropDownPicker.color().name(QColor.HexArgb) == "#800000ff"
 waveform = q.AudioWaveformWidget()
 waveform.setSamples([-.5, .5, 0], 24000)
 waveform.appendSamples([0], 24000)

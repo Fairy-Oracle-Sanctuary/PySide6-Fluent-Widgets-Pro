@@ -214,6 +214,11 @@ class MainWindow(TopFluentWindow):
         self.addSubInterface(self.audioWaveformInterface, FluentIcon.MUSIC,
                              "Waveform", TopNavigationItemPosition.LEFT)
 
+        from gallery.view.color_picker_demo import ColorPickerDemo
+        self.colorPickerInterface = ColorPickerDemo(self)
+        self.addSubInterface(self.colorPickerInterface, FluentIcon.PALETTE,
+                            "Colors", TopNavigationItemPosition.LEFT)
+
     def _createImageMagnifierPage(self):
         from pathlib import Path
 

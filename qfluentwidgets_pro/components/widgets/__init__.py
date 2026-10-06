@@ -241,3 +241,7 @@ from .image_comparison import ImageComparisonSlider
 from .image_cropper import ImageCropper, CropShape
 from .avatar_picker import AvatarPicker
 from .audio_waveform import AudioWaveformWidget
+from .circle_color_picker import CircleColorPicker
+from .screen_color_picker import ScreenColorPicker
+from .drop_down_color_palette import DropDownColorPalette
+from .drop_down_color_picker import DropDownColorPicker
