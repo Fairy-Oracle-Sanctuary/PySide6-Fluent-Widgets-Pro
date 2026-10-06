@@ -1055,4 +1055,39 @@
         <translation>Хадгалах</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Хамгийн сүүлийн рүү очих</translation></message>
+    <message><source>Write a message...</source><translation>Мессеж бичих...</translation></message>
+    <message><source>Message input</source><translation>Мессеж оруулах</translation></message>
+    <message><source>Stop</source><translation>Зогсоох</translation></message>
+    <message><source>Send</source><translation>Илгээх</translation></message>
+    <message><source>Typing...</source><translation>Бичиж байна...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Илгээхдээ Enter, шинэ мөрөнд Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Илгээхдээ Ctrl+Enter, шинэ мөрөнд Enter</translation></message>
+    <message><source>Copy message</source><translation>Мессежийг хуулах</translation></message>
+    <message><source>Retry</source><translation>Дахин оролдох</translation></message>
+    <message><source>Like</source><translation>Таалагдсан</translation></message>
+    <message><source>Dislike</source><translation>Таалагдаагүй</translation></message>
+    <message><source>Read aloud</source><translation>Чанга унших</translation></message>
+    <message><source>Share</source><translation>Хуваалцах</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Энгийн текст</translation></message>
+    <message><source>Copy code</source><translation>Кодыг хуулах</translation></message>
+    <message><source>Copied</source><translation>Хуулагдсан</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Томьёог харуулж чадсангүй: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Ачаалж байна</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Хаах</translation></message>
+</context>
 </TS>

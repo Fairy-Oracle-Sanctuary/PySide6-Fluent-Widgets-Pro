@@ -1055,4 +1055,39 @@
         <translation>ذخیره</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>پرش به آخرین</translation></message>
+    <message><source>Write a message...</source><translation>نوشتن پیام...</translation></message>
+    <message><source>Message input</source><translation>ورودی پیام</translation></message>
+    <message><source>Stop</source><translation>توقف</translation></message>
+    <message><source>Send</source><translation>ارسال</translation></message>
+    <message><source>Typing...</source><translation>در حال تایپ...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>برای ارسال Enter، برای خط جدید Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>برای ارسال Ctrl+Enter، برای خط جدید Enter</translation></message>
+    <message><source>Copy message</source><translation>کپی پیام</translation></message>
+    <message><source>Retry</source><translation>تلاش مجدد</translation></message>
+    <message><source>Like</source><translation>پسندیدن</translation></message>
+    <message><source>Dislike</source><translation>نپسندیدن</translation></message>
+    <message><source>Read aloud</source><translation>بلندخوانی</translation></message>
+    <message><source>Share</source><translation>اشتراک‌گذاری</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>متن ساده</translation></message>
+    <message><source>Copy code</source><translation>کپی کد</translation></message>
+    <message><source>Copied</source><translation>کپی شد</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>امکان نمایش فرمول وجود ندارد: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>در حال بارگذاری</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>بستن</translation></message>
+</context>
 </TS>

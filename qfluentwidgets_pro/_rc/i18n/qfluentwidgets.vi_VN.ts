@@ -1055,4 +1055,39 @@
         <translation>Lưu</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Chuyển đến mới nhất</translation></message>
+    <message><source>Write a message...</source><translation>Viết tin nhắn...</translation></message>
+    <message><source>Message input</source><translation>Nhập tin nhắn</translation></message>
+    <message><source>Stop</source><translation>Dừng</translation></message>
+    <message><source>Send</source><translation>Gửi</translation></message>
+    <message><source>Typing...</source><translation>Đang nhập...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter để gửi, Shift+Enter để xuống dòng</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter để gửi, Enter để xuống dòng</translation></message>
+    <message><source>Copy message</source><translation>Sao chép tin nhắn</translation></message>
+    <message><source>Retry</source><translation>Thử lại</translation></message>
+    <message><source>Like</source><translation>Thích</translation></message>
+    <message><source>Dislike</source><translation>Không thích</translation></message>
+    <message><source>Read aloud</source><translation>Đọc to</translation></message>
+    <message><source>Share</source><translation>Chia sẻ</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Văn bản thuần</translation></message>
+    <message><source>Copy code</source><translation>Sao chép mã</translation></message>
+    <message><source>Copied</source><translation>Đã sao chép</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Không thể hiển thị công thức: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Đang tải</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Đóng</translation></message>
+</context>
 </TS>

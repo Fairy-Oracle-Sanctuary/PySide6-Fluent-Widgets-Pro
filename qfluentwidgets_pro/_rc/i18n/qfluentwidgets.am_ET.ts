@@ -1055,4 +1055,39 @@
         <translation>አስቀምጥ</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>ወደ አዲሱ ዝለል</translation></message>
+    <message><source>Write a message...</source><translation>መልእክት ይጻፉ...</translation></message>
+    <message><source>Message input</source><translation>የመልእክት ግቤት</translation></message>
+    <message><source>Stop</source><translation>አቁም</translation></message>
+    <message><source>Send</source><translation>ላክ</translation></message>
+    <message><source>Typing...</source><translation>በመጻፍ ላይ...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>ለመላክ Enter ይጫኑ፣ ለአዲስ መስመር Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>ለመላክ Ctrl+Enter ይጫኑ፣ ለአዲስ መስመር Enter</translation></message>
+    <message><source>Copy message</source><translation>መልእክት ቅዳ</translation></message>
+    <message><source>Retry</source><translation>እንደገና ሞክር</translation></message>
+    <message><source>Like</source><translation>ወደድኩት</translation></message>
+    <message><source>Dislike</source><translation>አልወደድኩትም</translation></message>
+    <message><source>Read aloud</source><translation>ጮክ ብለህ አንብብ</translation></message>
+    <message><source>Share</source><translation>አጋራ</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>ግልጽ ጽሑፍ</translation></message>
+    <message><source>Copy code</source><translation>ኮድ ቅዳ</translation></message>
+    <message><source>Copied</source><translation>ተቀድቷል</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>ቀመሩን ማሳየት አልተቻለም፦ %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>በመጫን ላይ</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>ዝጋ</translation></message>
+</context>
 </TS>

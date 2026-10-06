@@ -1055,4 +1055,39 @@
         <translation>Simpan</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Lompat ke terbaru</translation></message>
+    <message><source>Write a message...</source><translation>Tulis pesan...</translation></message>
+    <message><source>Message input</source><translation>Input pesan</translation></message>
+    <message><source>Stop</source><translation>Berhenti</translation></message>
+    <message><source>Send</source><translation>Kirim</translation></message>
+    <message><source>Typing...</source><translation>Sedang mengetik...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter untuk kirim, Shift+Enter untuk baris baru</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter untuk kirim, Enter untuk baris baru</translation></message>
+    <message><source>Copy message</source><translation>Salin pesan</translation></message>
+    <message><source>Retry</source><translation>Coba lagi</translation></message>
+    <message><source>Like</source><translation>Suka</translation></message>
+    <message><source>Dislike</source><translation>Tidak suka</translation></message>
+    <message><source>Read aloud</source><translation>Bacakan dengan lantang</translation></message>
+    <message><source>Share</source><translation>Bagikan</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Teks biasa</translation></message>
+    <message><source>Copy code</source><translation>Salin kode</translation></message>
+    <message><source>Copied</source><translation>Disalin</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Tidak dapat merender rumus: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Memuat</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Tutup</translation></message>
+</context>
 </TS>

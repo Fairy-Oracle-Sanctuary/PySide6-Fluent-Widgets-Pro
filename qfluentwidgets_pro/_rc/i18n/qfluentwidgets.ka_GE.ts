@@ -1055,4 +1055,39 @@
         <translation>შენახვა</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>უახლესზე გადასვლა</translation></message>
+    <message><source>Write a message...</source><translation>დაწერეთ შეტყობინება...</translation></message>
+    <message><source>Message input</source><translation>შეტყობინების შეყვანა</translation></message>
+    <message><source>Stop</source><translation>შეჩერება</translation></message>
+    <message><source>Send</source><translation>გაგზავნა</translation></message>
+    <message><source>Typing...</source><translation>წერს...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>გაგზავნა Enter-ით, ახალი ხაზისთვის Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>გაგზავნა Ctrl+Enter-ით, ახალი ხაზისთვის Enter</translation></message>
+    <message><source>Copy message</source><translation>შეტყობინების კოპირება</translation></message>
+    <message><source>Retry</source><translation>ხელახლა ცდა</translation></message>
+    <message><source>Like</source><translation>მოწონება</translation></message>
+    <message><source>Dislike</source><translation>არ მოწონება</translation></message>
+    <message><source>Read aloud</source><translation>ხმამაღლა კითხვა</translation></message>
+    <message><source>Share</source><translation>გაზიარება</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>სუფთა ტექსტი</translation></message>
+    <message><source>Copy code</source><translation>კოდის კოპირება</translation></message>
+    <message><source>Copied</source><translation>დაკოპირებულია</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>ფორმულის რენდერი ვერ მოხერხდა: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>იტვირთება</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>დახურვა</translation></message>
+</context>
 </TS>

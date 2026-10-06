@@ -1055,4 +1055,39 @@
         <translation>Ruaj</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Kalo te më i fundit</translation></message>
+    <message><source>Write a message...</source><translation>Shkruaj një mesazh...</translation></message>
+    <message><source>Message input</source><translation>Fusha e mesazhit</translation></message>
+    <message><source>Stop</source><translation>Ndalo</translation></message>
+    <message><source>Send</source><translation>Dërgo</translation></message>
+    <message><source>Typing...</source><translation>Po shkruan...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter për të dërguar, Shift+Enter për rresht të ri</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter për të dërguar, Enter për rresht të ri</translation></message>
+    <message><source>Copy message</source><translation>Kopjo mesazhin</translation></message>
+    <message><source>Retry</source><translation>Provo përsëri</translation></message>
+    <message><source>Like</source><translation>Pëlqe</translation></message>
+    <message><source>Dislike</source><translation>Nuk më pëlqen</translation></message>
+    <message><source>Read aloud</source><translation>Lexo me zë</translation></message>
+    <message><source>Share</source><translation>Shpërndaj</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Tekst i thjeshtë</translation></message>
+    <message><source>Copy code</source><translation>Kopjo kodin</translation></message>
+    <message><source>Copied</source><translation>U kopjua</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Formula nuk mund të shfaqej: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Duke u ngarkuar</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Mbyll</translation></message>
+</context>
 </TS>

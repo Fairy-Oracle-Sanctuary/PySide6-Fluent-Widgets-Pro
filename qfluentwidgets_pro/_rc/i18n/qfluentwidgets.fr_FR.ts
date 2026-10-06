@@ -1055,4 +1055,39 @@
         <translation>Enregistrer</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Aller au plus récent</translation></message>
+    <message><source>Write a message...</source><translation>Écrire un message...</translation></message>
+    <message><source>Message input</source><translation>Saisie du message</translation></message>
+    <message><source>Stop</source><translation>Arrêter</translation></message>
+    <message><source>Send</source><translation>Envoyer</translation></message>
+    <message><source>Typing...</source><translation>Saisie en cours...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Entrée pour envoyer, Maj+Entrée pour un saut de ligne</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Entrée pour envoyer, Entrée pour un saut de ligne</translation></message>
+    <message><source>Copy message</source><translation>Copier le message</translation></message>
+    <message><source>Retry</source><translation>Réessayer</translation></message>
+    <message><source>Like</source><translation>J'aime</translation></message>
+    <message><source>Dislike</source><translation>Je n'aime pas</translation></message>
+    <message><source>Read aloud</source><translation>Lire à voix haute</translation></message>
+    <message><source>Share</source><translation>Partager</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Texte brut</translation></message>
+    <message><source>Copy code</source><translation>Copier le code</translation></message>
+    <message><source>Copied</source><translation>Copié</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Impossible d'afficher la formule : %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Chargement</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Fermer</translation></message>
+</context>
 </TS>

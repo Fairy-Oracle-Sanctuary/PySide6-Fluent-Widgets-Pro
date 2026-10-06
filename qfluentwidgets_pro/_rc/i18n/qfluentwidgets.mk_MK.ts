@@ -1055,4 +1055,39 @@
         <translation>Зачувај</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Скокни до најновото</translation></message>
+    <message><source>Write a message...</source><translation>Напиши порака...</translation></message>
+    <message><source>Message input</source><translation>Внесување порака</translation></message>
+    <message><source>Stop</source><translation>Запри</translation></message>
+    <message><source>Send</source><translation>Испрати</translation></message>
+    <message><source>Typing...</source><translation>Пишува...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter за испраќање, Shift+Enter за нов ред</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter за испраќање, Enter за нов ред</translation></message>
+    <message><source>Copy message</source><translation>Копирај порака</translation></message>
+    <message><source>Retry</source><translation>Обиди се повторно</translation></message>
+    <message><source>Like</source><translation>Ми се допаѓа</translation></message>
+    <message><source>Dislike</source><translation>Не ми се допаѓа</translation></message>
+    <message><source>Read aloud</source><translation>Читај на глас</translation></message>
+    <message><source>Share</source><translation>Сподели</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Обичен текст</translation></message>
+    <message><source>Copy code</source><translation>Копирај код</translation></message>
+    <message><source>Copied</source><translation>Копирано</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Не можеше да се прикаже формулата: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Се вчитува</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Затвори</translation></message>
+</context>
 </TS>

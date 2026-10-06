@@ -1055,4 +1055,39 @@
         <translation>Hifadhi</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Nenda kwa ya hivi punde</translation></message>
+    <message><source>Write a message...</source><translation>Andika ujumbe...</translation></message>
+    <message><source>Message input</source><translation>Ingiza ujumbe</translation></message>
+    <message><source>Stop</source><translation>Simama</translation></message>
+    <message><source>Send</source><translation>Tuma</translation></message>
+    <message><source>Typing...</source><translation>Inaandika...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Bonyeza Enter kutuma, Shift+Enter kwa mstari mpya</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter kutuma, Enter kwa mstari mpya</translation></message>
+    <message><source>Copy message</source><translation>Nakili ujumbe</translation></message>
+    <message><source>Retry</source><translation>Jaribu tena</translation></message>
+    <message><source>Like</source><translation>Penda</translation></message>
+    <message><source>Dislike</source><translation>Sipendi</translation></message>
+    <message><source>Read aloud</source><translation>Soma kwa sauti</translation></message>
+    <message><source>Share</source><translation>Shiriki</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Maandishi tupu</translation></message>
+    <message><source>Copy code</source><translation>Nakili msimbo</translation></message>
+    <message><source>Copied</source><translation>Imenakiliwa</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Imeshindwa kuonyesha fomula: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Inapakia</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Funga</translation></message>
+</context>
 </TS>

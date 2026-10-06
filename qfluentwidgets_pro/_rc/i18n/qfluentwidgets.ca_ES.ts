@@ -1055,4 +1055,39 @@
         <translation>Desa</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Ves a l'últim</translation></message>
+    <message><source>Write a message...</source><translation>Escriu un missatge...</translation></message>
+    <message><source>Message input</source><translation>Entrada de missatge</translation></message>
+    <message><source>Stop</source><translation>Atura</translation></message>
+    <message><source>Send</source><translation>Envia</translation></message>
+    <message><source>Typing...</source><translation>Escrivint...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter per enviar, Maj+Enter per a una línia nova</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter per enviar, Enter per a una línia nova</translation></message>
+    <message><source>Copy message</source><translation>Copia el missatge</translation></message>
+    <message><source>Retry</source><translation>Torna-ho a provar</translation></message>
+    <message><source>Like</source><translation>M'agrada</translation></message>
+    <message><source>Dislike</source><translation>No m'agrada</translation></message>
+    <message><source>Read aloud</source><translation>Llegeix en veu alta</translation></message>
+    <message><source>Share</source><translation>Comparteix</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Text pla</translation></message>
+    <message><source>Copy code</source><translation>Copia el codi</translation></message>
+    <message><source>Copied</source><translation>Copiat</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>No s'ha pogut renderitzar la fórmula: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>S'està carregant</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Tanca</translation></message>
+</context>
 </TS>

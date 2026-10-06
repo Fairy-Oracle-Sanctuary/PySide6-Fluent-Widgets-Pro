@@ -1055,4 +1055,39 @@
         <translation>ਸੰਭਾਲੋ</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>ਨਵੀਨਤਮ 'ਤੇ ਜਾਓ</translation></message>
+    <message><source>Write a message...</source><translation>ਇੱਕ ਸੁਨੇਹਾ ਲਿਖੋ...</translation></message>
+    <message><source>Message input</source><translation>ਸੁਨੇਹਾ ਇਨਪੁਟ</translation></message>
+    <message><source>Stop</source><translation>ਰੋਕੋ</translation></message>
+    <message><source>Send</source><translation>ਭੇਜੋ</translation></message>
+    <message><source>Typing...</source><translation>ਟਾਈਪ ਕਰ ਰਿਹਾ ਹੈ...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>ਭੇਜਣ ਲਈ Enter, ਨਵੀਂ ਲਾਈਨ ਲਈ Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>ਭੇਜਣ ਲਈ Ctrl+Enter, ਨਵੀਂ ਲਾਈਨ ਲਈ Enter</translation></message>
+    <message><source>Copy message</source><translation>ਸੁਨੇਹਾ ਕਾਪੀ ਕਰੋ</translation></message>
+    <message><source>Retry</source><translation>ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ</translation></message>
+    <message><source>Like</source><translation>ਪਸੰਦ</translation></message>
+    <message><source>Dislike</source><translation>ਨਾਪਸੰਦ</translation></message>
+    <message><source>Read aloud</source><translation>ਉੱਚੀ ਆਵਾਜ਼ ਵਿੱਚ ਪੜ੍ਹੋ</translation></message>
+    <message><source>Share</source><translation>ਸਾਂਝਾ ਕਰੋ</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>ਸਾਦਾ ਟੈਕਸਟ</translation></message>
+    <message><source>Copy code</source><translation>ਕੋਡ ਕਾਪੀ ਕਰੋ</translation></message>
+    <message><source>Copied</source><translation>ਕਾਪੀ ਕੀਤਾ ਗਿਆ</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>ਫਾਰਮੂਲਾ ਰੈਂਡਰ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>ਬੰਦ ਕਰੋ</translation></message>
+</context>
 </TS>

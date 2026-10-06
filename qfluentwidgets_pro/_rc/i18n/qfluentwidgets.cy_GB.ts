@@ -1055,4 +1055,39 @@
         <translation>Cadw</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Neidio i'r diweddaraf</translation></message>
+    <message><source>Write a message...</source><translation>Ysgrifennwch neges...</translation></message>
+    <message><source>Message input</source><translation>Mewnbwn neges</translation></message>
+    <message><source>Stop</source><translation>Stopio</translation></message>
+    <message><source>Send</source><translation>Anfon</translation></message>
+    <message><source>Typing...</source><translation>Yn teipio...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter i anfon, Shift+Enter am linell newydd</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter i anfon, Enter am linell newydd</translation></message>
+    <message><source>Copy message</source><translation>Copïo neges</translation></message>
+    <message><source>Retry</source><translation>Ailgynnig</translation></message>
+    <message><source>Like</source><translation>Hoffi</translation></message>
+    <message><source>Dislike</source><translation>Casáu</translation></message>
+    <message><source>Read aloud</source><translation>Darllen yn uchel</translation></message>
+    <message><source>Share</source><translation>Rhannu</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Testun plaen</translation></message>
+    <message><source>Copy code</source><translation>Copïo cod</translation></message>
+    <message><source>Copied</source><translation>Wedi copïo</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Methu rendro fformiwla: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Yn llwytho</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Cau</translation></message>
+</context>
 </TS>

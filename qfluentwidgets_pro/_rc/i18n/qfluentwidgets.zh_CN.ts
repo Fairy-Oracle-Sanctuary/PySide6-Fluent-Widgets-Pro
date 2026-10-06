@@ -1084,4 +1084,39 @@
         <translation>选择日期范围</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>跳转到最新</translation></message>
+    <message><source>Write a message...</source><translation>输入消息...</translation></message>
+    <message><source>Message input</source><translation>消息输入</translation></message>
+    <message><source>Stop</source><translation>停止</translation></message>
+    <message><source>Send</source><translation>发送</translation></message>
+    <message><source>Typing...</source><translation>正在输入...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>按 Enter 发送，Shift+Enter 换行</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>按 Ctrl+Enter 发送，Enter 换行</translation></message>
+    <message><source>Copy message</source><translation>复制消息</translation></message>
+    <message><source>Retry</source><translation>重试</translation></message>
+    <message><source>Like</source><translation>喜欢</translation></message>
+    <message><source>Dislike</source><translation>不喜欢</translation></message>
+    <message><source>Read aloud</source><translation>朗读</translation></message>
+    <message><source>Share</source><translation>分享</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>纯文本</translation></message>
+    <message><source>Copy code</source><translation>复制代码</translation></message>
+    <message><source>Copied</source><translation>已复制</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>无法渲染公式：%1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>加载中</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>关闭</translation></message>
+</context>
 </TS>

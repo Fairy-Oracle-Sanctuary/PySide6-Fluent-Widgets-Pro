@@ -1055,4 +1055,39 @@
         <translation>บันทึก</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>ไปล่าสุด</translation></message>
+    <message><source>Write a message...</source><translation>เขียนข้อความ...</translation></message>
+    <message><source>Message input</source><translation>ช่องป้อนข้อความ</translation></message>
+    <message><source>Stop</source><translation>หยุด</translation></message>
+    <message><source>Send</source><translation>ส่ง</translation></message>
+    <message><source>Typing...</source><translation>กำลังพิมพ์...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter เพื่อส่ง, Shift+Enter เพื่อขึ้นบรรทัดใหม่</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter เพื่อส่ง, Enter เพื่อขึ้นบรรทัดใหม่</translation></message>
+    <message><source>Copy message</source><translation>คัดลอกข้อความ</translation></message>
+    <message><source>Retry</source><translation>ลองใหม่</translation></message>
+    <message><source>Like</source><translation>ถูกใจ</translation></message>
+    <message><source>Dislike</source><translation>ไม่ถูกใจ</translation></message>
+    <message><source>Read aloud</source><translation>อ่านออกเสียง</translation></message>
+    <message><source>Share</source><translation>แชร์</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>ข้อความธรรมดา</translation></message>
+    <message><source>Copy code</source><translation>คัดลอกโค้ด</translation></message>
+    <message><source>Copied</source><translation>คัดลอกแล้ว</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>ไม่สามารถแสดงสูตรได้: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>กำลังโหลด</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>ปิด</translation></message>
+</context>
 </TS>

@@ -1055,4 +1055,39 @@
         <translation>सुरक्षित गर्नुहोस्</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>पछिल्लोमा जानुहोस्</translation></message>
+    <message><source>Write a message...</source><translation>सन्देश लेख्नुहोस्...</translation></message>
+    <message><source>Message input</source><translation>सन्देश इनपुट</translation></message>
+    <message><source>Stop</source><translation>रोक्नुहोस्</translation></message>
+    <message><source>Send</source><translation>पठाउनुहोस्</translation></message>
+    <message><source>Typing...</source><translation>टाइप गर्दै...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>पठाउन Enter, नयाँ लाइनको लागि Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>पठाउन Ctrl+Enter, नयाँ लाइनको लागि Enter</translation></message>
+    <message><source>Copy message</source><translation>सन्देश प्रतिलिपि गर्नुहोस्</translation></message>
+    <message><source>Retry</source><translation>पुनः प्रयास गर्नुहोस्</translation></message>
+    <message><source>Like</source><translation>मन पर्यो</translation></message>
+    <message><source>Dislike</source><translation>मन परेन</translation></message>
+    <message><source>Read aloud</source><translation>ठूलो स्वरमा पढ्नुहोस्</translation></message>
+    <message><source>Share</source><translation>साझा गर्नुहोस्</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>साधारण पाठ</translation></message>
+    <message><source>Copy code</source><translation>कोड प्रतिलिपि गर्नुहोस्</translation></message>
+    <message><source>Copied</source><translation>प्रतिलिपि गरियो</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>सूत्र रेन्डर गर्न सकिएन: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>लोड हुँदैछ</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>बन्द गर्नुहोस्</translation></message>
+</context>
 </TS>

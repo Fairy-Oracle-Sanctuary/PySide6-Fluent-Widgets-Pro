@@ -1055,4 +1055,39 @@
         <translation>Tallenna</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Siirry uusimpaan</translation></message>
+    <message><source>Write a message...</source><translation>Kirjoita viesti...</translation></message>
+    <message><source>Message input</source><translation>Viestin syöte</translation></message>
+    <message><source>Stop</source><translation>Lopeta</translation></message>
+    <message><source>Send</source><translation>Lähetä</translation></message>
+    <message><source>Typing...</source><translation>Kirjoittaa...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter lähettää, Shift+Enter uusi rivi</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter lähettää, Enter uusi rivi</translation></message>
+    <message><source>Copy message</source><translation>Kopioi viesti</translation></message>
+    <message><source>Retry</source><translation>Yritä uudelleen</translation></message>
+    <message><source>Like</source><translation>Tykkää</translation></message>
+    <message><source>Dislike</source><translation>En tykkää</translation></message>
+    <message><source>Read aloud</source><translation>Lue ääneen</translation></message>
+    <message><source>Share</source><translation>Jaa</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Pelkkä teksti</translation></message>
+    <message><source>Copy code</source><translation>Kopioi koodi</translation></message>
+    <message><source>Copied</source><translation>Kopioitu</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Kaavaa ei voitu näyttää: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Ladataan</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Sulje</translation></message>
+</context>
 </TS>

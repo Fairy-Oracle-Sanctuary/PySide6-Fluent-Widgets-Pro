@@ -1055,4 +1055,39 @@
         <translation>သိမ်းဆည်းပါ</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>နောက်ဆုံးသို့သွားရန်</translation></message>
+    <message><source>Write a message...</source><translation>မက်ဆေ့ချ်ရေးပါ...</translation></message>
+    <message><source>Message input</source><translation>မက်ဆေ့ချ်ထည့်ရန်</translation></message>
+    <message><source>Stop</source><translation>ရပ်</translation></message>
+    <message><source>Send</source><translation>ပို့ရန်</translation></message>
+    <message><source>Typing...</source><translation>ရိုက်နေသည်...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>ပို့ရန် Enter၊ လိုင်းအသစ်အတွက် Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>ပို့ရန် Ctrl+Enter၊ လိုင်းအသစ်အတွက် Enter</translation></message>
+    <message><source>Copy message</source><translation>မက်ဆေ့ခ်ျကို ကူးယူရန်</translation></message>
+    <message><source>Retry</source><translation>ထပ်စမ်းကြည့်ရန်</translation></message>
+    <message><source>Like</source><translation>သဘောကျသည်</translation></message>
+    <message><source>Dislike</source><translation>သဘောမကျပါ</translation></message>
+    <message><source>Read aloud</source><translation>အသံထွက်ဖတ်ရန်</translation></message>
+    <message><source>Share</source><translation>မျှဝေရန်</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>စာသားရိုးရိုး</translation></message>
+    <message><source>Copy code</source><translation>ကုဒ်ကိုကူးယူရန်</translation></message>
+    <message><source>Copied</source><translation>ကူးယူပြီးပါပြီ</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>ဖော်မြူလာကို ဖော်ပြနိုင်ခြင်းမရှိပါ- %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>ဖွင့်နေသည်</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>ပိတ်</translation></message>
+</context>
 </TS>

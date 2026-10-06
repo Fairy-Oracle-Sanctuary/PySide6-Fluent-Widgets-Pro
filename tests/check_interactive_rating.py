@@ -50,12 +50,21 @@ def run():
     for theme in (Theme.LIGHT, Theme.DARK):
         setTheme(theme)
         QTest.qWait(20)
+        rating.clearFocus()
         image = rating.grab().toImage()
         color = rating.starColor()
         assert pixel(image, 10, 12) == color and pixel(image, 34, 12) == color
-        assert pixel(image, x - 1, 12) == color
+        # At 1x DPI this fractional clip falls on an antialiased star edge.
+        sample = pixel(image, x - 1, 12)
+        assert max(abs(a - b) for a, b in zip(sample.getRgb(), color.getRgb())) <= 2
         assert pixel(image, x + 1, 12) != color
         assert pixel(image, 58, 12) != color and pixel(image, 82, 12) != color
+        for reason in (Qt.MouseFocusReason, Qt.TabFocusReason):
+            rating.setFocus(reason)
+            QTest.qWait(20)
+            assert rating.hasFocus()
+            assert rating.grab().toImage() == image, 'Focus must not draw a border around the stars'
+            rating.clearFocus()
     for x in (0., 10.1, 19.9, 20., 21.2, 23.99, 24., 24.1, 55.01, 100.3, 115.9, 116.):
         move(rating, x)
         # At a star's end the inverse may span its empty gap; the rendered
@@ -109,7 +118,7 @@ def run():
         else:
             raise AssertionError("Nonfinite score accepted")
     owner.close()
-    print("PASS: fractional cursor positions, pixel clipping, gaps, preview/commit, keyboard, read-only, themes and values")
+    print("PASS: fractional cursor positions, pixel clipping, gaps, preview/commit, keyboard, read-only, themes, values and no focus border")
 
 
 if __name__ == "__main__":

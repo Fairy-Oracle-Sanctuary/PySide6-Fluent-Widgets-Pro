@@ -1055,4 +1055,39 @@
         <translation>Uložit</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Přejít na nejnovější</translation></message>
+    <message><source>Write a message...</source><translation>Napište zprávu...</translation></message>
+    <message><source>Message input</source><translation>Vstup zprávy</translation></message>
+    <message><source>Stop</source><translation>Zastavit</translation></message>
+    <message><source>Send</source><translation>Odeslat</translation></message>
+    <message><source>Typing...</source><translation>Píše...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter pro odeslání, Shift+Enter pro nový řádek</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter pro odeslání, Enter pro nový řádek</translation></message>
+    <message><source>Copy message</source><translation>Kopírovat zprávu</translation></message>
+    <message><source>Retry</source><translation>Zkusit znovu</translation></message>
+    <message><source>Like</source><translation>Líbí se mi</translation></message>
+    <message><source>Dislike</source><translation>Nelíbí se mi</translation></message>
+    <message><source>Read aloud</source><translation>Přečíst nahlas</translation></message>
+    <message><source>Share</source><translation>Sdílet</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Prostý text</translation></message>
+    <message><source>Copy code</source><translation>Kopírovat kód</translation></message>
+    <message><source>Copied</source><translation>Zkopírováno</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Nepodařilo se vykreslit vzorec: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Načítání</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Zavřít</translation></message>
+</context>
 </TS>

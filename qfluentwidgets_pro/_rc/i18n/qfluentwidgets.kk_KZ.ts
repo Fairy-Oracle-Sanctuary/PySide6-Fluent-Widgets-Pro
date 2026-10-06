@@ -1055,4 +1055,39 @@
         <translation>Сақтау</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Соңғысына өту</translation></message>
+    <message><source>Write a message...</source><translation>Хабарлама жазу...</translation></message>
+    <message><source>Message input</source><translation>Хабарлама енгізу</translation></message>
+    <message><source>Stop</source><translation>Тоқтату</translation></message>
+    <message><source>Send</source><translation>Жіберу</translation></message>
+    <message><source>Typing...</source><translation>Теруде...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Жіберу үшін Enter, жаңа жол үшін Shift+Enter</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Жіберу үшін Ctrl+Enter, жаңа жол үшін Enter</translation></message>
+    <message><source>Copy message</source><translation>Хабарламаны көшіру</translation></message>
+    <message><source>Retry</source><translation>Қайталау</translation></message>
+    <message><source>Like</source><translation>Ұнайды</translation></message>
+    <message><source>Dislike</source><translation>Ұнамайды</translation></message>
+    <message><source>Read aloud</source><translation>Дауыстап оқу</translation></message>
+    <message><source>Share</source><translation>Бөлісу</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Қарапайым мәтін</translation></message>
+    <message><source>Copy code</source><translation>Кодты көшіру</translation></message>
+    <message><source>Copied</source><translation>Көшірілді</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Формуланы көрсету мүмкін болмады: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Жүктелуде</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Жабу</translation></message>
+</context>
 </TS>

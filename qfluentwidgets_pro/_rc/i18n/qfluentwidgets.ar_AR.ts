@@ -1054,4 +1054,39 @@
         <translation>حفظ</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>الانتقال إلى الأحدث</translation></message>
+    <message><source>Write a message...</source><translation>اكتب رسالة...</translation></message>
+    <message><source>Message input</source><translation>إدخال الرسالة</translation></message>
+    <message><source>Stop</source><translation>إيقاف</translation></message>
+    <message><source>Send</source><translation>إرسال</translation></message>
+    <message><source>Typing...</source><translation>يكتب...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter للإرسال، Shift+Enter لسطر جديد</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter للإرسال، Enter لسطر جديد</translation></message>
+    <message><source>Copy message</source><translation>نسخ الرسالة</translation></message>
+    <message><source>Retry</source><translation>إعادة المحاولة</translation></message>
+    <message><source>Like</source><translation>إعجاب</translation></message>
+    <message><source>Dislike</source><translation>عدم الإعجاب</translation></message>
+    <message><source>Read aloud</source><translation>القراءة بصوت عالٍ</translation></message>
+    <message><source>Share</source><translation>مشاركة</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>نص عادي</translation></message>
+    <message><source>Copy code</source><translation>نسخ الكود</translation></message>
+    <message><source>Copied</source><translation>تم النسخ</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>تعذّر عرض الصيغة: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>جارٍ التحميل</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>إغلاق</translation></message>
+</context>
 </TS>

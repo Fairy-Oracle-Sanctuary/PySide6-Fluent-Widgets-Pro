@@ -1055,4 +1055,39 @@
         <translation>Spara</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Hoppa till senaste</translation></message>
+    <message><source>Write a message...</source><translation>Skriv ett meddelande...</translation></message>
+    <message><source>Message input</source><translation>Meddelandeinmatning</translation></message>
+    <message><source>Stop</source><translation>Stoppa</translation></message>
+    <message><source>Send</source><translation>Skicka</translation></message>
+    <message><source>Typing...</source><translation>Skriver...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter för att skicka, Shift+Enter för ny rad</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter för att skicka, Enter för ny rad</translation></message>
+    <message><source>Copy message</source><translation>Kopiera meddelande</translation></message>
+    <message><source>Retry</source><translation>Försök igen</translation></message>
+    <message><source>Like</source><translation>Gilla</translation></message>
+    <message><source>Dislike</source><translation>Ogilla</translation></message>
+    <message><source>Read aloud</source><translation>Läs högt</translation></message>
+    <message><source>Share</source><translation>Dela</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Oformaterad text</translation></message>
+    <message><source>Copy code</source><translation>Kopiera kod</translation></message>
+    <message><source>Copied</source><translation>Kopierat</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Kunde inte rendera formel: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Laddar</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Stäng</translation></message>
+</context>
 </TS>

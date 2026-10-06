@@ -1055,4 +1055,39 @@
         <translation>Sábháil</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Léim go dtí an ceann is déanaí</translation></message>
+    <message><source>Write a message...</source><translation>Scríobh teachtaireacht...</translation></message>
+    <message><source>Message input</source><translation>Ionchur teachtaireachta</translation></message>
+    <message><source>Stop</source><translation>Stop</translation></message>
+    <message><source>Send</source><translation>Seol</translation></message>
+    <message><source>Typing...</source><translation>Ag clóscríobh...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter chun seoladh, Shift+Enter le haghaidh líne nua</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter chun seoladh, Enter le haghaidh líne nua</translation></message>
+    <message><source>Copy message</source><translation>Cóipeáil an teachtaireacht</translation></message>
+    <message><source>Retry</source><translation>Bain triail eile as</translation></message>
+    <message><source>Like</source><translation>Is maith liom</translation></message>
+    <message><source>Dislike</source><translation>Ní maith liom</translation></message>
+    <message><source>Read aloud</source><translation>Léigh os ard</translation></message>
+    <message><source>Share</source><translation>Roinn</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Gnáth-théacs</translation></message>
+    <message><source>Copy code</source><translation>Cóipeáil cód</translation></message>
+    <message><source>Copied</source><translation>Cóipeáilte</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Níorbh fhéidir an fhoirmle a rindreáil: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Á lódáil</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Dún</translation></message>
+</context>
 </TS>

@@ -1055,4 +1055,39 @@
         <translation>Sačuvaj</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Skoči na najnovije</translation></message>
+    <message><source>Write a message...</source><translation>Napiši poruku...</translation></message>
+    <message><source>Message input</source><translation>Unos poruke</translation></message>
+    <message><source>Stop</source><translation>Zaustavi</translation></message>
+    <message><source>Send</source><translation>Pošalji</translation></message>
+    <message><source>Typing...</source><translation>Kuca...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter za slanje, Shift+Enter za novi red</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter za slanje, Enter za novi red</translation></message>
+    <message><source>Copy message</source><translation>Kopiraj poruku</translation></message>
+    <message><source>Retry</source><translation>Pokušaj ponovo</translation></message>
+    <message><source>Like</source><translation>Sviđa mi se</translation></message>
+    <message><source>Dislike</source><translation>Ne sviđa mi se</translation></message>
+    <message><source>Read aloud</source><translation>Čitaj naglas</translation></message>
+    <message><source>Share</source><translation>Podijeli</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Običan tekst</translation></message>
+    <message><source>Copy code</source><translation>Kopiraj kod</translation></message>
+    <message><source>Copied</source><translation>Kopirano</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Nije moguće prikazati formulu: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Učitavanje</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Zatvori</translation></message>
+</context>
 </TS>

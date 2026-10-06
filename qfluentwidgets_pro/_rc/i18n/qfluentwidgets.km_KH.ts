@@ -1055,4 +1055,39 @@
         <translation>រក្សាទុក</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>លោតទៅថ្មីបំផុត</translation></message>
+    <message><source>Write a message...</source><translation>សរសេរសារ...</translation></message>
+    <message><source>Message input</source><translation>បញ្ចូលសារ</translation></message>
+    <message><source>Stop</source><translation>ឈប់</translation></message>
+    <message><source>Send</source><translation>ផ្ញើ</translation></message>
+    <message><source>Typing...</source><translation>កំពុងវាយ...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>ចុច Enter ដើម្បីផ្ញើ, Shift+Enter សម្រាប់បន្ទាត់ថ្មី</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>ចុច Ctrl+Enter ដើម្បីផ្ញើ, Enter សម្រាប់បន្ទាត់ថ្មី</translation></message>
+    <message><source>Copy message</source><translation>ចម្លងសារ</translation></message>
+    <message><source>Retry</source><translation>ព្យាយាមម្តងទៀត</translation></message>
+    <message><source>Like</source><translation>ចូលចិត្ត</translation></message>
+    <message><source>Dislike</source><translation>មិនចូលចិត្ត</translation></message>
+    <message><source>Read aloud</source><translation>អានឮៗ</translation></message>
+    <message><source>Share</source><translation>ចែករំលែក</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>អត្ថបទធម្មតា</translation></message>
+    <message><source>Copy code</source><translation>ចម្លងកូដ</translation></message>
+    <message><source>Copied</source><translation>បានចម្លង</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>មិនអាចបង្ហាញរូបមន្តបានទេ: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>កំពុងផ្ទុក</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>បិទ</translation></message>
+</context>
 </TS>

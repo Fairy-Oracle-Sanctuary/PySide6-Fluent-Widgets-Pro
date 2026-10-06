@@ -1055,4 +1055,39 @@
         <translation>保存</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>最新へジャンプ</translation></message>
+    <message><source>Write a message...</source><translation>メッセージを入力...</translation></message>
+    <message><source>Message input</source><translation>メッセージ入力</translation></message>
+    <message><source>Stop</source><translation>停止</translation></message>
+    <message><source>Send</source><translation>送信</translation></message>
+    <message><source>Typing...</source><translation>入力中...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enterで送信、Shift+Enterで改行</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enterで送信、Enterで改行</translation></message>
+    <message><source>Copy message</source><translation>メッセージをコピー</translation></message>
+    <message><source>Retry</source><translation>再試行</translation></message>
+    <message><source>Like</source><translation>高評価</translation></message>
+    <message><source>Dislike</source><translation>低評価</translation></message>
+    <message><source>Read aloud</source><translation>読み上げ</translation></message>
+    <message><source>Share</source><translation>共有</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>プレーンテキスト</translation></message>
+    <message><source>Copy code</source><translation>コードをコピー</translation></message>
+    <message><source>Copied</source><translation>コピーしました</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>数式をレンダリングできませんでした: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>読み込み中</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>閉じる</translation></message>
+</context>
 </TS>

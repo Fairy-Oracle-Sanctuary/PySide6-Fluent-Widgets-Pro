@@ -1055,4 +1055,39 @@
         <translation>Mentés</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Ugrás a legújabbra</translation></message>
+    <message><source>Write a message...</source><translation>Üzenet írása...</translation></message>
+    <message><source>Message input</source><translation>Üzenetbevitel</translation></message>
+    <message><source>Stop</source><translation>Leállítás</translation></message>
+    <message><source>Send</source><translation>Küldés</translation></message>
+    <message><source>Typing...</source><translation>Gépelés...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter a küldéshez, Shift+Enter az új sorhoz</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter a küldéshez, Enter az új sorhoz</translation></message>
+    <message><source>Copy message</source><translation>Üzenet másolása</translation></message>
+    <message><source>Retry</source><translation>Újra</translation></message>
+    <message><source>Like</source><translation>Tetszik</translation></message>
+    <message><source>Dislike</source><translation>Nem tetszik</translation></message>
+    <message><source>Read aloud</source><translation>Felolvasás</translation></message>
+    <message><source>Share</source><translation>Megosztás</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Sima szöveg</translation></message>
+    <message><source>Copy code</source><translation>Kód másolása</translation></message>
+    <message><source>Copied</source><translation>Másolva</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>A képlet megjelenítése sikertelen: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Betöltés</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Bezárás</translation></message>
+</context>
 </TS>

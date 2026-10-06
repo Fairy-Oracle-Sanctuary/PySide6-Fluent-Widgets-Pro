@@ -1055,4 +1055,39 @@
         <translation>Išsaugoti</translation>
     </message>
 </context>
+<context>
+    <name>ChatWidget</name>
+    <message><source>Jump to latest</source><translation>Pereiti prie naujausio</translation></message>
+    <message><source>Write a message...</source><translation>Rašyti žinutę...</translation></message>
+    <message><source>Message input</source><translation>Žinutės įvestis</translation></message>
+    <message><source>Stop</source><translation>Stabdyti</translation></message>
+    <message><source>Send</source><translation>Siųsti</translation></message>
+    <message><source>Typing...</source><translation>Rašoma...</translation></message>
+    <message><source>Enter to send, Shift+Enter for a new line</source><translation>Enter – siųsti, Shift+Enter – nauja eilutė</translation></message>
+    <message><source>Ctrl+Enter to send, Enter for a new line</source><translation>Ctrl+Enter – siųsti, Enter – nauja eilutė</translation></message>
+    <message><source>Copy message</source><translation>Kopijuoti pranešimą</translation></message>
+    <message><source>Retry</source><translation>Bandyti dar kartą</translation></message>
+    <message><source>Like</source><translation>Patinka</translation></message>
+    <message><source>Dislike</source><translation>Nepatinka</translation></message>
+    <message><source>Read aloud</source><translation>Skaityti garsiai</translation></message>
+    <message><source>Share</source><translation>Bendrinti</translation></message>
+</context>
+<context>
+    <name>_CodeBlock</name>
+    <message><source>Plain text</source><translation>Paprastas tekstas</translation></message>
+    <message><source>Copy code</source><translation>Kopijuoti kodą</translation></message>
+    <message><source>Copied</source><translation>Nukopijuota</translation></message>
+</context>
+<context>
+    <name>_MarkdownBlock</name>
+    <message><source>Could not render formula: %1</source><translation>Nepavyko atvaizduoti formulės: %1</translation></message>
+</context>
+<context>
+    <name>SkeletonWidget</name>
+    <message><source>Loading</source><translation>Įkeliama</translation></message>
+</context>
+<context>
+    <name>Drawer</name>
+    <message><source>Close</source><translation>Uždaryti</translation></message>
+</context>
 </TS>

@@ -72,5 +72,9 @@ args.append("--include-package=pygments")
 # The waveform gallery explicitly uses QtMultimedia and offers a bundled WAV.
 args.append("--include-qt-plugins=multimedia")
 args.append("--include-data-files=gallery/resource/audio/waveform_sample.wav=gallery/resource/audio/waveform_sample.wav")
+# Full-gallery ChatWidget formulas need Matplotlib/NumPy. CPU Acrylic blur is
+# still excluded independently; plain-chat business apps can exclude both.
+args.remove("--nofollow-import-to=numpy")
+args.append("--include-package=matplotlib")
 os.system(" ".join(args))
 print("打包完成！")
