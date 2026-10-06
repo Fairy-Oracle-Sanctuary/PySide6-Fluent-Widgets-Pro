@@ -741,6 +741,23 @@ Standalone 模式默认跟随导入；`--nofollow-import-to` 可以排除模块�
   - 文档资源
 
 
+## 国际化和资源编译
+
+组件内置文案使用英文 `tr()` 字面量。更新
+`qfluentwidgets_pro/_rc/i18n/qfluentwidgets.en_US.ts` 后执行：
+
+```powershell
+py -3.9 scripts/translate_ts.py --all --jobs 4 --build
+```
+
+脚本保留现有译文并同步模板新增项，仅翻译待处理文本，每批固定 50 条。
+完成后生成全部 QM，并依次编译组件库、演示程序和无边框窗口的资源模块。
+每批完成后保存，可断点续跑；校验占位符和文件过滤器通配符。
+仅同步、不调用 API 可用 `--all --skip-translate`；仅重新编译可用
+`--compile-qm --compile-resources`。
+API 密钥优先读取 `DEEPSEEK_API_KEY` 环境变量，也可放在被 Git 忽略的
+`scripts/translate_ts.local.json`（`{"api_key": "..."}`），不要提交密钥。
+
 ## 免责声明
 
 - 本项目为**社区驱动**的还原/扩展项目

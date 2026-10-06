@@ -562,6 +562,14 @@
         <source>Browse files</source>
         <translation>Обзор файлов</translation>
     </message>
+    <message>
+        <source>All files (*.*)</source>
+        <translation>Все файлы (*.*)</translation>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation>Файлы</translation>
+    </message>
 </context>
 <context>
     <name>DropSingleFileWidget</name>
@@ -613,6 +621,467 @@
     <message>
         <source>All files (*.*)</source>
         <translation>Все файлы (*.*)</translation>
+    </message>
+</context>
+<context>
+    <name>AudioDecoder</name>
+    <message>
+        <source>Audio contains no decoded samples</source>
+        <translation>Аудио не содержит декодированных сэмплов</translation>
+    </message>
+    <message>
+        <source>Audio decoding failed</source>
+        <translation>Ошибка декодирования аудио</translation>
+    </message>
+    <message>
+        <source>Audio decoding is not supported by this Qt multimedia backend</source>
+        <translation>Декодирование аудио не поддерживается этим бэкендом Qt Multimedia</translation>
+    </message>
+    <message>
+        <source>Audio sample rate changed during decoding</source>
+        <translation>Частота дискретизации аудио изменилась во время декодирования</translation>
+    </message>
+    <message>
+        <source>Incomplete PCM audio frame</source>
+        <translation>Неполный кадр PCM-аудио</translation>
+    </message>
+    <message>
+        <source>Invalid audio buffer</source>
+        <translation>Недопустимый аудиобуфер</translation>
+    </message>
+    <message>
+        <source>Unsupported PCM sample format</source>
+        <translation>Неподдерживаемый формат PCM-сэмплов</translation>
+    </message>
+</context>
+<context>
+    <name>AudioWaveformWidget</name>
+    <message>
+        <source>Audio waveform</source>
+        <translation>Аудиоволна</translation>
+    </message>
+    <message>
+        <source>Duration: %1 ms</source>
+        <translation>Длительность: %1 мс</translation>
+    </message>
+</context>
+<context>
+    <name>AvatarPicker</name>
+    <message>
+        <source>Choose avatar</source>
+        <translation>Выбрать аватар</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp)</source>
+        <translation>Изображения (*.png *.jpg *.jpeg *.bmp *.webp)</translation>
+    </message>
+</context>
+<context>
+    <name>CircleColorPicker</name>
+    <message>
+        <source>Color palette</source>
+        <translation>Цветовая палитра</translation>
+    </message>
+    <message>
+        <source>No color selected</source>
+        <translation>Цвет не выбран</translation>
+    </message>
+</context>
+<context>
+    <name>CodeEdit</name>
+    <message>
+        <source>Highlighting skipped: document exceeds 1,000,000 characters</source>
+        <translation>Подсветка пропущена: документ превышает 1 000 000 символов</translation>
+    </message>
+</context>
+<context>
+    <name>DatePicker</name>
+    <message>
+        <source>day</source>
+        <translation>день</translation>
+    </message>
+    <message>
+        <source>month</source>
+        <translation>месяц</translation>
+    </message>
+    <message>
+        <source>year</source>
+        <translation>год</translation>
+    </message>
+</context>
+<context>
+    <name>DropDownColorPalette</name>
+    <message>
+        <source>Choose Color</source>
+        <translation>Выбор цвета</translation>
+    </message>
+    <message>
+        <source>Color palette</source>
+        <translation>Цветовая палитра</translation>
+    </message>
+</context>
+<context>
+    <name>DropDownColorPicker</name>
+    <message>
+        <source>Color picker</source>
+        <translation>Выбор цвета</translation>
+    </message>
+</context>
+<context>
+    <name>EditMenu</name>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation>Вырезать</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation>Вставить</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Выбрать все</translation>
+    </message>
+</context>
+<context>
+    <name>FlyoutDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Подтвердить</translation>
+    </message>
+</context>
+<context>
+    <name>GuideWindow</name>
+    <message>
+        <source>Finish</source>
+        <translation>Готово</translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation>Далее</translation>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation>Назад</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCropper</name>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Подтвердить</translation>
+    </message>
+    <message>
+        <source>Crop image</source>
+        <translation>Обрезать изображение</translation>
+    </message>
+    <message>
+        <source>Custom crop shape</source>
+        <translation>Пользовательская форма обрезки</translation>
+    </message>
+    <message>
+        <source>Flip horizontally</source>
+        <translation>Отразить по горизонтали</translation>
+    </message>
+    <message>
+        <source>Rotate clockwise</source>
+        <translation>Повернуть по часовой стрелке</translation>
+    </message>
+</context>
+<context>
+    <name>MonthFormatter</name>
+    <message>
+        <source>April</source>
+        <translation>Апрель</translation>
+    </message>
+    <message>
+        <source>August</source>
+        <translation>Август</translation>
+    </message>
+    <message>
+        <source>December</source>
+        <translation>Декабрь</translation>
+    </message>
+    <message>
+        <source>February</source>
+        <translation>Февраль</translation>
+    </message>
+    <message>
+        <source>January</source>
+        <translation>Январь</translation>
+    </message>
+    <message>
+        <source>July</source>
+        <translation>Июль</translation>
+    </message>
+    <message>
+        <source>June</source>
+        <translation>Июнь</translation>
+    </message>
+    <message>
+        <source>March</source>
+        <translation>Март</translation>
+    </message>
+    <message>
+        <source>May</source>
+        <translation>Май</translation>
+    </message>
+    <message>
+        <source>November</source>
+        <translation>Ноябрь</translation>
+    </message>
+    <message>
+        <source>October</source>
+        <translation>Октябрь</translation>
+    </message>
+    <message>
+        <source>September</source>
+        <translation>Сентябрь</translation>
+    </message>
+</context>
+<context>
+    <name>RatingWidget</name>
+    <message>
+        <source>Rating</source>
+        <translation>Рейтинг</translation>
+    </message>
+</context>
+<context>
+    <name>RoundProgressToast</name>
+    <message>
+        <source>Loading, please wait</source>
+        <translation>Загрузка, подождите</translation>
+    </message>
+</context>
+<context>
+    <name>ScreenColorPicker</name>
+    <message>
+        <source>Another screen color picker is already active.</source>
+        <translation>Другой экранный выбор цвета уже активен.</translation>
+    </message>
+    <message>
+        <source>Cannot exclude the live picker overlay from screen capture (Windows error %1). Enable screen freezing instead.</source>
+        <translation>Невозможно исключить оверлей выбора цвета из захвата экрана (ошибка Windows %1). Включите замораживание экрана.</translation>
+    </message>
+    <message>
+        <source>Live screen capture exclusion is unavailable. Enable screen freezing instead.</source>
+        <translation>Исключение при захвате экрана в реальном времени недоступно. Включите замораживание экрана.</translation>
+    </message>
+    <message>
+        <source>Live screen capture failed. Check screen recording permissions.</source>
+        <translation>Не удалось выполнить захват экрана в реальном времени. Проверьте разрешения на запись экрана.</translation>
+    </message>
+    <message>
+        <source>Live screen picking requires Windows 10 version 2004 or newer; enable screen freezing on this platform.</source>
+        <translation>Для выбора цвета с экрана в реальном времени требуется Windows 10 версии 2004 или новее; включите замораживание экрана на этой платформе.</translation>
+    </message>
+    <message>
+        <source>No screen is available for color picking.</source>
+        <translation>Нет доступного экрана для выбора цвета.</translation>
+    </message>
+    <message>
+        <source>Pick a screen color</source>
+        <translation>Выбрать цвет с экрана</translation>
+    </message>
+    <message>
+        <source>Screen capture is unavailable.</source>
+        <translation>Захват экрана недоступен.</translation>
+    </message>
+    <message>
+        <source>Screen capture is unavailable. Check screen recording permissions.</source>
+        <translation>Захват экрана недоступен. Проверьте разрешения на запись экрана.</translation>
+    </message>
+</context>
+<context>
+    <name>ShortcutPicker</name>
+    <message>
+        <source>Activate shortcut</source>
+        <translation>Активировать сочетание клавиш</translation>
+    </message>
+    <message>
+        <source>Edit shortcut</source>
+        <translation>Изменить сочетание клавиш</translation>
+    </message>
+    <message>
+        <source>Not set</source>
+        <translation>Не задано</translation>
+    </message>
+    <message>
+        <source>Press a key combination to change this shortcut</source>
+        <translation>Нажмите комбинацию клавиш, чтобы изменить это сочетание</translation>
+    </message>
+    <message>
+        <source>Shortcut</source>
+        <translation>Сочетание клавиш</translation>
+    </message>
+</context>
+<context>
+    <name>TopNavigationPanel</name>
+    <message>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+</context>
+<context>
+    <name>Ui_MessageBox</name>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+</context>
+<context>
+    <name>WaitingDialog</name>
+    <message>
+        <source>Please wait...</source>
+        <translation>Пожалуйста, подождите...</translation>
+    </message>
+</context>
+<context>
+    <name>_CalendarTimePickerMixin</name>
+    <message>
+        <source>Pick a date and time</source>
+        <translation>Выберите дату и время</translation>
+    </message>
+</context>
+<context>
+    <name>_CalendarTimeView</name>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Подтвердить</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorPickerView</name>
+    <message>
+        <source>%1 slider</source>
+        <translation>Ползунок %1</translation>
+    </message>
+    <message>
+        <source>%1 value</source>
+        <translation>Значение %1</translation>
+    </message>
+    <message>
+        <source>Brightness</source>
+        <translation>Яркость</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Color model</source>
+        <translation>Цветовая модель</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Подтвердить</translation>
+    </message>
+    <message>
+        <source>Hexadecimal color, AARRGGBB or RRGGBB</source>
+        <translation>Шестнадцатеричный цвет, AARRGGBB или RRGGBB</translation>
+    </message>
+</context>
+<context>
+    <name>_FilledNavigationInterface</name>
+    <message>
+        <source>Search</source>
+        <translation>Поиск</translation>
+    </message>
+</context>
+<context>
+    <name>_HueSaturationPanel</name>
+    <message>
+        <source>Hue and saturation</source>
+        <translation>Оттенок и насыщенность</translation>
+    </message>
+</context>
+<context>
+    <name>_KeyCaps</name>
+    <message>
+        <source>Not set</source>
+        <translation>Не задано</translation>
+    </message>
+</context>
+<context>
+    <name>_PageSearchPopup</name>
+    <message>
+        <source>No matching pages</source>
+        <translation>Нет подходящих страниц</translation>
+    </message>
+</context>
+<context>
+    <name>_PaletteView</name>
+    <message>
+        <source>Automatic</source>
+        <translation>Автоматически</translation>
+    </message>
+    <message>
+        <source>More Colors...</source>
+        <translation>Другие цвета...</translation>
+    </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Стандартные цвета</translation>
+    </message>
+    <message>
+        <source>Theme Colors</source>
+        <translation>Цвета темы</translation>
+    </message>
+</context>
+<context>
+    <name>_PickerOverlay</name>
+    <message>
+        <source>Screen color picking: click to select, Escape to cancel</source>
+        <translation>Выбор цвета с экрана: нажмите для выбора, Escape для отмены</translation>
+    </message>
+</context>
+<context>
+    <name>_RangePickerMixin</name>
+    <message>
+        <source>Pick a date range</source>
+        <translation>Выберите диапазон дат</translation>
+    </message>
+</context>
+<context>
+    <name>_ShortcutPickerDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Press a key combination</source>
+        <translation>Нажмите комбинацию клавиш</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation>Сбросить</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Сохранить</translation>
     </message>
 </context>
 </TS>

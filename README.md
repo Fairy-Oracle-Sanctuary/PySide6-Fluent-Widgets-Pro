@@ -828,6 +828,24 @@ exported normally; it was an accidental omission, not a heavy dependency.
 - `docs/`
   - Documentation assets
 
+## Translation and resource builds
+
+Component source strings are English literals wrapped in `tr()`. Update
+`qfluentwidgets_pro/_rc/i18n/qfluentwidgets.en_US.ts`, then run:
+
+```powershell
+py -3.9 scripts/translate_ts.py --all --jobs 4 --build
+```
+
+This preserves existing translations, adds missing template messages, translates
+only pending entries in batches of 50, compiles all QM catalogs, and rebuilds the
+widget, gallery and frameless-window resource modules. Completed batches are saved
+for resuming a failed run. Placeholders and file-filter wildcards are checked.
+Use `--all --skip-translate` to sync without API calls, or
+`--compile-qm --compile-resources` to rebuild already translated files.
+The API key comes from `DEEPSEEK_API_KEY` or the ignored local
+`scripts/translate_ts.local.json` file (`{"api_key": "..."}`); never commit it.
+
 ## ⚠️ Disclaimer
 
 - This is a **community-driven restoration/extension** project.

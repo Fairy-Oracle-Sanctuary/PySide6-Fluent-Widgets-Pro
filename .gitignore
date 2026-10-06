@@ -8,5 +8,6 @@ __pycache__/
 config/
 main.build/
 main.dist/
-scripts/
+scripts/*
+!scripts/translate_ts.py
 app/

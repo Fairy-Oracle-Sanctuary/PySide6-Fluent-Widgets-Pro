@@ -55,7 +55,7 @@ class AvatarPicker(AvatarWidget):
     def chooseImage(self):
         path, _ = QFileDialog.getOpenFileName(
             self.window(), self.tr('Choose avatar'), '',
-            'Images (*.png *.jpg *.jpeg *.bmp *.webp)')
+            self.tr('Images (*.png *.jpg *.jpeg *.bmp *.webp)'))
         if path:
             self.cropImage(path)
 

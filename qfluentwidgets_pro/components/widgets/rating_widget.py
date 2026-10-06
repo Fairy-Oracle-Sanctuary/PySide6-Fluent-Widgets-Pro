@@ -43,7 +43,7 @@ class RatingWidget(QWidget):
         self._darkStarColor = QColor("#F88A00")
         self.setFont(getFont(20, QFont.DemiBold))
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.setAccessibleName("Rating")
+        self.setAccessibleName(self.tr('Rating'))
         self.setAccessibleDescription(self.text())
         qconfig.themeChangedFinished.connect(self.update)
 

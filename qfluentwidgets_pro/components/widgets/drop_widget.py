@@ -21,7 +21,7 @@ class DropMultiFilesWidget(QWidget):
         self.__borderWidth: int = 2
         self.__borderRadius: int = 16
         self._defaultDir: str = defaultDir
-        self._fileFilter: str = "All files (*.*)"
+        self._fileFilter: str = self.tr('All files (*.*)')
         self.__lineColor: QColor = None
         self.__enableDashLine: bool = isDashLine
         self.viewLayout: QVBoxLayout = QVBoxLayout(self)
@@ -118,7 +118,7 @@ class DropMultiFilesWidget(QWidget):
             filterName = name if name else self.tr("Files")
             self._fileFilter = f"{filterName} ({' '.join(exts)})"
         else:
-            self._fileFilter = "All files (*.*)"
+            self._fileFilter = self.tr('All files (*.*)')
 
     def fileExtensions(self) -> str:
         """Return the file extension filter in Qt format"""

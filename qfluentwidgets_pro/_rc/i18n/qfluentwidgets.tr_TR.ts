@@ -281,6 +281,14 @@
         <source>Browse files</source>
         <translation>Dosya seç</translation>
     </message>
+    <message>
+        <source>All files (*.*)</source>
+        <translation>Tüm dosyalar (*.*)</translation>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation>Dosyalar</translation>
+    </message>
 </context>
 <context>
     <name>DropSingleFileWidget</name>
@@ -332,6 +340,719 @@
     <message>
         <source>All files (*.*)</source>
         <translation>Tüm dosyalar (*.*)</translation>
+    </message>
+</context>
+<context>
+    <name>AudioDecoder</name>
+    <message>
+        <source>Audio contains no decoded samples</source>
+        <translation>Ses kodlanmış örnek içermiyor</translation>
+    </message>
+    <message>
+        <source>Audio decoding failed</source>
+        <translation>Ses kod çözme başarısız</translation>
+    </message>
+    <message>
+        <source>Audio decoding is not supported by this Qt multimedia backend</source>
+        <translation>Ses kod çözme bu Qt multimedya arka ucu tarafından desteklenmiyor</translation>
+    </message>
+    <message>
+        <source>Audio sample rate changed during decoding</source>
+        <translation>Kod çözme sırasında ses örnekleme hızı değişti</translation>
+    </message>
+    <message>
+        <source>Incomplete PCM audio frame</source>
+        <translation>Eksik PCM ses çerçevesi</translation>
+    </message>
+    <message>
+        <source>Invalid audio buffer</source>
+        <translation>Geçersiz ses arabelleği</translation>
+    </message>
+    <message>
+        <source>Unsupported PCM sample format</source>
+        <translation>Desteklenmeyen PCM örnek biçimi</translation>
+    </message>
+</context>
+<context>
+    <name>AudioWaveformWidget</name>
+    <message>
+        <source>Audio waveform</source>
+        <translation>Ses dalga formu</translation>
+    </message>
+    <message>
+        <source>Duration: %1 ms</source>
+        <translation>Süre: %1 ms</translation>
+    </message>
+</context>
+<context>
+    <name>AvatarPicker</name>
+    <message>
+        <source>Choose avatar</source>
+        <translation>Avatar seç</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp)</source>
+        <translation>Resimler (*.png *.jpg *.jpeg *.bmp *.webp)</translation>
+    </message>
+</context>
+<context>
+    <name>CalendarPicker</name>
+    <message>
+        <source>Pick a date</source>
+        <translation>Bir tarih seç</translation>
+    </message>
+</context>
+<context>
+    <name>CircleColorPicker</name>
+    <message>
+        <source>Color palette</source>
+        <translation>Renk paleti</translation>
+    </message>
+    <message>
+        <source>No color selected</source>
+        <translation>Renk seçilmedi</translation>
+    </message>
+</context>
+<context>
+    <name>CodeEdit</name>
+    <message>
+        <source>Highlighting skipped: document exceeds 1,000,000 characters</source>
+        <translation>Vurgulama atlandı: belge 1.000.000 karakteri aşıyor</translation>
+    </message>
+</context>
+<context>
+    <name>DatePicker</name>
+    <message>
+        <source>day</source>
+        <translation>gün</translation>
+    </message>
+    <message>
+        <source>month</source>
+        <translation>ay</translation>
+    </message>
+    <message>
+        <source>year</source>
+        <translation>yıl</translation>
+    </message>
+</context>
+<context>
+    <name>DayScrollView</name>
+    <message>
+        <source>Fr</source>
+        <translation>Cu</translation>
+    </message>
+    <message>
+        <source>Mo</source>
+        <translation>Pt</translation>
+    </message>
+    <message>
+        <source>Sa</source>
+        <translation>Ct</translation>
+    </message>
+    <message>
+        <source>Su</source>
+        <translation>Pa</translation>
+    </message>
+    <message>
+        <source>Th</source>
+        <translation>Pe</translation>
+    </message>
+    <message>
+        <source>Tu</source>
+        <translation>Sa</translation>
+    </message>
+    <message>
+        <source>We</source>
+        <translation>Ça</translation>
+    </message>
+</context>
+<context>
+    <name>DropDownColorPalette</name>
+    <message>
+        <source>Choose Color</source>
+        <translation>Renk Seç</translation>
+    </message>
+    <message>
+        <source>Color palette</source>
+        <translation>Renk paleti</translation>
+    </message>
+</context>
+<context>
+    <name>DropDownColorPicker</name>
+    <message>
+        <source>Color picker</source>
+        <translation>Renk seçici</translation>
+    </message>
+</context>
+<context>
+    <name>EditMenu</name>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopyala</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation>Kes</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation>Yapıştır</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Tümünü seç</translation>
+    </message>
+</context>
+<context>
+    <name>FastDayScrollView</name>
+    <message>
+        <source>Fr</source>
+        <translation>Cu</translation>
+    </message>
+    <message>
+        <source>Mo</source>
+        <translation>Pt</translation>
+    </message>
+    <message>
+        <source>Sa</source>
+        <translation>Ct</translation>
+    </message>
+    <message>
+        <source>Su</source>
+        <translation>Pa</translation>
+    </message>
+    <message>
+        <source>Th</source>
+        <translation>Pe</translation>
+    </message>
+    <message>
+        <source>Tu</source>
+        <translation>Sa</translation>
+    </message>
+    <message>
+        <source>We</source>
+        <translation>Ça</translation>
+    </message>
+</context>
+<context>
+    <name>FastMonthScrollView</name>
+    <message>
+        <source>Apr</source>
+        <translation>Nis</translation>
+    </message>
+    <message>
+        <source>Aug</source>
+        <translation>Ağu</translation>
+    </message>
+    <message>
+        <source>Dec</source>
+        <translation>Ara</translation>
+    </message>
+    <message>
+        <source>Feb</source>
+        <translation>Şub</translation>
+    </message>
+    <message>
+        <source>Jan</source>
+        <translation>Oca</translation>
+    </message>
+    <message>
+        <source>Jul</source>
+        <translation>Tem</translation>
+    </message>
+    <message>
+        <source>Jun</source>
+        <translation>Haz</translation>
+    </message>
+    <message>
+        <source>Mar</source>
+        <translation>Mar</translation>
+    </message>
+    <message>
+        <source>May</source>
+        <translation>May</translation>
+    </message>
+    <message>
+        <source>Nov</source>
+        <translation>Kas</translation>
+    </message>
+    <message>
+        <source>Oct</source>
+        <translation>Eki</translation>
+    </message>
+    <message>
+        <source>Sep</source>
+        <translation>Eyl</translation>
+    </message>
+</context>
+<context>
+    <name>FlyoutDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Onayla</translation>
+    </message>
+</context>
+<context>
+    <name>GuideWindow</name>
+    <message>
+        <source>Finish</source>
+        <translation>Bitir</translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation>İleri</translation>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation>Geri</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCropper</name>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Onayla</translation>
+    </message>
+    <message>
+        <source>Crop image</source>
+        <translation>Görüntüyü kırp</translation>
+    </message>
+    <message>
+        <source>Custom crop shape</source>
+        <translation>Özel kırpma şekli</translation>
+    </message>
+    <message>
+        <source>Flip horizontally</source>
+        <translation>Yatay çevir</translation>
+    </message>
+    <message>
+        <source>Rotate clockwise</source>
+        <translation>Saat yönünde döndür</translation>
+    </message>
+</context>
+<context>
+    <name>LabelContextMenu</name>
+    <message>
+        <source>Copy</source>
+        <translation>Kopyala</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Tümünü seç</translation>
+    </message>
+</context>
+<context>
+    <name>MessageBoxBase</name>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>Tamam</translation>
+    </message>
+</context>
+<context>
+    <name>MonthFormatter</name>
+    <message>
+        <source>April</source>
+        <translation>Nisan</translation>
+    </message>
+    <message>
+        <source>August</source>
+        <translation>Ağustos</translation>
+    </message>
+    <message>
+        <source>December</source>
+        <translation>Aralık</translation>
+    </message>
+    <message>
+        <source>February</source>
+        <translation>Şubat</translation>
+    </message>
+    <message>
+        <source>January</source>
+        <translation>Ocak</translation>
+    </message>
+    <message>
+        <source>July</source>
+        <translation>Temmuz</translation>
+    </message>
+    <message>
+        <source>June</source>
+        <translation>Haziran</translation>
+    </message>
+    <message>
+        <source>March</source>
+        <translation>Mart</translation>
+    </message>
+    <message>
+        <source>May</source>
+        <translation>May</translation>
+    </message>
+    <message>
+        <source>November</source>
+        <translation>Kasım</translation>
+    </message>
+    <message>
+        <source>October</source>
+        <translation>Ekim</translation>
+    </message>
+    <message>
+        <source>September</source>
+        <translation>Eylül</translation>
+    </message>
+</context>
+<context>
+    <name>MonthScrollView</name>
+    <message>
+        <source>Apr</source>
+        <translation>Nis</translation>
+    </message>
+    <message>
+        <source>Aug</source>
+        <translation>Ağu</translation>
+    </message>
+    <message>
+        <source>Dec</source>
+        <translation>Ara</translation>
+    </message>
+    <message>
+        <source>Feb</source>
+        <translation>Şub</translation>
+    </message>
+    <message>
+        <source>Jan</source>
+        <translation>Oca</translation>
+    </message>
+    <message>
+        <source>Jul</source>
+        <translation>Tem</translation>
+    </message>
+    <message>
+        <source>Jun</source>
+        <translation>Haz</translation>
+    </message>
+    <message>
+        <source>Mar</source>
+        <translation>Mar</translation>
+    </message>
+    <message>
+        <source>May</source>
+        <translation>May</translation>
+    </message>
+    <message>
+        <source>Nov</source>
+        <translation>Kas</translation>
+    </message>
+    <message>
+        <source>Oct</source>
+        <translation>Eki</translation>
+    </message>
+    <message>
+        <source>Sep</source>
+        <translation>Eyl</translation>
+    </message>
+</context>
+<context>
+    <name>NavigationPanel</name>
+    <message>
+        <source>Back</source>
+        <translation>Geri</translation>
+    </message>
+    <message>
+        <source>Close Navigation</source>
+        <translation>Gezinmeyi Kapat</translation>
+    </message>
+    <message>
+        <source>Open Navigation</source>
+        <translation>Gezinmeyi Aç</translation>
+    </message>
+</context>
+<context>
+    <name>PipsPager</name>
+    <message>
+        <source>Next Page</source>
+        <translation>Sonraki Sayfa</translation>
+    </message>
+    <message>
+        <source>Previous Page</source>
+        <translation>Önceki Sayfa</translation>
+    </message>
+</context>
+<context>
+    <name>PlayButton</name>
+    <message>
+        <source>Pause</source>
+        <translation>Duraklat</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Oynat</translation>
+    </message>
+</context>
+<context>
+    <name>RatingWidget</name>
+    <message>
+        <source>Rating</source>
+        <translation>Değerlendirme</translation>
+    </message>
+</context>
+<context>
+    <name>RoundProgressToast</name>
+    <message>
+        <source>Loading, please wait</source>
+        <translation>Yükleniyor, lütfen bekleyin</translation>
+    </message>
+</context>
+<context>
+    <name>ScreenColorPicker</name>
+    <message>
+        <source>Another screen color picker is already active.</source>
+        <translation>Başka bir ekran renk seçici zaten etkin.</translation>
+    </message>
+    <message>
+        <source>Cannot exclude the live picker overlay from screen capture (Windows error %1). Enable screen freezing instead.</source>
+        <translation>Canlı seçici katmanı ekran yakalamadan hariç tutulamıyor (Windows hatası %1). Bunun yerine ekran dondurmayı etkinleştirin.</translation>
+    </message>
+    <message>
+        <source>Live screen capture exclusion is unavailable. Enable screen freezing instead.</source>
+        <translation>Canlı ekran yakalama hariç tutma kullanılamıyor. Bunun yerine ekran dondurmayı etkinleştirin.</translation>
+    </message>
+    <message>
+        <source>Live screen capture failed. Check screen recording permissions.</source>
+        <translation>Canlı ekran yakalama başarısız oldu. Ekran kaydı izinlerini kontrol edin.</translation>
+    </message>
+    <message>
+        <source>Live screen picking requires Windows 10 version 2004 or newer; enable screen freezing on this platform.</source>
+        <translation>Canlı ekran seçimi Windows 10 sürüm 2004 veya üstünü gerektirir; bu platformda ekran dondurmayı etkinleştirin.</translation>
+    </message>
+    <message>
+        <source>No screen is available for color picking.</source>
+        <translation>Renk seçimi için kullanılabilir ekran yok.</translation>
+    </message>
+    <message>
+        <source>Pick a screen color</source>
+        <translation>Bir ekran rengi seçin</translation>
+    </message>
+    <message>
+        <source>Screen capture is unavailable.</source>
+        <translation>Ekran yakalama kullanılamıyor.</translation>
+    </message>
+    <message>
+        <source>Screen capture is unavailable. Check screen recording permissions.</source>
+        <translation>Ekran yakalama kullanılamıyor. Ekran kaydı izinlerini kontrol edin.</translation>
+    </message>
+</context>
+<context>
+    <name>ShortcutPicker</name>
+    <message>
+        <source>Activate shortcut</source>
+        <translation>Kısayolu etkinleştir</translation>
+    </message>
+    <message>
+        <source>Edit shortcut</source>
+        <translation>Kısayolu düzenle</translation>
+    </message>
+    <message>
+        <source>Not set</source>
+        <translation>Ayarlanmadı</translation>
+    </message>
+    <message>
+        <source>Press a key combination to change this shortcut</source>
+        <translation>Bu kısayolu değiştirmek için bir tuş kombinasyonuna basın</translation>
+    </message>
+    <message>
+        <source>Shortcut</source>
+        <translation>Kısayol</translation>
+    </message>
+</context>
+<context>
+    <name>SwitchButton</name>
+    <message>
+        <source>Off</source>
+        <translation>Kapalı</translation>
+    </message>
+    <message>
+        <source>On</source>
+        <translation>Açık</translation>
+    </message>
+</context>
+<context>
+    <name>TopNavigationPanel</name>
+    <message>
+        <source>Back</source>
+        <translation>Geri</translation>
+    </message>
+</context>
+<context>
+    <name>Ui_MessageBox</name>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>Tamam</translation>
+    </message>
+</context>
+<context>
+    <name>VolumeView</name>
+    <message>
+        <source>Mute</source>
+        <translation>Sesi kapat</translation>
+    </message>
+    <message>
+        <source>Unmute</source>
+        <translation>Sesi aç</translation>
+    </message>
+</context>
+<context>
+    <name>WaitingDialog</name>
+    <message>
+        <source>Please wait...</source>
+        <translation>Lütfen bekleyin...</translation>
+    </message>
+</context>
+<context>
+    <name>_CalendarTimePickerMixin</name>
+    <message>
+        <source>Pick a date and time</source>
+        <translation>Bir tarih ve saat seçin</translation>
+    </message>
+</context>
+<context>
+    <name>_CalendarTimeView</name>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Onayla</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorPickerView</name>
+    <message>
+        <source>%1 slider</source>
+        <translation>%1 kaydırıcısı</translation>
+    </message>
+    <message>
+        <source>%1 value</source>
+        <translation>%1 değeri</translation>
+    </message>
+    <message>
+        <source>Brightness</source>
+        <translation>Parlaklık</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Color model</source>
+        <translation>Renk modeli</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Onayla</translation>
+    </message>
+    <message>
+        <source>Hexadecimal color, AARRGGBB or RRGGBB</source>
+        <translation>Onaltılık renk, AARRGGBB veya RRGGBB</translation>
+    </message>
+</context>
+<context>
+    <name>_FilledNavigationInterface</name>
+    <message>
+        <source>Search</source>
+        <translation>Ara</translation>
+    </message>
+</context>
+<context>
+    <name>_HueSaturationPanel</name>
+    <message>
+        <source>Hue and saturation</source>
+        <translation>Ton ve doygunluk</translation>
+    </message>
+</context>
+<context>
+    <name>_KeyCaps</name>
+    <message>
+        <source>Not set</source>
+        <translation>Ayarlanmadı</translation>
+    </message>
+</context>
+<context>
+    <name>_PageSearchPopup</name>
+    <message>
+        <source>No matching pages</source>
+        <translation>Eşleşen sayfa yok</translation>
+    </message>
+</context>
+<context>
+    <name>_PaletteView</name>
+    <message>
+        <source>Automatic</source>
+        <translation>Otomatik</translation>
+    </message>
+    <message>
+        <source>More Colors...</source>
+        <translation>Diğer Renkler...</translation>
+    </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Standart Renkler</translation>
+    </message>
+    <message>
+        <source>Theme Colors</source>
+        <translation>Tema Renkleri</translation>
+    </message>
+</context>
+<context>
+    <name>_PickerOverlay</name>
+    <message>
+        <source>Screen color picking: click to select, Escape to cancel</source>
+        <translation>Ekran rengi seçimi: seçmek için tıklayın, iptal etmek için Escape</translation>
+    </message>
+</context>
+<context>
+    <name>_RangePickerMixin</name>
+    <message>
+        <source>Pick a date range</source>
+        <translation>Bir tarih aralığı seçin</translation>
+    </message>
+</context>
+<context>
+    <name>_ShortcutPickerDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Press a key combination</source>
+        <translation>Bir tuş kombinasyonuna basın</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation>Sıfırla</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Kaydet</translation>
     </message>
 </context>
 </TS>

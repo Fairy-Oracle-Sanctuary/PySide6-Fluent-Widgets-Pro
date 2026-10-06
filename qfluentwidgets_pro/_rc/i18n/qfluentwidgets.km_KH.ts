@@ -281,6 +281,14 @@
         <source>Browse files</source>
         <translation>រកមើលឯកសារ</translation>
     </message>
+    <message>
+        <source>All files (*.*)</source>
+        <translation>ឯកសារទាំងអស់ (*.*)</translation>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation>ឯកសារ</translation>
+    </message>
 </context>
 <context>
     <name>DropSingleFileWidget</name>
@@ -332,6 +340,719 @@
     <message>
         <source>All files (*.*)</source>
         <translation>ឯកសារទាំងអស់ (*.*)</translation>
+    </message>
+</context>
+<context>
+    <name>AudioDecoder</name>
+    <message>
+        <source>Audio contains no decoded samples</source>
+        <translation>អូឌីយ៉ូមិនមានគំរូឌិកូដទេ</translation>
+    </message>
+    <message>
+        <source>Audio decoding failed</source>
+        <translation>ការឌិកូដអូឌីយ៉ូបានបរាជ័យ</translation>
+    </message>
+    <message>
+        <source>Audio decoding is not supported by this Qt multimedia backend</source>
+        <translation>ការឌិកូដអូឌីយ៉ូមិនត្រូវបានគាំទ្រដោយ Qt multimedia backend នេះទេ</translation>
+    </message>
+    <message>
+        <source>Audio sample rate changed during decoding</source>
+        <translation>អត្រាគំរូអូឌីយ៉ូបានផ្លាស់ប្តូរកំឡុងពេលឌិកូដ</translation>
+    </message>
+    <message>
+        <source>Incomplete PCM audio frame</source>
+        <translation>ស៊ុមអូឌីយ៉ូ PCM មិនពេញលេញ</translation>
+    </message>
+    <message>
+        <source>Invalid audio buffer</source>
+        <translation>Buffer អូឌីយ៉ូមិនត្រឹមត្រូវ</translation>
+    </message>
+    <message>
+        <source>Unsupported PCM sample format</source>
+        <translation>ទម្រង់គំរូ PCM មិនត្រូវបានគាំទ្រ</translation>
+    </message>
+</context>
+<context>
+    <name>AudioWaveformWidget</name>
+    <message>
+        <source>Audio waveform</source>
+        <translation>រលកសំឡេងអូឌីយ៉ូ</translation>
+    </message>
+    <message>
+        <source>Duration: %1 ms</source>
+        <translation>រយៈពេល៖ %1 ms</translation>
+    </message>
+</context>
+<context>
+    <name>AvatarPicker</name>
+    <message>
+        <source>Choose avatar</source>
+        <translation>ជ្រើសរើសរូបតំណាង</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp)</source>
+        <translation>រូបភាព (*.png *.jpg *.jpeg *.bmp *.webp)</translation>
+    </message>
+</context>
+<context>
+    <name>CalendarPicker</name>
+    <message>
+        <source>Pick a date</source>
+        <translation>ជ្រើសរើសកាលបរិច្ឆេទ</translation>
+    </message>
+</context>
+<context>
+    <name>CircleColorPicker</name>
+    <message>
+        <source>Color palette</source>
+        <translation>ក្ដារពណ៌</translation>
+    </message>
+    <message>
+        <source>No color selected</source>
+        <translation>មិនបានជ្រើសរើសពណ៌</translation>
+    </message>
+</context>
+<context>
+    <name>CodeEdit</name>
+    <message>
+        <source>Highlighting skipped: document exceeds 1,000,000 characters</source>
+        <translation>បានរំលងការបន្លិច៖ ឯកសារលើសពី 1,000,000 តួអក្សរ</translation>
+    </message>
+</context>
+<context>
+    <name>DatePicker</name>
+    <message>
+        <source>day</source>
+        <translation>ថ្ងៃ</translation>
+    </message>
+    <message>
+        <source>month</source>
+        <translation>ខែ</translation>
+    </message>
+    <message>
+        <source>year</source>
+        <translation>ឆ្នាំ</translation>
+    </message>
+</context>
+<context>
+    <name>DayScrollView</name>
+    <message>
+        <source>Fr</source>
+        <translation>សុ</translation>
+    </message>
+    <message>
+        <source>Mo</source>
+        <translation>ច</translation>
+    </message>
+    <message>
+        <source>Sa</source>
+        <translation>ស</translation>
+    </message>
+    <message>
+        <source>Su</source>
+        <translation>អា</translation>
+    </message>
+    <message>
+        <source>Th</source>
+        <translation>ព្រ</translation>
+    </message>
+    <message>
+        <source>Tu</source>
+        <translation>អ</translation>
+    </message>
+    <message>
+        <source>We</source>
+        <translation>ពុ</translation>
+    </message>
+</context>
+<context>
+    <name>DropDownColorPalette</name>
+    <message>
+        <source>Choose Color</source>
+        <translation>ជ្រើសរើសពណ៌</translation>
+    </message>
+    <message>
+        <source>Color palette</source>
+        <translation>ក្ដារពណ៌</translation>
+    </message>
+</context>
+<context>
+    <name>DropDownColorPicker</name>
+    <message>
+        <source>Color picker</source>
+        <translation>ឧបករណ៍ជ្រើសពណ៌</translation>
+    </message>
+</context>
+<context>
+    <name>EditMenu</name>
+    <message>
+        <source>Cancel</source>
+        <translation>បោះបង់</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>ចម្លង</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation>កាត់</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation>បិទភ្ជាប់</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>ជ្រើសរើសទាំងអស់</translation>
+    </message>
+</context>
+<context>
+    <name>FastDayScrollView</name>
+    <message>
+        <source>Fr</source>
+        <translation>សុ</translation>
+    </message>
+    <message>
+        <source>Mo</source>
+        <translation>ច</translation>
+    </message>
+    <message>
+        <source>Sa</source>
+        <translation>ស</translation>
+    </message>
+    <message>
+        <source>Su</source>
+        <translation>អា</translation>
+    </message>
+    <message>
+        <source>Th</source>
+        <translation>ព្រ</translation>
+    </message>
+    <message>
+        <source>Tu</source>
+        <translation>អ</translation>
+    </message>
+    <message>
+        <source>We</source>
+        <translation>ពុ</translation>
+    </message>
+</context>
+<context>
+    <name>FastMonthScrollView</name>
+    <message>
+        <source>Apr</source>
+        <translation>មេសា</translation>
+    </message>
+    <message>
+        <source>Aug</source>
+        <translation>សីហា</translation>
+    </message>
+    <message>
+        <source>Dec</source>
+        <translation>ធ្នូ</translation>
+    </message>
+    <message>
+        <source>Feb</source>
+        <translation>កុម្ភៈ</translation>
+    </message>
+    <message>
+        <source>Jan</source>
+        <translation>មករា</translation>
+    </message>
+    <message>
+        <source>Jul</source>
+        <translation>កក្កដា</translation>
+    </message>
+    <message>
+        <source>Jun</source>
+        <translation>មិថុនា</translation>
+    </message>
+    <message>
+        <source>Mar</source>
+        <translation>មីនា</translation>
+    </message>
+    <message>
+        <source>May</source>
+        <translation>ឧសភា</translation>
+    </message>
+    <message>
+        <source>Nov</source>
+        <translation>វិច្ឆិកា</translation>
+    </message>
+    <message>
+        <source>Oct</source>
+        <translation>តុលា</translation>
+    </message>
+    <message>
+        <source>Sep</source>
+        <translation>កញ្ញា</translation>
+    </message>
+</context>
+<context>
+    <name>FlyoutDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation>បោះបង់</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>បញ្ជាក់</translation>
+    </message>
+</context>
+<context>
+    <name>GuideWindow</name>
+    <message>
+        <source>Finish</source>
+        <translation>បញ្ចប់</translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation>បន្ទាប់</translation>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation>មុន</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCropper</name>
+    <message>
+        <source>Cancel</source>
+        <translation>បោះបង់</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>បញ្ជាក់</translation>
+    </message>
+    <message>
+        <source>Crop image</source>
+        <translation>កាត់រូបភាព</translation>
+    </message>
+    <message>
+        <source>Custom crop shape</source>
+        <translation>រូបរាងកាត់ផ្ទាល់ខ្លួន</translation>
+    </message>
+    <message>
+        <source>Flip horizontally</source>
+        <translation>ត្រឡប់ផ្ដេក</translation>
+    </message>
+    <message>
+        <source>Rotate clockwise</source>
+        <translation>បង្វិលតាមទ្រនិចនាឡិកា</translation>
+    </message>
+</context>
+<context>
+    <name>LabelContextMenu</name>
+    <message>
+        <source>Copy</source>
+        <translation>ចម្លង</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>ជ្រើសរើសទាំងអស់</translation>
+    </message>
+</context>
+<context>
+    <name>MessageBoxBase</name>
+    <message>
+        <source>Cancel</source>
+        <translation>បោះបង់</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>យល់ព្រម</translation>
+    </message>
+</context>
+<context>
+    <name>MonthFormatter</name>
+    <message>
+        <source>April</source>
+        <translation>មេសា</translation>
+    </message>
+    <message>
+        <source>August</source>
+        <translation>សីហា</translation>
+    </message>
+    <message>
+        <source>December</source>
+        <translation>ធ្នូ</translation>
+    </message>
+    <message>
+        <source>February</source>
+        <translation>កុម្ភៈ</translation>
+    </message>
+    <message>
+        <source>January</source>
+        <translation>មករា</translation>
+    </message>
+    <message>
+        <source>July</source>
+        <translation>កក្កដា</translation>
+    </message>
+    <message>
+        <source>June</source>
+        <translation>មិថុនា</translation>
+    </message>
+    <message>
+        <source>March</source>
+        <translation>មីនា</translation>
+    </message>
+    <message>
+        <source>May</source>
+        <translation>ឧសភា</translation>
+    </message>
+    <message>
+        <source>November</source>
+        <translation>វិច្ឆិកា</translation>
+    </message>
+    <message>
+        <source>October</source>
+        <translation>តុលា</translation>
+    </message>
+    <message>
+        <source>September</source>
+        <translation>កញ្ញា</translation>
+    </message>
+</context>
+<context>
+    <name>MonthScrollView</name>
+    <message>
+        <source>Apr</source>
+        <translation>មេសា</translation>
+    </message>
+    <message>
+        <source>Aug</source>
+        <translation>សីហា</translation>
+    </message>
+    <message>
+        <source>Dec</source>
+        <translation>ធ្នូ</translation>
+    </message>
+    <message>
+        <source>Feb</source>
+        <translation>កុម្ភៈ</translation>
+    </message>
+    <message>
+        <source>Jan</source>
+        <translation>មករា</translation>
+    </message>
+    <message>
+        <source>Jul</source>
+        <translation>កក្កដា</translation>
+    </message>
+    <message>
+        <source>Jun</source>
+        <translation>មិថុនា</translation>
+    </message>
+    <message>
+        <source>Mar</source>
+        <translation>មីនា</translation>
+    </message>
+    <message>
+        <source>May</source>
+        <translation>ឧសភា</translation>
+    </message>
+    <message>
+        <source>Nov</source>
+        <translation>វិច្ឆិកា</translation>
+    </message>
+    <message>
+        <source>Oct</source>
+        <translation>តុលា</translation>
+    </message>
+    <message>
+        <source>Sep</source>
+        <translation>កញ្ញា</translation>
+    </message>
+</context>
+<context>
+    <name>NavigationPanel</name>
+    <message>
+        <source>Back</source>
+        <translation>ត្រឡប់ក្រោយ</translation>
+    </message>
+    <message>
+        <source>Close Navigation</source>
+        <translation>បិទការរុករក</translation>
+    </message>
+    <message>
+        <source>Open Navigation</source>
+        <translation>បើកការរុករក</translation>
+    </message>
+</context>
+<context>
+    <name>PipsPager</name>
+    <message>
+        <source>Next Page</source>
+        <translation>ទំព័របន្ទាប់</translation>
+    </message>
+    <message>
+        <source>Previous Page</source>
+        <translation>ទំព័រមុន</translation>
+    </message>
+</context>
+<context>
+    <name>PlayButton</name>
+    <message>
+        <source>Pause</source>
+        <translation>ផ្អាក</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>លេង</translation>
+    </message>
+</context>
+<context>
+    <name>RatingWidget</name>
+    <message>
+        <source>Rating</source>
+        <translation>ការវាយតម្លៃ</translation>
+    </message>
+</context>
+<context>
+    <name>RoundProgressToast</name>
+    <message>
+        <source>Loading, please wait</source>
+        <translation>កំពុងផ្ទុក សូមរង់ចាំ</translation>
+    </message>
+</context>
+<context>
+    <name>ScreenColorPicker</name>
+    <message>
+        <source>Another screen color picker is already active.</source>
+        <translation>កម្មវិធីជ្រើសរើសពណ៌អេក្រង់ផ្សេងទៀតកំពុងដំណើរការរួចហើយ។</translation>
+    </message>
+    <message>
+        <source>Cannot exclude the live picker overlay from screen capture (Windows error %1). Enable screen freezing instead.</source>
+        <translation>មិនអាចដកចេញពីការថតអេក្រង់នូវផ្ទាំងជ្រើសរើសពណ៌ផ្ទាល់បានទេ (កំហុស Windows %1)។ សូមបើកការបង្កកអេក្រង់ជំនួសវិញ។</translation>
+    </message>
+    <message>
+        <source>Live screen capture exclusion is unavailable. Enable screen freezing instead.</source>
+        <translation>ការដកចេញពីការថតអេក្រង់ផ្ទាល់មិនអាចប្រើបានទេ។ សូមបើកការបង្កកអេក្រង់ជំនួសវិញ។</translation>
+    </message>
+    <message>
+        <source>Live screen capture failed. Check screen recording permissions.</source>
+        <translation>ការថតអេក្រង់ផ្ទាល់បានបរាជ័យ។ សូមពិនិត្យការអនុញ្ញាតថតអេក្រង់។</translation>
+    </message>
+    <message>
+        <source>Live screen picking requires Windows 10 version 2004 or newer; enable screen freezing on this platform.</source>
+        <translation>ការជ្រើសរើសពណ៌ពីអេក្រង់ផ្ទាល់ត្រូវការ Windows 10 កំណែ 2004 ឬថ្មីជាងនេះ។ សូមបើកការបង្កកអេក្រង់នៅលើវេទិកានេះ។</translation>
+    </message>
+    <message>
+        <source>No screen is available for color picking.</source>
+        <translation>គ្មានអេក្រង់សម្រាប់ជ្រើសរើសពណ៌ទេ។</translation>
+    </message>
+    <message>
+        <source>Pick a screen color</source>
+        <translation>ជ្រើសរើសពណ៌ពីអេក្រង់</translation>
+    </message>
+    <message>
+        <source>Screen capture is unavailable.</source>
+        <translation>ការថតអេក្រង់មិនអាចប្រើបានទេ។</translation>
+    </message>
+    <message>
+        <source>Screen capture is unavailable. Check screen recording permissions.</source>
+        <translation>ការថតអេក្រង់មិនអាចប្រើបានទេ។ សូមពិនិត្យការអនុញ្ញាតថតអេក្រង់។</translation>
+    </message>
+</context>
+<context>
+    <name>ShortcutPicker</name>
+    <message>
+        <source>Activate shortcut</source>
+        <translation>ធ្វើឱ្យផ្លូវកាត់សកម្ម</translation>
+    </message>
+    <message>
+        <source>Edit shortcut</source>
+        <translation>កែសម្រួលផ្លូវកាត់</translation>
+    </message>
+    <message>
+        <source>Not set</source>
+        <translation>មិនបានកំណត់</translation>
+    </message>
+    <message>
+        <source>Press a key combination to change this shortcut</source>
+        <translation>ចុចបន្សំគ្រាប់ចុចដើម្បីផ្លាស់ប្តូរផ្លូវកាត់នេះ</translation>
+    </message>
+    <message>
+        <source>Shortcut</source>
+        <translation>ផ្លូវកាត់</translation>
+    </message>
+</context>
+<context>
+    <name>SwitchButton</name>
+    <message>
+        <source>Off</source>
+        <translation>បិទ</translation>
+    </message>
+    <message>
+        <source>On</source>
+        <translation>បើក</translation>
+    </message>
+</context>
+<context>
+    <name>TopNavigationPanel</name>
+    <message>
+        <source>Back</source>
+        <translation>ត្រឡប់ក្រោយ</translation>
+    </message>
+</context>
+<context>
+    <name>Ui_MessageBox</name>
+    <message>
+        <source>Cancel</source>
+        <translation>បោះបង់</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>យល់ព្រម</translation>
+    </message>
+</context>
+<context>
+    <name>VolumeView</name>
+    <message>
+        <source>Mute</source>
+        <translation>បិទសំឡេង</translation>
+    </message>
+    <message>
+        <source>Unmute</source>
+        <translation>បើកសំឡេង</translation>
+    </message>
+</context>
+<context>
+    <name>WaitingDialog</name>
+    <message>
+        <source>Please wait...</source>
+        <translation>សូមរង់ចាំ...</translation>
+    </message>
+</context>
+<context>
+    <name>_CalendarTimePickerMixin</name>
+    <message>
+        <source>Pick a date and time</source>
+        <translation>ជ្រើសរើសកាលបរិច្ឆេទ និងពេលវេលា</translation>
+    </message>
+</context>
+<context>
+    <name>_CalendarTimeView</name>
+    <message>
+        <source>Cancel</source>
+        <translation>បោះបង់</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>បញ្ជាក់</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorPickerView</name>
+    <message>
+        <source>%1 slider</source>
+        <translation>គ្រាប់រំកិល %1</translation>
+    </message>
+    <message>
+        <source>%1 value</source>
+        <translation>តម្លៃ %1</translation>
+    </message>
+    <message>
+        <source>Brightness</source>
+        <translation>ពន្លឺ</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>បោះបង់</translation>
+    </message>
+    <message>
+        <source>Color model</source>
+        <translation>គំរូពណ៌</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>បញ្ជាក់</translation>
+    </message>
+    <message>
+        <source>Hexadecimal color, AARRGGBB or RRGGBB</source>
+        <translation>ពណ៌គោលដប់ប្រាំមួយ ឬ AARRGGBB ឬ RRGGBB</translation>
+    </message>
+</context>
+<context>
+    <name>_FilledNavigationInterface</name>
+    <message>
+        <source>Search</source>
+        <translation>ស្វែងរក</translation>
+    </message>
+</context>
+<context>
+    <name>_HueSaturationPanel</name>
+    <message>
+        <source>Hue and saturation</source>
+        <translation>ពណ៌លាំ និងភាពឆ្អែត</translation>
+    </message>
+</context>
+<context>
+    <name>_KeyCaps</name>
+    <message>
+        <source>Not set</source>
+        <translation>មិនបានកំណត់</translation>
+    </message>
+</context>
+<context>
+    <name>_PageSearchPopup</name>
+    <message>
+        <source>No matching pages</source>
+        <translation>គ្មានទំព័រត្រូវគ្នាទេ</translation>
+    </message>
+</context>
+<context>
+    <name>_PaletteView</name>
+    <message>
+        <source>Automatic</source>
+        <translation>ស្វ័យប្រវត្តិ</translation>
+    </message>
+    <message>
+        <source>More Colors...</source>
+        <translation>ពណ៌ផ្សេងទៀត...</translation>
+    </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>ពណ៌ស្តង់ដារ</translation>
+    </message>
+    <message>
+        <source>Theme Colors</source>
+        <translation>ពណ៌ស្បែក</translation>
+    </message>
+</context>
+<context>
+    <name>_PickerOverlay</name>
+    <message>
+        <source>Screen color picking: click to select, Escape to cancel</source>
+        <translation>ការជ្រើសរើសពណ៌ពីអេក្រង់៖ ចុចដើម្បីជ្រើសរើស ចុច Escape ដើម្បីបោះបង់</translation>
+    </message>
+</context>
+<context>
+    <name>_RangePickerMixin</name>
+    <message>
+        <source>Pick a date range</source>
+        <translation>ជ្រើសរើសជួរកាលបរិច្ឆេទ</translation>
+    </message>
+</context>
+<context>
+    <name>_ShortcutPickerDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation>បោះបង់</translation>
+    </message>
+    <message>
+        <source>Press a key combination</source>
+        <translation>ចុចបន្សំគ្រាប់ចុច</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation>កំណត់ឡើងវិញ</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>រក្សាទុក</translation>
     </message>
 </context>
 </TS>
