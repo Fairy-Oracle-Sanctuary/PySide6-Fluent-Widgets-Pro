@@ -120,7 +120,7 @@ def run():
     QTest.qWait(30)
     assert card.titleLabel.geometry().right() < card.switchButton.geometry().left()
     assert card.contentLabel.width() <= card.contentWidget.width()
-    from gallery.view.dashboard_card_demo import DashboardCardDemo
+    from gallery_fixtures.dashboard_card_demo import DashboardCardDemo
     demo = DashboardCardDemo()
     demo.resize(900, 650)
     demo.show()

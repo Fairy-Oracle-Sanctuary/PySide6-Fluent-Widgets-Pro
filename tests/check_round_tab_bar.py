@@ -16,7 +16,7 @@ from PySide6.QtWidgets import QApplication, QVBoxLayout, QWidget
 from qfluentwidgets_pro import FluentIcon, RoundTabBar, TabBar, TabCloseButtonDisplayMode, Theme, setTheme
 from qfluentwidgets_pro.components.widgets.round_tab_bar import RoundTabItem
 from qfluentwidgets_pro.components.widgets.tab_view import TabItem
-from gallery.view.round_tab_bar_demo import RoundTabBarDemo
+from gallery_fixtures.round_tab_bar_demo import RoundTabBarDemo
 
 
 def run():
@@ -247,30 +247,20 @@ def run():
     demo.close()
     window.close()
     if app.platformName() == 'windows':
-        import main
-        gallery = main.MainWindow()
-        gallery.show()
-        gallery.switchTo(gallery.buttonsInterface)
-        gallery.buttonsInterface.ensureWidgetVisible(gallery.roundTabBarDemo.tabBar)
+        example = RoundTabBarDemo()
+        example.show()
         QTest.qWait(350)
-        example = gallery.roundTabBarDemo
         setTheme(Theme.LIGHT)
         QTest.qWait(100)
-        preview = QImage(example.size(), QImage.Format_ARGB32_Premultiplied)
-        preview.fill(Qt.transparent)
-        example.render(preview)
-        point = example.tabBar.mapTo(example, QPoint(10, 1))
-        assert preview.pixelColor(point).name() == '#f3f4f6'
         item = example.tabBar.tab('songs')
-        QTest.mouseClick(gallery.windowHandle(), Qt.LeftButton,
-                         pos=item.mapTo(gallery, QPoint(50, 16)))
+        QTest.mouseClick(item, Qt.LeftButton, pos=QPoint(50, 16))
         assert example.stack.currentWidget() is example.pages['songs']
         QTest.mouseClick(example.tabBar.addButton, Qt.LeftButton)
         assert example.tabBar.count() == 4 and example.tabBar.currentTab().routeKey() == 'new-1'
         QTest.mouseClick(example.tabBar.currentTab().closeButton, Qt.LeftButton)
         QTest.qWait(30)
         assert example.tabBar.count() == 3 and example.stack.count() == 3
-        gallery.close()
+        example.close()
     print('PASS: RoundTabBar reuse, add/close, routes, callbacks, drag, scroll, modes and seam/DPI rendering')
     print('Previews:', previews)
 

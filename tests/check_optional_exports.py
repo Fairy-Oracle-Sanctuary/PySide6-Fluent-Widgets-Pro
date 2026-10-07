@@ -112,10 +112,14 @@ print("PASS: lightweight root import with optional dependencies excluded, explic
             runpy.run_path(str(ROOT / "deploy.py"))
         args = command.call_args.args[0]
         assert "--nofollow-import-to=qfluentwidgets_pro.common.image_utils" in args
-        assert "--nofollow-import-to=numpy" not in args  # full chat gallery uses MathText
+        assert "--nofollow-import-to=numpy" not in args  # offline chat formulas
         assert "--nofollow-import-to=scipy" in args
-        assert "--include-package=pygments" in args  # full gallery intentionally uses it
-        assert "--include-package=matplotlib" in args  # full gallery includes formulas
+        assert "--include-package=gallery.view.chart" in args
+        assert "--nofollow-import-to=PySide6.QtWebChannel" not in args
+        assert "--include-module=gallery.view.chat_interface" in args
+        assert "--include-package=pygments" in args
+        assert "--include-package=matplotlib" in args
+        assert "--include-package=gallery.pro_demos" in args
         assert "--include-qt-plugins=multimedia" in args
         assert "--include-data-files=gallery/resource/audio/waveform_sample.wav=gallery/resource/audio/waveform_sample.wav" in args
     print("PASS: all three gallery build profiles exclude CPU blur; no compiler was invoked")

@@ -268,20 +268,16 @@ def run():
     assert not external.isVisible()
     owner.close()
 
-    # Exercise the actual gallery page, including its menu action feedback.
+    # Exercise the retained standalone fixture, including menu action feedback.
     if app.platformName() == 'windows':
-        import main
-        gallery = main.MainWindow()
-        gallery.show()
-        gallery.activateWindow()
-        gallery.switchTo(gallery.buttonsInterface)
-        gallery.buttonsInterface.ensureWidgetVisible(gallery.menuBarDemo)
+        from gallery_fixtures.menu_bar_demo import MenuBarDemo
+        demo = MenuBarDemo()
+        demo.show()
+        demo.activateWindow()
         QTest.qWait(350)
-        demo = gallery.menuBarDemo
         menu = demo.menuBar.menus()[0]
         button = demo.menuBar._buttons[menu.menuAction()]
-        QTest.mouseClick(gallery.windowHandle(), Qt.LeftButton,
-                         pos=button.mapTo(gallery, button.rect().center()))
+        QTest.mouseClick(button, Qt.LeftButton)
         QTest.qWait(50)
         assert demo.menuBar.activeMenu() is menu
         QTest.keyClick(menu.view, Qt.Key_Down)
@@ -302,7 +298,7 @@ def run():
             painter.end()
             assert image.save(str(previews / f'gallery-{theme.value.lower()}.png'))
             demo.menuBar.closeActiveMenu()
-        gallery.close()
+        demo.close()
     print('PASS: MenuBar actions, shortcuts, popup switching, keyboard, lifecycle and previews')
     print('Previews:', previews)
 

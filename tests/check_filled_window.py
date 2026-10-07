@@ -10,7 +10,7 @@ from PySide6.QtTest import QTest
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QStyleOptionViewItem, QWidget
 
-from gallery.view.filled_window_demo import FilledWindowDemo
+from gallery_fixtures.filled_window_demo import FilledWindowDemo
 from qfluentwidgets_pro import FluentIcon, FluentWindow, Theme, setTheme, setThemeColor, themeColor
 from qfluentwidgets_pro.components.navigation.navigation_widget import NavigationWidget
 

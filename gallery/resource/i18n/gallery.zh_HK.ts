@@ -728,6 +728,14 @@ In that case, I would accept it no matter which side the ball falls on.</source>
 <context>
     <name>MainWindow</name>
     <message>
+        <source>Chat</source>
+        <translation>聊天</translation>
+    </message>
+    <message>
+        <source>Charts</source>
+        <translation>圖表</translation>
+    </message>
+    <message>
         <location filename="../../view/main_window.py" line="71"/>
         <source>Home</source>
         <translation>主頁</translation>
@@ -1093,6 +1101,18 @@ In that case, I would accept it no matter which side the ball falls on.</source>
 </context>
 <context>
     <name>SettingInterface</name>
+    <message>
+        <source>Extensions and maintenance: %1 · © %2</source>
+        <translation>擴展與維護：%1 · © %2</translation>
+    </message>
+    <message>
+        <source>Based on QFluentWidgets %1 · © %2, %3</source>
+        <translation>基於 QFluentWidgets %1 · © %2，%3</translation>
+    </message>
+    <message>
+        <source>License: GPLv3 · No warranty.</source>
+        <translation>授權條款：GPLv3 · 不提供擔保。</translation>
+    </message>
     <message>
         <location filename="../../view/setting_interface.py" line="27"/>
         <source>Settings</source>
@@ -1682,6 +1702,10 @@ In that case, I would accept it no matter which side the ball falls on.</source>
 <context>
     <name>Translator</name>
     <message>
+        <source>Change Theme</source>
+        <translation>切換主題</translation>
+    </message>
+    <message>
         <location filename="../../common/translator.py" line="19"/>
         <source>Basic input</source>
         <translation>基本輸入</translation>
@@ -1806,6 +1830,132 @@ In that case, I would accept it no matter which side the ball falls on.</source>
         <location filename="../../view/view_interface.py" line="61"/>
         <source>Flip view</source>
         <translation>翻轉視圖</translation>
+    </message>
+</context>
+<context>
+    <name>ChatWindow</name>
+    <message>
+        <source>Chat</source>
+        <translation>聊天</translation>
+    </message>
+</context>
+<context>
+    <name>ProExamples</name>
+    <message>
+        <source>Load demo</source>
+        <translation>載入示範</translation>
+    </message>
+    <message>
+        <source>Optional dependency unavailable: </source>
+        <translation>可選依賴不可用：</translation>
+    </message>
+    <message>
+        <source>Open charts</source>
+        <translation>開啟圖表</translation>
+    </message>
+    <message>
+        <source>Open chat</source>
+        <translation>開啟聊天</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation>下載</translation>
+    </message>
+    <message>
+        <source>Enable notifications</source>
+        <translation>啟用通知</translation>
+    </message>
+    <message>
+        <source>Receive updates when a task finishes.</source>
+        <translation>工作完成時接收通知。</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>自動</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>手動</translation>
+    </message>
+    <message>
+        <source>Choose an operating mode.</source>
+        <translation>選擇執行模式。</translation>
+    </message>
+    <message>
+        <source>Show flyout dialog</source>
+        <translation>顯示彈出對話方塊</translation>
+    </message>
+    <message>
+        <source>Show waiting dialog (Esc to close)</source>
+        <translation>顯示等待對話方塊（Esc 關閉）</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>左側</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>右側</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>頂部</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>底部</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation>標題</translation>
+    </message>
+    <message>
+        <source>Custom dialog content.</source>
+        <translation>自訂對話方塊內容。</translation>
+    </message>
+    <message>
+        <source>Please wait...</source>
+        <translation>請稍候…</translation>
+    </message>
+    <message>
+        <source>Preparing download...</source>
+        <translation>正在準備下載…</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>通知</translation>
+    </message>
+    <message>
+        <source>No more notifications</source>
+        <translation>沒有更多通知</translation>
+    </message>
+    <message>
+        <source>Open window</source>
+        <translation>開啟視窗</translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <translation>已完成</translation>
+    </message>
+    <message>
+        <source>Task finished.</source>
+        <translation>工作已完成。</translation>
+    </message>
+    <message>
+        <source>Today</source>
+        <translation>今日安排</translation>
+    </message>
+    <message>
+        <source>Pending</source>
+        <translation>待辦事項</translation>
+    </message>
+    <message>
+        <source>Enter a name</source>
+        <translation>輸入名稱</translation>
+    </message>
+    <message>
+        <source>Crop image</source>
+        <translation>裁剪圖片</translation>
     </message>
 </context>
 </TS>

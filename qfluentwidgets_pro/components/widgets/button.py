@@ -2541,6 +2541,18 @@ class TextToolButton(TextButtonBase, QToolButton):
         self._drawIcon(self._icon, painter, QRectF(x, y, w, h))
 
 
+class _LuminaGlowEffect(QGraphicsDropShadowEffect):
+    """Keep the effect's source/cache rectangle stable while its blur animates."""
+
+    def __init__(self, maximumBlur, parent=None):
+        self._glowMargin = float(maximumBlur)
+        super().__init__(parent)
+
+    def boundingRectFor(self, rect):
+        margin = self._glowMargin
+        return rect.adjusted(-margin, -margin, margin, margin)
+
+
 class LuminaPushButton(PushButton):
     """Lumina push button with glowing border effect
 
@@ -2565,7 +2577,7 @@ class LuminaPushButton(PushButton):
         super().__init__(*args, **kwargs)
 
         # Glow effect - always visible, blur radius expands on hover
-        self._glowEffect = QGraphicsDropShadowEffect(self)
+        self._glowEffect = _LuminaGlowEffect(self._hoverBlur, self)
         self._glowEffect.setOffset(0, 0)
         self._glowEffect.setBlurRadius(LuminaPushButton._normalBlur)
         self._glowColor = QColor(*themeColor().getRgb()[:3], 80)
@@ -2684,7 +2696,7 @@ class LuminaPushButton(PushButton):
         painter.setFont(self.font())
 
         isDark = isDarkTheme()
-        rect = QRectF(self.rect()).adjusted(0, 0, 0, 0)
+        rect = QRectF(self.rect()).adjusted(.5, .5, -.5, -.5)
         r = 8
 
         bgColor = QColor(45, 45, 45) if isDark else QColor(249, 249, 249)

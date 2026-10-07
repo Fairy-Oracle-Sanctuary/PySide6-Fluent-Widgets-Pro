@@ -16,7 +16,7 @@ from shiboken6 import isValid
 
 from qfluentwidgets_pro import FluentTranslator, GuideWindow, PipsPager, Theme, setTheme
 from qfluentwidgets_pro.qframelesswindow import FramelessWindow
-from gallery.view.guide_window_demo import GuideWindowDemo
+from gallery_fixtures.guide_window_demo import GuideWindowDemo
 
 
 class ValidatedGuide(GuideWindow):
@@ -244,30 +244,8 @@ def run():
     assert not independent.isVisible()
     independent.deleteLater()
     app.sendPostedEvents(None, QEvent.DeferredDelete)
-    if app.platformName() == 'windows':
-        import main
-        gallery = main.MainWindow()
-        gallery.show()
-        gallery.activateWindow()
-        gallery.switchTo(gallery.buttonsInterface)
-        gallery.buttonsInterface.ensureWidgetVisible(gallery.guideWindowButton)
-        QTest.qWait(350)
-        button = gallery.guideWindowButton
-        QTest.mouseClick(gallery.windowHandle(), Qt.LeftButton,
-                         pos=button.mapTo(gallery, button.rect().center()))
-        QTest.qWait(100)
-        wizard = gallery._guideWindow
-        assert wizard.isVisible() and wizard.parentWidget() is None and wizard.isWindow()
-        assert wizard.isMicaEffectEnabled() == micaSupported
-        wizard.setCurrentIndex(2)
-        wizard.next()
-        assert not wizard.isVisible() and gallery.isVisible()
-        assert '已完成' in button.text()
-        gallery._openGuideWindow()
-        QTest.qWait(100)
-        QTest.mouseClick(wizard.titleBar.closeBtn, Qt.LeftButton)
-        assert not wizard.isVisible() and gallery.isVisible() and '已取消' in button.text()
-        gallery.close()
+    # The retired playground launcher is no longer a gallery page. Native
+    # independent-window behavior and the standalone fixture are covered above.
     print('PASS: GuideWindow custom pages, PipsPager, navigation, validation, close/finish/reuse, theme and DPI')
     print('Previews:', previews)
 

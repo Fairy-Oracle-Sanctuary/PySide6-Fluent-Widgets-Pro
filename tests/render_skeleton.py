@@ -10,7 +10,7 @@ from PySide6.QtCore import QLocale
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets_pro import FluentTranslator, Theme, setTheme
-from gallery.view.skeleton_demo import SkeletonDemo
+from gallery_fixtures.skeleton_demo import SkeletonDemo
 
 
 def run():

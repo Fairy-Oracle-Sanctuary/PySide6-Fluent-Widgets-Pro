@@ -10,7 +10,7 @@ from PySide6.QtCore import QLocale
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets_pro import DrawerPosition, FluentTranslator, Theme, setTheme
-from gallery.view.drawer_demo import DrawerDemo
+from gallery_fixtures.drawer_demo import DrawerDemo
 
 
 def run():

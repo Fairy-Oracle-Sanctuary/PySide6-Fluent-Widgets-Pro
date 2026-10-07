@@ -165,7 +165,7 @@ def run():
     doomed.deleteLater()
     QCoreApplication.sendPostedEvents(None, QEvent.DeferredDelete)
     assert not isValid(attached)
-    from gallery.view.drawer_demo import DrawerDemo
+    from gallery_fixtures.drawer_demo import DrawerDemo
     demo = DrawerDemo()
     demo.resize(900, 820)
     demo.show()

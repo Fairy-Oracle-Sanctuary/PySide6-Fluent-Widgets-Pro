@@ -19,7 +19,7 @@ import qfluentwidgets_pro.components.widgets.screen_color_picker as pickerModule
 from qfluentwidgets_pro.components.widgets.screen_color_picker import (
     _ColorPreview, _PickerOverlay, _captureLiveColor, _previewPosition, _sampleImage,
 )
-from gallery.view.color_picker_demo import ColorPickerDemo
+from gallery_fixtures.color_picker_demo import ColorPickerDemo
 
 
 def image(width, height, color):

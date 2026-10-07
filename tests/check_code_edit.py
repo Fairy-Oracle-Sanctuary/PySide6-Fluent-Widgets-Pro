@@ -7,7 +7,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCursor
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
-from gallery.view.code_edit_demo import SAMPLES
+from gallery_fixtures.code_edit_demo import SAMPLES
 from qfluentwidgets_pro import Theme, setTheme
 from qfluentwidgets_pro.components.widgets.code_edit import CodeEdit, CodeLanguage
 

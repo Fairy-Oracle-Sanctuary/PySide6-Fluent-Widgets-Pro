@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets_pro import Theme, setTheme
-from gallery.view.dashboard_card_demo import DashboardCardDemo
+from gallery_fixtures.dashboard_card_demo import DashboardCardDemo
 
 
 app = QApplication([])

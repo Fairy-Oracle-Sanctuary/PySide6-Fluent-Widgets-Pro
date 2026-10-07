@@ -170,7 +170,7 @@ def run():
     doomed.deleteLater()
     QCoreApplication.sendPostedEvents(None, QEvent.DeferredDelete)
     assert not isValid(attached)
-    from gallery.view.watermark_demo import WatermarkDemo
+    from gallery_fixtures.watermark_demo import WatermarkDemo
     demo = WatermarkDemo()
     demo.resize(900, 950)
     demo.show()

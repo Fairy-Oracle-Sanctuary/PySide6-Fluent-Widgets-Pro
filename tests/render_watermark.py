@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets_pro import Theme, setTheme
-from gallery.view.watermark_demo import WatermarkDemo
+from gallery_fixtures.watermark_demo import WatermarkDemo
 
 
 def run():

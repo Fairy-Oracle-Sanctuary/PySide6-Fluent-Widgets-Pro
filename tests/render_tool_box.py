@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets_pro import Theme, setTheme
-from gallery.view.tool_box_demo import ToolBoxDemo
+from gallery_fixtures.tool_box_demo import ToolBoxDemo
 
 app = QApplication([])
 demo = ToolBoxDemo()
