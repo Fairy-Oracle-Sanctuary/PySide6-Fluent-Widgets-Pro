@@ -9,7 +9,7 @@ from qfluentwidgets_pro import AudioWaveformWidget, BodyLabel, PushButton, toggl
 from qfluentwidgets_pro.common.audio_decoder import AudioDecoder
 
 
-SAMPLE_WAV = Path(__file__).resolve().parents[1] / 'resource/audio/waveform_sample.wav'
+SAMPLE_WAV = Path(__file__).resolve().parents[2] / 'gallery/resource/audio/waveform_sample.wav'
 
 
 class AudioWaveformDemo(QWidget):

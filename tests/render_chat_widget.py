@@ -10,7 +10,7 @@ from PySide6.QtCore import QEvent, QLocale, QPointF
 from PySide6.QtGui import QEnterEvent
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets_pro import FluentTranslator, Theme, setTheme
-from gallery.view.chat_widget_demo import ChatWidgetDemo
+from gallery_fixtures.chat_widget_demo import ChatWidgetDemo
 
 
 def run():

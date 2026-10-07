@@ -710,11 +710,10 @@ these dependencies remain absent from the widget's own import path.
 "Load test WAV" opens `gallery/resource/audio/waveform_sample.wav`: a five-second,
 24 kHz, mono, 16-bit PCM synthetic test sound, not speech. To generate another copy:
 `python examples/audio_waveform/generate_sample.py --output test.wav` (no overwrite).
-On Windows, `main.py` defaults the gallery to the native multimedia backend when
-its plugin is installed, avoiding a locally reproduced FFmpeg output-layout error.
-An explicit `QT_MEDIA_BACKEND` is respected. The library itself never selects a
-backend; format support still depends on the selected backend. The gallery build
-includes multimedia plugins and the test WAV as data.
+The standalone waveform demo now lives in `tests/gallery_fixtures/` rather than
+the gallery. The library itself never selects a multimedia backend; format
+support depends on the application's selected backend. The current gallery
+build does not include the waveform demo or multimedia plugins.
 
 `AudioDecoder` is a separate **heavy, opt-in helper**, never exported by any
 `__init__.py`. Import its exact module only when file decoding is needed:
@@ -815,13 +814,22 @@ unblurred image; this does not disable the native Windows Mica effect.
 --nofollow-import-to=scipy
 ```
 
-`deploy.py` builds the **complete gallery in `main.py`**, which explicitly imports
-charts, CodeEdit, audio waveform and native chat demos, including QtMultimedia
-for playback and Matplotlib/NumPy for offline chat formulas. CPU Acrylic blur
-remains excluded independently. It deliberately includes Pygments for dynamic
-lexer discovery and is not a minimal business-app build template. Use your own entry
-point to avoid gallery-only imports; omit `--include-package=pygments` when not
-using CodeEdit. If you do use CodeEdit, include its dynamically loaded lexers.
+`main.py` now runs the migrated free-component gallery. The **Charts** sidebar
+button opens the retained, independent chart window on demand; closing and
+reopening it reuses the same window. The **Chat** entry immediately below Charts
+opens a native chat demo window, preserving its conversation on reopen and
+stopping local simulated output on close. All 91 restored/extended components
+are integrated into the matching category pages by `gallery/view/pro_examples.py`.
+Interactive examples live in `gallery/pro_demos/`; the retained test fixtures
+are not runtime dependencies. Heavy CodeEdit/audio demos load only when requested.
+
+`deploy.py` builds this gallery and includes its lazy chart package; Nuitka's
+PySide6 plugin collects the WebEngine renderer and resources. CPU Acrylic blur
+and SciPy remain excluded. The chat demo includes Pygments for code highlighting
+and Matplotlib/NumPy for offline formulas. The optional waveform demo includes
+QtMultimedia plugins and its sample WAV; its runtime imports remain lazy.
+Use your own entry point for a minimal business-app build.
+If you use CodeEdit, include Pygments and its dynamically loaded lexers.
 Final bundle contents must be checked in Nuitka's compilation report and output;
 removing a root export alone does not guarantee removal of Qt plugins or native
 libraries reached through other imports. `RadialGauge` is pure QtWidgets and is
@@ -832,7 +840,13 @@ exported normally; it was an accidental omission, not a heavy dependency.
 - `qfluentwidgets_pro/`
   - Main package (free base + restored components)
 - `main.py`
-  - Demo / playground
+  - Free-component gallery entry point; independent Charts sidebar action
+- `gallery/`
+  - Migrated gallery pages and assets, plus the retained chart window
+- `tests/gallery_fixtures/`
+  - Standalone legacy extension demos for regression tests
+- `gallery/pro_demos/`
+  - Interactive extension previews used by the categorized gallery
 - `docs/`
   - Documentation assets
 
@@ -977,7 +991,7 @@ and resume on show. `setColors(baseLight, baseDark, highlightLight, highlightDar
 customizes both themes; neutral defaults are independent of the accent color.
 Use normal Qt layouts/geometry to size the canvas. Remove or hide the skeleton
 when real content is ready; it does not fetch data or automatically replace it.
-The **Skeleton** demo page includes all four layouts and an animation toggle;
+The standalone skeleton fixture includes all four layouts and an animation toggle;
 its custom layout keeps a 20-pixel avatar/text gap as the window widens.
 
 ## Native ChatWidget

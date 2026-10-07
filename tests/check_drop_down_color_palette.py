@@ -13,7 +13,7 @@ from PySide6.QtGui import QColor, QImage, QPainter
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets_pro import ColorDialog, DropDownColorPalette, DropDownPushButton, Theme, setTheme, themeColor
-from gallery.view.color_picker_demo import ColorPickerDemo
+from gallery_fixtures.color_picker_demo import ColorPickerDemo
 
 
 def render(widget, scale=1):

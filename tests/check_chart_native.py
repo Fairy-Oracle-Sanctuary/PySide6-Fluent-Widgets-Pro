@@ -13,20 +13,26 @@ from check_chart_widget import javascript, wait_for
 
 from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
-from PySide6.QtWidgets import QApplication, QWidget
 
-from main import MainWindow
+from main import MainWindow, createApplication
 from qfluentwidgets_pro import Theme, setTheme
 from qfluentwidgets_pro.components.widgets.chart_widget import ChartWidget
 
 
 def run():
-    app = QApplication([])
+    app = createApplication([])
     assert app.platformName() == "windows", "This check needs native Windows Qt"
-    host = QWidget()
-    # Exercise the actual entry method and its lifetime management.
-    MainWindow._openChartWindow(host)
+    host = MainWindow()
+    host.show()
+    host.navigationInterface.expand(useAni=False)
+    QTest.qWait(250)
+    selected = host.stackedWidget.currentWidget()
+    # Click the real sidebar entry; it must not replace the main gallery page.
+    button = host.navigationInterface.widget('charts')
+    QTest.mouseClick(button.itemWidget, Qt.LeftButton)
+    assert host.stackedWidget.currentWidget() is selected
     window = host._chartWindow
+    assert window.parentWidget() is None and window.isWindow()
     window.setWindowTitle("Chart native regression")
     handle = window.winId()
     flags = window.windowFlags()

@@ -257,7 +257,7 @@ def run():
         doomedDialog.deleteLater()
     app.processEvents()
 
-    from gallery.view.shortcut_picker_demo import ShortcutPickerDemo
+    from gallery_fixtures.shortcut_picker_demo import ShortcutPickerDemo
     demo = ShortcutPickerDemo(window)
     demo.picker.setKeySequence('Alt+F6')
     assert demo.shortcut.key() == QKeySequence('Alt+F6')

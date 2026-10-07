@@ -16,7 +16,7 @@ from PySide6.QtWidgets import QApplication, QTabWidget, QWidget
 from shiboken6 import isValid
 
 from qfluentwidgets_pro import FluentIcon, RoundTabBar, RoundTabWidget, TabBar, TabWidget, Theme, setTheme
-from gallery.view.round_tab_widget_demo import RoundTabWidgetDemo
+from gallery_fixtures.round_tab_widget_demo import RoundTabWidgetDemo
 
 
 def checkSync(tabs):
@@ -228,27 +228,18 @@ def run():
     assert custom.pixelColor(point).name() == '#324055'
     demo.close()
     if app.platformName() == 'windows':
-        import main
-        gallery = main.MainWindow()
-        gallery.show()
-        gallery.switchTo(gallery.buttonsInterface)
-        gallery.buttonsInterface.ensureWidgetVisible(gallery.roundTabWidgetDemo.tabWidget.tabBar)
+        host = RoundTabWidgetDemo()
+        host.show()
         QTest.qWait(300)
-        sample = gallery.roundTabWidgetDemo.tabWidget
+        sample = host.tabWidget
         setTheme(Theme.LIGHT)
         QTest.qWait(100)
-        host = gallery.roundTabWidgetDemo
-        preview = QImage(host.size(), QImage.Format_ARGB32_Premultiplied)
-        preview.fill(Qt.transparent)
-        host.render(preview)
-        point = sample.mapTo(host, QPoint(1, 1))
-        assert preview.pixelColor(point).name() == '#f3f4f6', preview.pixelColor(point).name()
         item = sample.tabBar.tabItem(1)
-        QTest.mouseClick(gallery.windowHandle(), Qt.LeftButton, pos=item.mapTo(gallery, QPoint(45, 16)))
+        QTest.mouseClick(item, Qt.LeftButton, pos=QPoint(45, 16))
         assert sample.currentIndex() == 1
         QTest.mouseClick(sample.tabBar.addButton, Qt.LeftButton)
         assert sample.count() == 3
-        gallery.close()
+        host.close()
     print('PASS: RoundTabWidget Qt overloads, page ownership, signals, drag, visibility and seamless theme rendering')
     print('Previews:', previews)
 

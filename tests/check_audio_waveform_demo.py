@@ -15,7 +15,7 @@ from PySide6.QtCore import QElapsedTimer, QPoint, Qt
 from PySide6.QtMultimedia import QMediaPlayer
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
-from gallery.view.audio_waveform_demo import AudioWaveformDemo, SAMPLE_WAV
+from gallery_fixtures.audio_waveform_demo import AudioWaveformDemo, SAMPLE_WAV
 
 
 def wait_until(predicate):
@@ -36,7 +36,7 @@ def run():
     demo.show()
     app.processEvents()
     assert not demo.playButton.isEnabled() and demo.waveform.duration() == 0
-    with patch('gallery.view.audio_waveform_demo.QFileDialog.getOpenFileName',
+    with patch('gallery_fixtures.audio_waveform_demo.QFileDialog.getOpenFileName',
                return_value=(str(SAMPLE_WAV), '音频文件')) as dialog:
         demo.chooseButton.click()
         dialog.assert_called_once()
@@ -46,7 +46,7 @@ def run():
     assert demo.player.source().toLocalFile() == str(SAMPLE_WAV).replace('\\', '/')
     assert demo.player.duration() == 5000 and demo.waveform.isSeekEnabled()
     # Cancelling the chooser preserves the already-loaded recording/source.
-    with patch('gallery.view.audio_waveform_demo.QFileDialog.getOpenFileName',
+    with patch('gallery_fixtures.audio_waveform_demo.QFileDialog.getOpenFileName',
                return_value=('', '')):
         demo.chooseButton.click()
     assert demo.waveform.sampleCount() == 120000 and demo._loaded

@@ -146,7 +146,7 @@ class ChartMainWindow(FluentWindow):
         self.resize(960, 780)
         self.setMinimumWidth(760)
         self.setWindowIcon(QIcon(":/gallery/images/logo.png"))
-        self.setWindowTitle("PyQt-Fluent-Widgets")
+        self.setWindowTitle("PySide6-Fluent-Widgets-Pro — Charts")
 
         # create splash screen
         self.splashScreen = SplashScreen(self.windowIcon(), self)

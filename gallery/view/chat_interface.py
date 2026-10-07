@@ -1,11 +1,13 @@
 """Native QQ-style chat demo; streaming is simulated, with no model/API key."""
 
 from PySide6.QtCore import QTimer, Qt
-from PySide6.QtGui import QColor, QImage, QPainter
-from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
+from PySide6.QtGui import QColor, QIcon, QImage, QPainter
+from PySide6.QtWidgets import QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
 
 from qfluentwidgets_pro import BodyLabel, CheckBox, FluentIcon, PushButton, toggleTheme
 from qfluentwidgets_pro.components.widgets.chat_widget import ChatWidget
+from qfluentwidgets_pro.window.fluent_window import FluentWidget
+from ..common.config import cfg
 
 
 class ChatWidgetDemo(QWidget):
@@ -130,3 +132,29 @@ class ChatWidgetDemo(QWidget):
     def _clear(self):
         self._stop()
         self.chat.clear()
+
+    def hideEvent(self, event):
+        # Finish simulated output when the window closes; preserve its history.
+        self._stop()
+        super().hideEvent(event)
+
+
+class ChatWindow(FluentWidget):
+    """Independent native chat window, without a redundant sidebar or WebView."""
+
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('PySide6-Fluent-Widgets-Pro — ' + self.tr('Chat'))
+        self.setWindowIcon(QIcon(':/gallery/images/logo.png'))
+        self.resize(1040, 840)
+        self.setMinimumSize(760, 560)
+        self.setMicaEffectEnabled(cfg.get(cfg.micaEnabled))
+        self.demo = ChatWidgetDemo(self)
+        self.chat = self.demo.chat
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, self.titleBar.height(), 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(self.demo)
+        self.titleBar.raise_()
+        desktop = QApplication.primaryScreen().availableGeometry()
+        self.move(desktop.center() - self.rect().center())

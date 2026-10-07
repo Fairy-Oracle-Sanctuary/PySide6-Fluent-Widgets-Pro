@@ -140,7 +140,7 @@ def run():
         QTest.qWait(10)
         assert child.width() <= 216
         box.removeItem(0).deleteLater()
-    from gallery.view.tool_box_demo import ToolBoxDemo
+    from gallery_fixtures.tool_box_demo import ToolBoxDemo
     demo = ToolBoxDemo()
     demo.toolBox.setAnimationDuration(0)
     demo.resize(900, 650)

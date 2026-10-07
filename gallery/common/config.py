@@ -81,9 +81,13 @@ class Config(QConfig):
     )
 
 
-YEAR = 2023
-AUTHOR = "zhiyiYo"
-VERSION = __version__
+# Gallery project metadata is independent of the upstream library metadata.
+YEAR = 2026
+AUTHOR = "Fairy-Oracle-Sanctuary"
+VERSION = "1.0.0"  # Keep in sync with the project's README version.
+UPSTREAM_YEAR = 2023
+UPSTREAM_AUTHOR = "zhiyiYo"
+UPSTREAM_VERSION = __version__
 HELP_URL = "https://qfluentwidgets.com"
 REPO_URL = "https://github.com/Fairy-Oracle-Sanctuary/PySide6-Fluent-Widgets-Pro"
 EXAMPLE_URL = "https://github.com/Fairy-Oracle-Sanctuary/PySide6-Fluent-Widgets-Pro"

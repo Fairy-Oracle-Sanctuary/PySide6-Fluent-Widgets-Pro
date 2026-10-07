@@ -1,11 +1,11 @@
 # coding: utf-8
 from enum import Enum
 
-from qfluentwidgets_pro import StyleSheetBase, Theme, qconfig
+from qfluentwidgets_pro import StyleSheetBase, Theme, isDarkTheme, qconfig
 
 
 class StyleSheet(StyleSheetBase, Enum):
-    """Style sheet"""
+    """ Style sheet  """
 
     LINK_CARD = "link_card"
     SAMPLE_CARD = "sample_card"

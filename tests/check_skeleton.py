@@ -145,7 +145,7 @@ def run():
         else:
             assert path.contains(QPointF(5, 5))
         preset.close()
-    from gallery.view.skeleton_demo import SkeletonDemo
+    from gallery_fixtures.skeleton_demo import SkeletonDemo
     demo = SkeletonDemo()
     demo.resize(900, 850)
     demo.show()
