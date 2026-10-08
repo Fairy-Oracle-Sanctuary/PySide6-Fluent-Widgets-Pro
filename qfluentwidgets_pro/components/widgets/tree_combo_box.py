@@ -2,17 +2,21 @@
 from __future__ import annotations
 
 from typing import Iterable
+import re
 
 from PySide6.QtCore import (
-    QAbstractItemModel, QEasingCurve, QEvent, QIdentityProxyModel, QModelIndex, QPoint,
+    QAbstractItemModel, QEasingCurve, QEvent, QIdentityProxyModel, QModelIndex, QPoint, QPointF,
     QParallelAnimationGroup, QPersistentModelIndex, QPropertyAnimation, QRect, QRectF, Qt, Signal,
 )
-from PySide6.QtGui import QIcon, QPainter, QStandardItem, QStandardItemModel
+from PySide6.QtGui import QColor, QFontMetrics, QIcon, QPainter, QPalette, QStandardItem, QStandardItemModel, QTextLayout, QTextOption
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QApplication,
     QFrame,
     QHBoxLayout,
+    QVBoxLayout,
+    QStyle,
+    QStyleOptionViewItem,
     QPushButton,
     QScrollArea,
     QSizePolicy,
@@ -23,7 +27,58 @@ from ...common.font import setFont
 from ...common.icon import FluentIcon as FIF, isDarkTheme
 from ...common.style_sheet import FluentStyleSheet
 from .button import SubClip
-from .tree_view import TreeView
+from .tree_view import TreeView, TreeItemDelegate
+from .line_edit import SearchLineEdit
+from .label import BodyLabel
+
+
+class _SearchTreeDelegate(TreeItemDelegate):
+    """Keep the existing tree style; decorate literal matches without HTML."""
+
+    def initStyleOption(self, option, index):
+        super().initStyleOption(option, index)
+        option.text = ""
+
+    def paint(self, painter, option, index):
+        query = self.parent().property("treeSearchText") or ""
+        super().paint(painter, option, index)
+        opt = QStyleOptionViewItem(option)
+        self.initStyleOption(opt, index)
+        # Keep the QSS padding and checkbox spacing, but paint the text ourselves.
+        # Avoid re-entering QStyleSheetStyle during a Python paint callback;
+        # the native delegate still draws the row, icon and checkbox normally.
+        offset = 66 if index.data(Qt.ItemDataRole.CheckStateRole) is not None else 20
+        icon = index.data(Qt.ItemDataRole.DecorationRole)
+        if isinstance(icon, QIcon) and not icon.isNull():
+            offset += 24
+        textRect = QStyle.visualRect(opt.direction, opt.rect, opt.rect.adjusted(offset, 0, -8, 0))
+        displayed = QFontMetrics(opt.font).elidedText(str(index.data() or ""), Qt.TextElideMode.ElideRight, textRect.width())
+        painter.save()
+        painter.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing)
+        painter.setPen(opt.palette.color(QPalette.ColorRole.Text))
+        if not index.flags() & Qt.ItemFlag.ItemIsEnabled:
+            painter.setOpacity(0.36)
+        layout = QTextLayout(displayed, opt.font)
+        textOption = QTextOption()
+        textOption.setTextDirection(opt.direction)
+        textOption.setAlignment(Qt.AlignmentFlag.AlignLeading)
+        layout.setTextOption(textOption)
+        formats = []
+        for match in re.finditer(re.escape(query), displayed, re.IGNORECASE) if query else ():
+            formatRange = QTextLayout.FormatRange()
+            formatRange.start = len(displayed[:match.start()].encode("utf-16-le")) // 2
+            formatRange.length = len(match.group().encode("utf-16-le")) // 2
+            formatRange.format.setBackground(QColor(255, 207, 64, 100))
+            formats.append(formatRange)
+        layout.setFormats(formats)
+        layout.beginLayout()
+        line = layout.createLine()
+        if line.isValid():
+            line.setLineWidth(textRect.width())
+        layout.endLayout()
+        if line.isValid():
+            layout.draw(painter, QPointF(textRect.x(), textRect.y() + (textRect.height() - line.height()) / 2))
+        painter.restore()
 
 
 def _pathText(index: QModelIndex) -> str:
@@ -93,6 +148,7 @@ class TreeComboBox(QPushButton):
     currentModelIndexChanged = Signal(QModelIndex)
     currentTextChanged = Signal(str)
     activated = Signal(QModelIndex)
+    searchTextChanged = Signal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -107,6 +163,13 @@ class TreeComboBox(QPushButton):
         self._popupAnimation: QParallelAnimationGroup | None = None
         self._tree: TreeView | None = None
         self._branchPress = False
+        self._searchEnabled = True
+        self._searchText = ""
+        self._search = None
+        self._emptySearch = None
+        self._filtering = False
+        self._expandedBeforeSearch = []
+        self._currentBeforeSearch = QPersistentModelIndex()
 
         FluentStyleSheet.COMBO_BOX.apply(self)
         setFont(self)
@@ -128,12 +191,16 @@ class TreeComboBox(QPushButton):
                 (self._model.dataChanged, self._onModelDataChanged),
                 (self._model.rowsRemoved, self._onRowsRemoved),
                 (self._model.rowsInserted, self._onRowsInserted),
+                (self._model.rowsMoved, self._refreshDisplay),
                 (self._model.modelReset, self._onModelReset),
                 (self._model.layoutChanged, self._refreshDisplay),
             ):
                 signal.disconnect(slot)
 
         self.hidePopup()
+        self._filtering = False
+        self._expandedBeforeSearch = []
+        self._currentBeforeSearch = QPersistentModelIndex()
         self._model = model
         self._viewModel.setSourceModel(model)
         self._current = QPersistentModelIndex()
@@ -141,6 +208,7 @@ class TreeComboBox(QPushButton):
         model.dataChanged.connect(self._onModelDataChanged)
         model.rowsRemoved.connect(self._onRowsRemoved)
         model.rowsInserted.connect(self._onRowsInserted)
+        model.rowsMoved.connect(self._refreshDisplay)
         model.modelReset.connect(self._onModelReset)
         model.layoutChanged.connect(self._refreshDisplay)
         if self._tree is not None:
@@ -189,6 +257,92 @@ class TreeComboBox(QPushButton):
     def maxVisibleItems(self) -> int:
         return self._maxVisibleItems
 
+    def setSearchEnabled(self, enabled: bool):
+        if self._searchEnabled == bool(enabled):
+            return
+        self.hidePopup()
+        self._searchEnabled = bool(enabled)
+        if not enabled:
+            self.setSearchText("")
+        if self._search is not None:
+            self._search.setVisible(bool(enabled))
+        self._applySearch()
+
+    def isSearchEnabled(self) -> bool:
+        return self._searchEnabled
+
+    def setSearchText(self, text: str):
+        if self._searchText == text:
+            return
+        self._searchText = text
+        if self._search is not None and self._search.text() != text:
+            self._search.setText(text)
+        self._applySearch()
+        self.searchTextChanged.emit(text)
+
+    def searchText(self) -> str:
+        return self._searchText
+
+    def searchLineEdit(self):
+        return self._search
+
+    def _applySearch(self):
+        if self._tree is None or self._emptySearch is None:
+            return
+        query = self._searchText.strip() if self._searchEnabled else ""
+        wasFiltering = self._filtering
+        if not wasFiltering and query:
+            self._currentBeforeSearch = QPersistentModelIndex(self._tree.currentIndex())
+            self._expandedBeforeSearch = []
+            def save(parent=QModelIndex()):
+                for row in range(self._viewModel.rowCount(parent)):
+                    index = self._viewModel.index(row, 0, parent)
+                    if self._tree.isExpanded(index):
+                        self._expandedBeforeSearch.append(QPersistentModelIndex(index))
+                    save(index)
+            save()
+        self._filtering = bool(query)
+        self._tree.setProperty("treeSearchText", query)
+        def filterRows(parent=QModelIndex(), ancestorMatches=False):
+            anyVisible = False
+            for row in range(self._viewModel.rowCount(parent)):
+                index = self._viewModel.index(row, 0, parent)
+                matches = ancestorMatches or not query or query.casefold() in str(index.data() or "").casefold()
+                childMatches = filterRows(index, matches)
+                visible = matches or childMatches
+                self._tree.setRowHidden(row, parent, not visible)
+                if query and visible and self._viewModel.hasChildren(index):
+                    self._tree.expand(index)
+                anyVisible |= visible
+            return anyVisible
+        anyVisible = filterRows()
+        if wasFiltering and not query:
+            if self.currentModelIndex().isValid():
+                self._tree.setCurrentIndex(self._viewModel.mapFromSource(self.currentModelIndex()))
+            elif self._currentBeforeSearch.isValid():
+                self._tree.setCurrentIndex(QModelIndex(self._currentBeforeSearch))
+            self._currentBeforeSearch = QPersistentModelIndex()
+            self._tree.collapseAll()
+            for index in self._expandedBeforeSearch:
+                if index.isValid():
+                    self._tree.expand(QModelIndex(index))
+            self._expandedBeforeSearch = []
+        self._emptySearch.setVisible(not anyVisible)
+        self._tree.setVisible(anyVisible)
+        index = self._tree.currentIndex()
+        visible = index.isValid()
+        while index.isValid():
+            visible &= not self._tree.isRowHidden(index.row(), index.parent())
+            index = index.parent()
+        if not visible:
+            first = QModelIndex()
+            for row in range(self._viewModel.rowCount()):
+                if not self._tree.isRowHidden(row, QModelIndex()):
+                    first = self._viewModel.index(row, 0)
+                    break
+            self._tree.setCurrentIndex(first)
+        self._tree.viewport().update()
+
     def currentModelIndex(self) -> QModelIndex:
         return QModelIndex(self._current) if self._current.isValid() else QModelIndex()
 
@@ -233,6 +387,7 @@ class TreeComboBox(QPushButton):
         index = self.currentModelIndex()
         if index.isValid() and self._model.hasChildren(index):
             self.setCurrentModelIndex(QModelIndex())
+        self._applySearch()
 
     def _onModelDataChanged(self, *_):
         oldText = self._lastText
@@ -241,6 +396,7 @@ class TreeComboBox(QPushButton):
             self.currentTextChanged.emit(self._lastText)
 
     def _refreshDisplay(self, *_):
+        self._applySearch()
         hasSelection = self.currentModelIndex().isValid()
         self._lastText = self.currentText()
         self.setText(self._lastText if hasSelection else self._placeholderText)
@@ -261,9 +417,22 @@ class TreeComboBox(QPushButton):
             animation.setDuration(160)
             animation.setEasingCurve(QEasingCurve.Type.OutQuad)
             self._popupAnimation.addAnimation(animation)
-        layout = QHBoxLayout(self._popup)
+        layout = QVBoxLayout(self._popup)
         layout.setContentsMargins(6, 6, 6, 6)
+        layout.setSpacing(8)
+        self._search = SearchLineEdit(self._popup)
+        self._search.setObjectName("treeComboSearch")
+        self._search.setPlaceholderText(self.tr("Search items"))
+        self._search.setAccessibleName(self.tr("Search items"))
+        self._search.setFixedHeight(30)
+        setFont(self._search, 12)
+        self._search.setText(self._searchText)
+        self._search.setVisible(self._searchEnabled)
+        self._search.installEventFilter(self)
+        self._search.textChanged.connect(self.setSearchText)
+        layout.addWidget(self._search)
         self._tree = TreeView(self._popup)
+        self._tree.setItemDelegate(_SearchTreeDelegate(self._tree))
         self._tree.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Ignored)
         self._tree.setModel(self._viewModel)
         self._tree.setHeaderHidden(True)
@@ -274,6 +443,12 @@ class TreeComboBox(QPushButton):
         self._tree.clicked.connect(self._onTreeClicked)
         self._tree.activated.connect(self._onTreeClicked)
         layout.addWidget(self._tree)
+        self._emptySearch = BodyLabel(self.tr("No matching items"), self._popup)
+        self._emptySearch.setObjectName("treeComboEmptySearch")
+        self._emptySearch.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._emptySearch.setMinimumHeight(34)
+        self._emptySearch.hide()
+        layout.addWidget(self._emptySearch)
 
     def showPopup(self):
         if self._popup is None:
@@ -286,13 +461,17 @@ class TreeComboBox(QPushButton):
         self._popup.ensurePolished()
         self._tree.setModel(self._viewModel)
         self._tree.expandAll()
+        self._tree.setLayoutDirection(self.layoutDirection())
+        self._search.setLayoutDirection(self.layoutDirection())
         current = self.currentModelIndex()
         if current.isValid():
             self._tree.setCurrentIndex(self._viewModel.mapFromSource(current))
+        self._applySearch()
 
         margins = self._popup.layout().contentsMargins()
         chromeHeight = margins.top() + margins.bottom() + 2 * self._popup.frameWidth()
-        desiredHeight = self._visibleRowsHeight() + chromeHeight
+        searchHeight = self._search.height() + self._popup.layout().spacing() if self._searchEnabled else 0
+        desiredHeight = max(34, self._visibleRowsHeight()) + chromeHeight + searchHeight
         popupWidth = max(self.width(), 240)
         screen = QApplication.screenAt(self.mapToGlobal(QPoint(0, 0))) or QApplication.primaryScreen()
         available = screen.availableGeometry()
@@ -322,7 +501,7 @@ class TreeComboBox(QPushButton):
         self._opacityAnimation.setStartValue(0)
         self._opacityAnimation.setEndValue(1)
         self._popupAnimation.start()
-        self._tree.setFocus()
+        (self._search if self._searchEnabled else self._tree).setFocus()
 
     def _visibleRowsHeight(self) -> int:
         count = 0
@@ -331,6 +510,8 @@ class TreeComboBox(QPushButton):
             nonlocal count
             height = 0
             for row in range(self._viewModel.rowCount(parent)):
+                if self._tree.isRowHidden(row, parent):
+                    continue
                 if 0 <= self._maxVisibleItems <= count:
                     break
                 index = self._viewModel.index(row, 0, parent)
@@ -368,6 +549,15 @@ class TreeComboBox(QPushButton):
         return wasBranch
 
     def eventFilter(self, obj, event):
+        if obj is self._search and event.type() == QEvent.Type.KeyPress:
+            if event.key() == Qt.Key.Key_Escape:
+                self.hidePopup()
+                self.setFocus()
+                return True
+            if event.key() in (Qt.Key.Key_Down, Qt.Key.Key_Up, Qt.Key.Key_Return, Qt.Key.Key_Enter):
+                if self._tree.isVisible():
+                    self._tree.setFocus()
+                return True
         if obj is self._popup and event.type() == QEvent.Type.Hide:
             self._popupAnimation.stop()
             self._popup.setWindowOpacity(1)
@@ -383,6 +573,13 @@ class TreeComboBox(QPushButton):
                 arrowLeft = depth * self._tree.indentation() + 20
                 self._branchPress = arrowLeft < event.pos().x() < arrowLeft + 10
         return super().eventFilter(obj, event)
+
+    def changeEvent(self, event):
+        super().changeEvent(event)
+        if event.type() == QEvent.Type.LanguageChange and self._search is not None:
+            self._search.setPlaceholderText(self.tr("Search items"))
+            self._search.setAccessibleName(self.tr("Search items"))
+            self._emptySearch.setText(self.tr("No matching items"))
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -580,6 +777,7 @@ class MultiSelectionTreeComboBox(TreeComboBox):
         self.selectedTextChanged.emit(self.selectedTexts())
 
     def _refreshDisplay(self, *_):
+        self._applySearch()
         self._selected = [index for index in self._selected if index.isValid() and not self._model.hasChildren(QModelIndex(index))]
         texts = self.selectedTexts()
         self._lastSelectedTexts = texts
