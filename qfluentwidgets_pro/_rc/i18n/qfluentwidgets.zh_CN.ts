@@ -1119,4 +1119,14 @@
     <name>Drawer</name>
     <message><source>Close</source><translation>关闭</translation></message>
 </context>
+<context>
+    <name>TreeComboBox</name>
+    <message><source>Search items</source><translation>搜索条目</translation></message>
+    <message><source>No matching items</source><translation>没有匹配的条目</translation></message>
+</context>
+<context>
+    <name>MultiSelectionTreeComboBox</name>
+    <message><source>Search items</source><translation>搜索条目</translation></message>
+    <message><source>No matching items</source><translation>没有匹配的条目</translation></message>
+</context>
 </TS>
