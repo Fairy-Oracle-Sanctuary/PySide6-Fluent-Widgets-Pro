@@ -45,6 +45,7 @@ class _PaletteButton(QAbstractButton):
         super().__init__(view)
         self.view, self.color, self.icon = view, QColor(color) if color is not None else None, icon
         self.selected = False
+        self._hovered = False
         self._showFocus = False
         self.setText(text)
         self.setFont(getFont(14))
@@ -65,10 +66,12 @@ class _PaletteButton(QAbstractButton):
             super().keyPressEvent(event)
 
     def enterEvent(self, event):
+        self._hovered = True
         super().enterEvent(event)
         self.update()
 
     def leaveEvent(self, event):
+        self._hovered = False
         super().leaveEvent(event)
         self.update()
 
@@ -86,11 +89,17 @@ class _PaletteButton(QAbstractButton):
         painter.setRenderHints(QPainter.Antialiasing | QPainter.TextAntialiasing)
         foreground = QColor('#FFFFFF' if isDarkTheme() else '#000000')
         if self.text():
-            if self.underMouse() or self.isDown() or (self.hasFocus() and self._showFocus):
+            if self._hovered or self.isDown() or (self.hasFocus() and self._showFocus):
                 shade = 255 if isDarkTheme() else 0
                 painter.setPen(Qt.NoPen)
                 painter.setBrush(QColor(shade, shade, shade, 22 if self.isDown() else 12))
-                painter.drawRoundedRect(QRectF(self.rect()).adjusted(4, 2, -4, -2), 4, 4)
+                row = QPainterPath()
+                row.setFillRule(Qt.WindingFill)
+                row.addRoundedRect(QRectF(self.rect()), 8, 8)
+                # Round only the panel-facing corners; the separator edge is square.
+                row.addRect(QRectF(0, 8 if self.color is not None else 0,
+                                  self.width(), self.height() - 8))
+                painter.drawPath(row)
             if self.color is not None:
                 _drawColor(painter, QRectF(11, 7, 28, 28), self.color)
             elif self.icon:
@@ -100,12 +109,15 @@ class _PaletteButton(QAbstractButton):
             painter.drawText(QRectF(51, 0, self.width() - 63, self.height()),
                              Qt.AlignLeft | Qt.AlignVCenter, self.text())
         else:
-            _drawColor(painter, QRectF(self.rect()), self.color)
-            if self.selected or self.underMouse() or (self.hasFocus() and self._showFocus) or self.isDown():
-                outline = QColor('#FFFFFF' if self.color.lightnessF() < .5 else '#303030')
+            outlined = (self.selected or self._hovered or
+                        (self.hasFocus() and self._showFocus) or self.isDown())
+            bounds = QRectF(self.rect())
+            _drawColor(painter, bounds.adjusted(2, 2, -2, -2) if outlined else bounds, self.color)
+            if outlined:
                 painter.setBrush(Qt.NoBrush)
-                painter.setPen(QPen(outline, 1.5 if self.selected else 1))
-                painter.drawRoundedRect(QRectF(self.rect()).adjusted(2, 2, -2, -2), 3, 3)
+                painter.setPen(QPen(Qt.white, 1.5 if self.selected else 1))
+                inset = .75 if self.selected else .5
+                painter.drawRoundedRect(bounds.adjusted(inset, inset, -inset, -inset), 4, 4)
 
 
 class _PaletteView(FlyoutViewBase):
