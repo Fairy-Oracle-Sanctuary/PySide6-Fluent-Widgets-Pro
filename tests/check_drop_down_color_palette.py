@@ -9,7 +9,7 @@ os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from PySide6.QtCore import QEvent, QPoint, QSize, Qt
-from PySide6.QtGui import QColor, QImage, QPainter
+from PySide6.QtGui import QColor, QEnterEvent, QImage, QPainter
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets_pro import ColorDialog, DropDownColorPalette, DropDownPushButton, Theme, setTheme, themeColor
@@ -93,6 +93,44 @@ def run():
                 point = button.geometry().center() * scale
                 assert raster.pixelColor(point) == button.color
             assert raster.pixelColor(0, 0).alpha() == 0
+            # The action highlight reaches the row edges, not an inset capsule.
+            for action in (view.automaticButton, view.moreButton):
+                action.clearFocus()
+                QApplication.sendEvent(action, QEvent(QEvent.Leave))
+                assert render(action, scale).pixelColor(0, 21 * scale).alpha() == 0
+                QApplication.sendEvent(action, QEnterEvent(QPoint(8, 21), QPoint(8, 21), QPoint(8, 21)))
+                hovered = render(action, scale)
+                for x, y in ((0, 21), (action.width() - 1, 21),
+                             (action.width() // 2, 0), (action.width() // 2, action.height() - 1)):
+                    assert hovered.pixelColor(x * scale, y * scale).alpha() == 12
+                action.setDown(True)
+                assert render(action, scale).pixelColor(0, 21 * scale).alpha() == 22
+                action.setDown(False)
+                QApplication.sendEvent(action, QEvent(QEvent.Leave))
+                assert render(action, scale).pixelColor(0, 21 * scale).alpha() == 0
+
+            # Dark, bright and standard swatches use the same white outer frame.
+            view.setSelection(QColor('#44546A'), False)
+            for index in (3, 7, 60):
+                button = view.buttons[index]
+                button.clearFocus()
+                QApplication.sendEvent(button, QEvent(QEvent.Leave))
+                original = render(button, scale)
+                assert original.pixelColor(14 * scale, 14 * scale) == button.color
+                if index == 3:
+                    assert original.pixelColor(0, 14 * scale) == QColor(Qt.white)
+                else:
+                    assert original.pixelColor(1 * scale, 14 * scale) == button.color
+                QApplication.sendEvent(button, QEnterEvent(QPoint(14, 14), QPoint(14, 14), QPoint(14, 14)))
+                hovered = render(button, scale)
+                assert hovered.pixelColor(0, 14 * scale) == QColor(Qt.white)
+                gap_x = 1 if scale == 1 else 3
+                assert hovered.pixelColor(gap_x, 14 * scale).alpha() < 255, (theme, scale, index)
+                assert hovered.pixelColor(2 * scale, 14 * scale) == button.color
+                assert button.size() == QSize(28, 28)
+                QApplication.sendEvent(button, QEvent(QEvent.Leave))
+                assert render(button, scale) == original
+            view.setSelection(picker.color(), picker.isAutomatic())
         effect.setEnabled(True)
         assert picker.color() == QColor('#0078D4')
     setTheme(Theme.LIGHT)
